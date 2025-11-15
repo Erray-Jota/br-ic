@@ -1,0 +1,1716 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RaaP ModularFeasibility</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f3f4f6; }
+    .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+    .header { background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%); color: white; padding: 24px; margin-bottom: 24px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+    .header h1 { font-size: 28px; margin-bottom: 4px; }
+    .header p { opacity: 0.9; font-size: 14px; }
+    .progress { background: white; padding: 20px; margin-bottom: 24px; border-radius: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+    .steps { display: flex; justify-content: center; align-items: center; gap: 32px; }
+    .step { display: flex; align-items: center; gap: 8px; }
+    .step-num { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; }
+    .step-num.active { background: #2563eb; color: white; }
+    .step-num.inactive { background: #d1d5db; color: white; }
+    .step-line { width: 64px; height: 4px; background: #d1d5db; }
+    .card { background: white; padding: 24px; border-radius: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); margin-bottom: 24px; }
+    .card h2 { font-size: 20px; margin-bottom: 16px; color: #1f2937; }
+    .form-group { margin-bottom: 20px; }
+    .form-label { display: block; font-weight: 600; margin-bottom: 8px; color: #374151; font-size: 14px; }
+    .form-input, .form-select { width: 100%; padding: 10px 12px; border: 2px solid #d1d5db; border-radius: 8px; font-size: 14px; }
+    .form-input:focus, .form-select:focus { outline: none; border-color: #2563eb; }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+    .unit-input { border: 2px solid #93c5fd; background: #dbeafe; padding: 16px; border-radius: 8px; text-align: center; }
+    .unit-input.green { border-color: #86efac; background: #d1fae5; }
+    .unit-input.purple { border-color: #c4b5fd; background: #e9d5ff; }
+    .unit-input.orange { border-color: #fdba74; background: #fed7aa; }
+    .unit-input input { width: 100%; text-align: center; font-size: 24px; font-weight: bold; border: none; background: transparent; }
+    .btn { padding: 12px 24px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 14px; transition: all 0.2s; }
+    .btn-primary { background: #2563eb; color: white; }
+    .btn-primary:hover { background: #1d4ed8; }
+    .btn-secondary { background: #d1d5db; color: #374151; }
+    .btn-secondary:hover { background: #9ca3af; }
+    .btn-success { background: #16a34a; color: white; }
+    .btn-success:hover { background: #15803d; }
+    .flex-end { display: flex; justify-content: flex-between; gap: 16px; }
+    .status-banner { padding: 24px; border-radius: 12px; margin-bottom: 24px; color: white; }
+    .status-banner.success { background: linear-gradient(135deg, #16a34a 0%, #15803d 100%); }
+    .status-banner.warning { background: linear-gradient(135deg, #ea580c 0%, #c2410c 100%); }
+    .status-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+    .status-item { text-align: center; }
+    .status-value { font-size: 28px; font-weight: bold; }
+    .status-label { font-size: 12px; opacity: 0.9; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { padding: 12px; text-align: left; border-bottom: 1px solid #e5e7eb; }
+    th { font-weight: 600; background: #f9fafb; }
+    .cost-card { border: 2px solid #d1d5db; }
+    .cost-card.highlight { background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%); border-color: #16a34a; }
+    .cost-value { font-size: 32px; font-weight: bold; color: #1f2937; margin: 16px 0; }
+    .savings-box { background: #16a34a; color: white; padding: 16px; border-radius: 8px; margin-top: 16px; }
+    .excess-box { background: #86efac; color: #14532d; padding: 16px; border-radius: 8px; margin-top: 16px; border: 2px solid #16a34a; }
+    .info-box { background: #dbeafe; border: 1px solid #93c5fd; padding: 16px; border-radius: 8px; margin-top: 16px; color: #1e40af; }
+    .small-text { font-size: 12px; color: #6b7280; }
+    .range-input { width: 100%; }
+    .range-input.green { accent-color: #16a34a; }
+    .simple-input { display: flex; align-items: center; gap: 8px; padding: 12px; background: white; border: 2px solid #e5e7eb; border-radius: 8px; }
+    .simple-input input { flex: 1; font-size: 18px; font-weight: 600; border: none; padding: 4px; text-align: center; min-width: 60px; }
+    .simple-input input:focus { outline: none; background: #f3f4f6; border-radius: 4px; }
+    .simple-input-label { font-weight: 600; color: #374151; min-width: 80px; }
+    
+    @media print {
+      .progress, .btn, #phase1-content, #phase2-content { display: none !important; }
+      .card { page-break-inside: avoid; }
+      body { background: white; }
+      .header { background: #2563eb !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>🏗️ RaaP ModularFeasibility</h1>
+      <p id="project-name">Alpine Vista Apartments</p>
+    </div>
+
+    <div class="progress">
+      <div class="steps">
+        <div class="step">
+          <div class="step-num active" id="step1-num">1</div>
+          <span id="step1-label">Project Setup</span>
+        </div>
+        <div class="step-line"></div>
+        <div class="step">
+          <div class="step-num inactive" id="step2-num">2</div>
+          <span id="step2-label">Unit Mix Design</span>
+        </div>
+        <div class="step-line"></div>
+        <div class="step">
+          <div class="step-num inactive" id="step3-num">3</div>
+          <span id="step3-label">Cost Analysis</span>
+        </div>
+      </div>
+    </div>
+
+    <div id="phase1-content">
+      <div class="card">
+        <h2>Project Information</h2>
+        <div class="form-group">
+          <label class="form-label">Project Name</label>
+          <input type="text" class="form-input" id="input-project-name" value="Alpine Vista Apartments">
+        </div>
+        
+        <div class="grid-2">
+          <div class="form-group">
+            <label class="form-label">📍 Property Location</label>
+            <select class="form-select" id="input-property-city">
+              <option value="1.35">San Francisco, CA (1.35)</option>
+              <option value="1.32">New York, NY (1.32)</option>
+              <option value="1.23">Chicago, IL (1.23)</option>
+              <option value="1.18">Los Angeles, CA (1.18)</option>
+              <option value="1.16">Boston, MA (1.16)</option>
+              <option value="1.08">Seattle, WA (1.08)</option>
+              <option value="0.90">Denver, CO (0.90)</option>
+              <option value="0.87" selected>Phoenix, AZ (0.87)</option>
+              <option value="0.85">Houston, TX (0.85)</option>
+              <option value="0.85">Miami, FL (0.85)</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">🏭 Factory Location</label>
+            <select class="form-select" id="input-factory-city">
+              <option value="1.35">San Francisco, CA (1.35)</option>
+              <option value="1.32">New York, NY (1.32)</option>
+              <option value="1.23">Chicago, IL (1.23)</option>
+              <option value="1.18">Los Angeles, CA (1.18)</option>
+              <option value="1.16">Boston, MA (1.16)</option>
+              <option value="1.08">Seattle, WA (1.08)</option>
+              <option value="0.90">Denver, CO (0.90)</option>
+              <option value="0.87" selected>Phoenix, AZ (0.87)</option>
+              <option value="0.85">Houston, TX (0.85)</option>
+              <option value="0.85">Miami, FL (0.85)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="grid-3">
+          <div class="form-group">
+            <label class="form-label">Number of Floors</label>
+            <select class="form-select" id="input-floors">
+              <option value="3">3 Floors</option>
+              <option value="4">4 Floors</option>
+              <option value="5" selected>5 Floors</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">Lobby Type</label>
+            <select class="form-select" id="input-lobby">
+              <option value="1">1-Bay</option>
+              <option value="2" selected>2-Bay</option>
+              <option value="4">4-Bay</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">Target Length: <span id="length-display">280</span> ft <span id="length-status"></span></label>
+            <input type="range" class="range-input" id="input-length" min="100" max="400" step="5" value="280">
+            <div class="flex justify-between text-xs text-gray-500 mt-1">
+              <span>100 ft</span>
+              <span>400 ft</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">🎯 Target Unit Mix (<span id="total-units">120</span> total)</label>
+          <div style="display: grid; gap: 12px;">
+            <div class="simple-input">
+              <label class="simple-input-label">Studio</label>
+              <input type="number" id="input-studio" value="40" min="0">
+              <span class="small-text">units</span>
+            </div>
+            <div class="simple-input">
+              <label class="simple-input-label">1 Bed</label>
+              <input type="number" id="input-1bed" value="40" min="0">
+              <span class="small-text">units</span>
+            </div>
+            <div class="simple-input">
+              <label class="simple-input-label">2 Bed</label>
+              <input type="number" id="input-2bed" value="40" min="0">
+              <span class="small-text">units</span>
+            </div>
+            <div class="simple-input">
+              <label class="simple-input-label">3 Bed</label>
+              <input type="number" id="input-3bed" value="0" min="0">
+              <span class="small-text">units</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex-end">
+        <button class="btn btn-primary" onclick="goToPhase2()">Continue to Design →</button>
+      </div>
+    </div>
+
+    <div id="phase2-content" style="display:none;">
+      <div id="status-banner" class="status-banner success">
+        <div class="status-grid">
+          <div class="status-item">
+            <div class="status-label">OPTIMIZED LENGTH:</div>
+            <div class="status-value" id="result-length">252.0 ft</div>
+          </div>
+          <div class="status-item">
+            <div class="status-label">Required</div>
+            <div class="status-value" id="result-required">328.0 ft</div>
+          </div>
+          <div class="status-item">
+            <div class="status-label">Target</div>
+            <div class="status-value" id="result-target">280 ft</div>
+          </div>
+          <div class="status-item">
+            <div class="status-label">Remaining</div>
+            <div class="status-value" id="result-remaining">28.0 ft</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>📋 Unit Mix Comparison</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Unit Type</th>
+              <th>You Wanted</th>
+              <th>We Fit</th>
+              <th>Difference</th>
+            </tr>
+          </thead>
+          <tbody id="comparison-table">
+          </tbody>
+        </table>
+      </div>
+
+      <div class="card">
+        <h2>🏢 Building Summary</h2>
+        <div class="grid-4">
+          <div style="background: #f3f4f6; padding: 16px; border-radius: 8px; text-align: center;">
+            <div class="small-text">Floors</div>
+            <div style="font-size: 28px; font-weight: bold;" id="summary-floors">5</div>
+          </div>
+          <div style="background: #f3f4f6; padding: 16px; border-radius: 8px; text-align: center;">
+            <div class="small-text">Total Units</div>
+            <div style="font-size: 28px; font-weight: bold;" id="summary-units">105</div>
+          </div>
+          <div style="background: #f3f4f6; padding: 16px; border-radius: 8px; text-align: center;">
+            <div class="small-text">Length</div>
+            <div style="font-size: 28px; font-weight: bold;" id="summary-length">252.0 ft</div>
+          </div>
+          <div style="background: #f3f4f6; padding: 16px; border-radius: 8px; text-align: center;">
+            <div class="small-text">Width</div>
+            <div style="font-size: 28px; font-weight: bold;">72 ft</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>🗺️ Floor Plan Preview</h2>
+        <p class="small-text" style="margin-bottom: 16px;">Typical floor layout showing unit placement on both sides of central corridor</p>
+        <div style="display: flex; justify-content: center; background: #f9fafb; padding: 24px; border-radius: 8px;">
+          <svg id="floor-plan-svg" width="400" height="600" style="border: 2px solid #d1d5db; border-radius: 8px; background: white;"></svg>
+        </div>
+        <div style="margin-top: 16px; padding: 16px; background: #f3f4f6; border-radius: 8px;">
+          <div style="font-weight: 600; margin-bottom: 8px;">Layout Rules:</div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 13px;">
+            <div>✓ Units on both sides of corridor</div>
+            <div>✓ Corner units at top/bottom</div>
+            <div>✓ Lobby centered</div>
+            <div>✓ Stairs at fixed positions</div>
+          </div>
+          <div style="margin-top: 12px; display: flex; gap: 16px; flex-wrap: wrap; font-size: 12px;">
+            <div><span style="display: inline-block; width: 16px; height: 16px; background: #93C5FD; border: 1px solid #000; margin-right: 4px; vertical-align: middle;"></span>Studio</div>
+            <div><span style="display: inline-block; width: 16px; height: 16px; background: #86EFAC; border: 1px solid #000; margin-right: 4px; vertical-align: middle;"></span>1 Bed</div>
+            <div><span style="display: inline-block; width: 16px; height: 16px; background: #C4B5FD; border: 1px solid #000; margin-right: 4px; vertical-align: middle;"></span>2 Bed</div>
+            <div><span style="display: inline-block; width: 16px; height: 16px; background: #FCA5A5; border: 1px solid #000; margin-right: 4px; vertical-align: middle;"></span>3 Bed</div>
+            <div><span style="display: inline-block; width: 16px; height: 16px; background: #FDE047; border: 1px solid #000; margin-right: 4px; vertical-align: middle;"></span>Lobby</div>
+            <div><span style="display: inline-block; width: 16px; height: 16px; background: #D1D5DB; border: 1px solid: #000; margin-right: 4px; vertical-align: middle;"></span>Stair</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex-end">
+        <button class="btn btn-secondary" onclick="goToPhase1()">← Back to Setup</button>
+        <button class="btn btn-primary" onclick="goToPhase3()">View Cost Analysis →</button>
+      </div>
+    </div>
+
+    <div id="phase3-content" style="display:none;">
+      <div class="card" style="background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%); color: white;">
+        <h2 style="color: white; margin-bottom: 8px;" id="cost-project-name">Alpine Vista Apartments</h2>
+        <p style="opacity: 0.9;" id="cost-summary"></p>
+      </div>
+
+      <div class="grid-2">
+        <div class="card cost-card">
+          <h3 style="font-size: 18px; margin-bottom: 16px;">🏗️ Traditional Build</h3>
+          <p class="small-text" id="site-location"></p>
+          <div class="cost-value" id="site-total">$29.1M</div>
+          <div style="display: flex; gap: 24px; margin-top: 12px;">
+            <div>
+              <div style="font-size: 28px; font-weight: bold; color: #1f2937;" id="site-sf">$372</div>
+              <div style="font-size: 14px; color: #6b7280;">per sq ft</div>
+            </div>
+            <div>
+              <div style="font-size: 28px; font-weight: bold; color: #1f2937;" id="site-unit">$277K</div>
+              <div style="font-size: 14px; color: #6b7280;">per unit</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card cost-card highlight">
+          <h3 style="font-size: 18px; margin-bottom: 16px;">🏭 RaaP Modular</h3>
+          <p class="small-text" id="modular-locations"></p>
+          <div class="cost-value" style="color: #16a34a;" id="modular-total">$24.5M</div>
+          <div style="display: flex; gap: 24px; margin-top: 12px;">
+            <div>
+              <div style="font-size: 28px; font-weight: bold; color: #16a34a;" id="modular-sf">$313</div>
+              <div style="font-size: 14px; color: #15803d;">per sq ft</div>
+            </div>
+            <div>
+              <div style="font-size: 28px; font-weight: bold; color: #16a34a;" id="modular-unit">$233K</div>
+              <div style="font-size: 14px; color: #15803d;">per unit</div>
+            </div>
+          </div>
+          
+          <div id="diff-box" class="savings-box">
+            <p style="font-size: 12px; font-weight: 600;" id="diff-label">💚 YOU SAVE</p>
+            <p style="font-size: 24px; font-weight: bold;" id="savings-amount">$4.6M</p>
+            <p style="font-size: 14px;" id="savings-percent">16% Less</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="info-box">
+        <strong>⏱️ Additional Modular Benefits:</strong><br>
+        ✓ 40% faster construction time<br>
+        ✓ Higher quality control (factory built)<br>
+        ✓ Less weather delays<br>
+        ✓ Reduced site disruption
+      </div>
+
+      <div class="card" style="background: #f9fafb; border: 2px dashed #d1d5db;">
+        <h2>🔄 Compare Cost Scenarios</h2>
+        <p class="small-text" style="margin-bottom: 16px;">See how costs change with different locations or configurations</p>
+        
+        <div class="grid-2" style="gap: 24px;">
+          <div>
+            <h3 style="font-size: 16px; font-weight: 600; margin-bottom: 12px;">Scenario A (Current)</h3>
+            <div style="background: white; padding: 16px; border-radius: 8px; border: 2px solid #2563eb;">
+              <div class="form-group" style="margin-bottom: 12px;">
+                <label class="form-label" style="font-size: 13px;">Property Location</label>
+                <select class="form-select" id="scenario-a-property" style="font-size: 14px;">
+                  <option value="1.35">San Francisco, CA (1.35)</option>
+                  <option value="1.32">New York, NY (1.32)</option>
+                  <option value="1.23">Chicago, IL (1.23)</option>
+                  <option value="1.18">Los Angeles, CA (1.18)</option>
+                  <option value="1.16">Boston, MA (1.16)</option>
+                  <option value="1.08">Seattle, WA (1.08)</option>
+                  <option value="0.90">Denver, CO (0.90)</option>
+                  <option value="0.87" selected>Phoenix, AZ (0.87)</option>
+                  <option value="0.85">Houston, TX (0.85)</option>
+                  <option value="0.85">Miami, FL (0.85)</option>
+                </select>
+              </div>
+              <div class="form-group" style="margin-bottom: 12px;">
+                <label class="form-label" style="font-size: 13px;">Factory Location</label>
+                <select class="form-select" id="scenario-a-factory" style="font-size: 14px;">
+                  <option value="1.35">San Francisco, CA (1.35)</option>
+                  <option value="1.32">New York, NY (1.32)</option>
+                  <option value="1.23">Chicago, IL (1.23)</option>
+                  <option value="1.18">Los Angeles, CA (1.18)</option>
+                  <option value="1.16">Boston, MA (1.16)</option>
+                  <option value="1.08">Seattle, WA (1.08)</option>
+                  <option value="0.90">Denver, CO (0.90)</option>
+                  <option value="0.87" selected>Phoenix, AZ (0.87)</option>
+                  <option value="0.85">Houston, TX (0.85)</option>
+                  <option value="0.85">Miami, FL (0.85)</option>
+                </select>
+              </div>
+              <div style="padding: 12px; background: #dbeafe; border-radius: 6px; margin-top: 12px;">
+                <div style="font-size: 13px; color: #1e40af; font-weight: 600;">Site Build: <span id="scenario-a-site">$18.8M</span></div>
+                <div style="font-size: 13px; color: #1e40af; font-weight: 600;">Modular: <span id="scenario-a-modular">$20.9M</span></div>
+                <div style="font-size: 12px; color: #1e40af; margin-top: 4px;" id="scenario-a-diff">+$2.1M excess</div>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <h3 style="font-size: 16px; font-weight: 600; margin-bottom: 12px;">Scenario B (Compare)</h3>
+            <div style="background: white; padding: 16px; border-radius: 8px; border: 2px solid #16a34a;">
+              <div class="form-group" style="margin-bottom: 12px;">
+                <label class="form-label" style="font-size: 13px;">Property Location</label>
+                <select class="form-select" id="scenario-b-property" style="font-size: 14px;">
+                  <option value="1.35" selected>San Francisco, CA (1.35)</option>
+                  <option value="1.32">New York, NY (1.32)</option>
+                  <option value="1.23">Chicago, IL (1.23)</option>
+                  <option value="1.18">Los Angeles, CA (1.18)</option>
+                  <option value="1.16">Boston, MA (1.16)</option>
+                  <option value="1.08">Seattle, WA (1.08)</option>
+                  <option value="0.90">Denver, CO (0.90)</option>
+                  <option value="0.87">Phoenix, AZ (0.87)</option>
+                  <option value="0.85">Houston, TX (0.85)</option>
+                  <option value="0.85">Miami, FL (0.85)</option>
+                </select>
+              </div>
+              <div class="form-group" style="margin-bottom: 12px;">
+                <label class="form-label" style="font-size: 13px;">Factory Location</label>
+                <select class="form-select" id="scenario-b-factory" style="font-size: 14px;">
+                  <option value="1.35">San Francisco, CA (1.35)</option>
+                  <option value="1.32">New York, NY (1.32)</option>
+                  <option value="1.23">Chicago, IL (1.23)</option>
+                  <option value="1.18">Los Angeles, CA (1.18)</option>
+                  <option value="1.16">Boston, MA (1.16)</option>
+                  <option value="1.08">Seattle, WA (1.08)</option>
+                  <option value="0.90">Denver, CO (0.90)</option>
+                  <option value="0.87">Phoenix, AZ (0.87)</option>
+                  <option value="0.85" selected>Houston, TX (0.85)</option>
+                  <option value="0.85">Miami, FL (0.85)</option>
+                </select>
+              </div>
+              <div style="padding: 12px; background: #d1fae5; border-radius: 6px; margin-top: 12px;">
+                <div style="font-size: 13px; color: #14532d; font-weight: 600;">Site Build: <span id="scenario-b-site">$29.1M</span></div>
+                <div style="font-size: 13px; color: #14532d; font-weight: 600;">Modular: <span id="scenario-b-modular">$24.5M</span></div>
+                <div style="font-size: 12px; color: #14532d; margin-top: 4px;" id="scenario-b-diff">-$4.6M savings</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top: 16px; padding: 16px; background: white; border-radius: 8px; border: 2px solid #f59e0b;">
+          <h4 style="font-size: 15px; font-weight: 600; margin-bottom: 8px; color: #92400e;">💡 Insight</h4>
+          <p style="font-size: 14px; color: #78350f; margin: 0;" id="scenario-insight">
+            Scenario B saves $2.5M more than Scenario A by building in a higher-cost market where modular advantages are greater.
+          </p>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>📊 Cost Breakdown by Division</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Division</th>
+              <th style="text-align: right;">Site Build</th>
+              <th style="text-align: right;">Site/sf</th>
+              <th style="text-align: right;">Modular GC</th>
+              <th style="text-align: right;">Modular Fab</th>
+              <th style="text-align: right;">Modular Total</th>
+              <th style="text-align: right;">Mod/sf</th>
+            </tr>
+          </thead>
+          <tbody id="division-table">
+          </tbody>
+        </table>
+      </div>
+
+      <div class="flex-end">
+        <button class="btn btn-secondary" onclick="goToPhase2()">← Back to Design</button>
+        <button class="btn btn-success" onclick="downloadReport()">📥 Download Report</button>
+        <button class="btn btn-primary" onclick="printReport()">🖨️ Print Report</button>
+      </div>
+
+      <!-- Assembly Explorer -->
+      <div class="card" style="margin-top: 24px;">
+        <h2>📚 Assembly Explorer</h2>
+        <p class="small-text" style="margin-bottom: 16px;">Search and explore construction assemblies with RSMeans codes</p>
+        
+        <div style="margin-bottom: 16px;">
+          <input 
+            type="text" 
+            id="assembly-search" 
+            placeholder="Search assemblies (e.g., 'foundation', 'electrical', 'window')..." 
+            class="form-input"
+            onkeyup="searchAssemblies()"
+            style="font-size: 14px;"
+          />
+        </div>
+
+        <div style="display: grid; grid-template-columns: 200px 1fr; gap: 16px;">
+          <div>
+            <div style="font-weight: 600; margin-bottom: 8px; font-size: 14px;">Categories</div>
+            <div style="display: flex; flex-direction: column; gap: 4px;">
+              <button onclick="filterAssemblies('all')" id="filter-all" class="btn" style="padding: 8px 12px; font-size: 13px; text-align: left; background: #2563eb; color: white;">All</button>
+              <button onclick="filterAssemblies('foundation')" id="filter-foundation" class="btn btn-secondary" style="padding: 8px 12px; font-size: 13px; text-align: left;">Foundation</button>
+              <button onclick="filterAssemblies('electrical')" id="filter-electrical" class="btn btn-secondary" style="padding: 8px 12px; font-size: 13px; text-align: left;">Electrical</button>
+              <button onclick="filterAssemblies('openings')" id="filter-openings" class="btn btn-secondary" style="padding: 8px 12px; font-size: 13px; text-align: left;">Openings</button>
+            </div>
+          </div>
+
+          <div id="assembly-results" style="max-height: 400px; overflow-y: auto; border: 1px solid #e5e7eb; border-radius: 8px; padding: 12px;">
+            <div style="color: #6b7280; text-align: center; padding: 40px;">
+              <p>Use the search box or select a category to explore assemblies</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cost Chatbot -->
+      <div class="card" style="margin-top: 24px;">
+        <h2>💬 Ask About Costs</h2>
+        <p class="small-text" style="margin-bottom: 16px;">Get detailed explanations about construction costs and assemblies</p>
+        
+        <div id="chat-messages" style="background: #f9fafb; border: 2px solid #e5e7eb; border-radius: 8px; padding: 16px; min-height: 300px; max-height: 400px; overflow-y: auto; margin-bottom: 12px;">
+          <div style="background: white; padding: 12px; border-radius: 8px; border-left: 4px solid #2563eb; margin-bottom: 12px;">
+            <div style="font-size: 12px; color: #6b7280; margin-bottom: 4px;">💬 Assistant</div>
+            <div style="font-size: 14px; color: #1f2937;">
+              Hello! I can help explain construction costs and assemblies. Try asking me:<br><br>
+              • "Why is the electrical cost so high?"<br>
+              • "What's included in the foundation cost?"<br>
+              • "How many windows are in the building?"<br>
+              • "Explain the modular GC vs fabricator scope"<br>
+              • "What are the major cost drivers?"
+            </div>
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 8px;">
+          <input 
+            type="text" 
+            id="chat-input" 
+            placeholder="Ask a question about costs..." 
+            class="form-input"
+            onkeypress="if(event.key === 'Enter') sendChatMessage()"
+            style="flex: 1; font-size: 14px;"
+          />
+          <button class="btn btn-primary" onclick="sendChatMessage()" style="padding: 12px 24px;">Send</button>
+        </div>
+
+        <div style="margin-top: 12px;">
+          <div style="font-weight: 600; font-size: 13px; margin-bottom: 8px;">Quick Questions:</div>
+          <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+            <button onclick="askQuickQuestion('Why is electrical expensive?')" class="btn btn-secondary" style="padding: 6px 12px; font-size: 12px;">Electrical costs?</button>
+            <button onclick="askQuickQuestion('What is in foundation?')" class="btn btn-secondary" style="padding: 6px 12px; font-size: 12px;">Foundation details?</button>
+            <button onclick="askQuickQuestion('How many units fit?')" class="btn btn-secondary" style="padding: 6px 12px; font-size: 12px;">Unit count?</button>
+            <button onclick="askQuickQuestion('Compare GC vs Fab')" class="btn btn-secondary" style="padding: 6px 12px; font-size: 12px;">GC vs Fab?</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Data
+    let currentPhase = 1;
+    let projectData = {
+      projectName: 'Alpine Vista Apartments',
+      floors: 5,
+      targetLength: 280,
+      lobbyType: 2,
+      propertyFactor: 0.87,
+      factoryFactor: 0.87,
+      targets: { studio: 40, oneBed: 40, twoBed: 40, threeBed: 0 },
+      optimized: { studio: 40, oneBed: 45, twoBed: 20, threeBed: 0 },
+      length: 252.0,
+      requiredLength: 328.0
+    };
+
+    // Update total units
+    function updateTotalUnits() {
+      const studio = parseInt(document.getElementById('input-studio').value) || 0;
+      const oneBed = parseInt(document.getElementById('input-1bed').value) || 0;
+      const twoBed = parseInt(document.getElementById('input-2bed').value) || 0;
+      const threeBed = parseInt(document.getElementById('input-3bed').value) || 0;
+      document.getElementById('total-units').textContent = studio + oneBed + twoBed + threeBed;
+      updateSliderColor();
+    }
+
+    // Update slider color based on constraint
+    function updateSliderColor() {
+      const targetLength = parseInt(document.getElementById('input-length').value);
+      const slider = document.getElementById('input-length');
+      const statusSpan = document.getElementById('length-status');
+      
+      // Calculate required length (simplified estimate)
+      const studio = parseInt(document.getElementById('input-studio').value) || 0;
+      const oneBed = parseInt(document.getElementById('input-1bed').value) || 0;
+      const twoBed = parseInt(document.getElementById('input-2bed').value) || 0;
+      const threeBed = parseInt(document.getElementById('input-3bed').value) || 0;
+      const floors = parseInt(document.getElementById('input-floors').value) || 5;
+      
+      // Rough estimate: average unit width ~25', plus lobby ~25', plus stair ~13'
+      const totalUnits = studio + oneBed + twoBed + threeBed;
+      const unitsPerFloor = Math.ceil(totalUnits / floors / 2); // units per side
+      const estimatedLength = (unitsPerFloor * 25) + 25 + 13;
+      
+      if (targetLength >= estimatedLength) {
+        slider.classList.add('green');
+        statusSpan.innerHTML = '<span style="color: #16a34a; font-weight: 600;">✓ No constraint</span>';
+      } else {
+        slider.classList.remove('green');
+        statusSpan.innerHTML = '<span style="color: #ea580c; font-weight: 600;">⚠ Will adjust units</span>';
+      }
+    }
+
+    // Update length display
+    document.getElementById('input-length').addEventListener('input', (e) => {
+      document.getElementById('length-display').textContent = e.target.value;
+      updateSliderColor();
+    });
+
+    // Update floors listener
+    document.getElementById('input-floors').addEventListener('change', updateSliderColor);
+
+    // Add listeners
+    ['input-studio', 'input-1bed', 'input-2bed', 'input-3bed'].forEach(id => {
+      document.getElementById(id).addEventListener('input', updateTotalUnits);
+    });
+
+    // Initial update
+    updateSliderColor();
+
+    function goToPhase1() {
+      currentPhase = 1;
+      document.getElementById('phase1-content').style.display = 'block';
+      document.getElementById('phase2-content').style.display = 'none';
+      document.getElementById('phase3-content').style.display = 'none';
+      document.getElementById('step1-num').className = 'step-num active';
+      document.getElementById('step2-num').className = 'step-num inactive';
+      document.getElementById('step3-num').className = 'step-num inactive';
+    }
+
+    function goToPhase2() {
+      currentPhase = 2;
+      
+      // Collect data
+      projectData.projectName = document.getElementById('input-project-name').value;
+      projectData.floors = parseInt(document.getElementById('input-floors').value);
+      projectData.targetLength = parseInt(document.getElementById('input-length').value);
+      projectData.propertyFactor = parseFloat(document.getElementById('input-property-city').value);
+      projectData.factoryFactor = parseFloat(document.getElementById('input-factory-city').value);
+      projectData.targets = {
+        studio: parseInt(document.getElementById('input-studio').value) || 0,
+        oneBed: parseInt(document.getElementById('input-1bed').value) || 0,
+        twoBed: parseInt(document.getElementById('input-2bed').value) || 0,
+        threeBed: parseInt(document.getElementById('input-3bed').value) || 0
+      };
+
+      // REAL UNIT MIX OPTIMIZATION ALGORITHM
+      const floors = projectData.floors;
+      const targetLength = projectData.targetLength;
+      const targets = projectData.targets;
+      const cornersPerSide = 2;
+      const max3BUnits = 4 * floors; // Max 4 three-beds per floor (2 per side)
+      
+      // Cap 3-bed target to maximum possible
+      const cappedThreeBedTarget = Math.min(targets.threeBed, max3BUnits);
+      
+      // Calculate units needed per side to meet targets
+      const unitsPerSideTarget = {
+        threeBed: Math.ceil(cappedThreeBedTarget / floors / 2),
+        twoBed: Math.ceil(targets.twoBed / floors / 2),
+        oneBed: Math.ceil(targets.oneBed / floors / 2),
+        studio: Math.ceil(targets.studio / floors / 2)
+      };
+      
+      // Initial placement - assign units to corners and inline positions
+      let p = {
+        threeBed: unitsPerSideTarget.threeBed,
+        twoBedCorner: 0,
+        twoBedInline: 0,
+        oneBedJrCorner: 0,
+        oneBedInline: 0,
+        studio: unitsPerSideTarget.studio
+      };
+      
+      // Assign corner positions (priority: 3-bed > 2-bed corner > 1-bed Jr)
+      let requiredCornersUsed = Math.min(p.threeBed, cornersPerSide);
+      p.twoBedCorner = Math.min(unitsPerSideTarget.twoBed, cornersPerSide - requiredCornersUsed);
+      requiredCornersUsed += p.twoBedCorner;
+      p.twoBedInline = unitsPerSideTarget.twoBed - p.twoBedCorner;
+      p.oneBedJrCorner = Math.min(unitsPerSideTarget.oneBed, cornersPerSide - requiredCornersUsed);
+      p.oneBedInline = unitsPerSideTarget.oneBed - p.oneBedJrCorner;
+      
+      // Calculate required length
+      const lobbyWidth = projectData.lobbyType === 1 ? 13.5 : 24.5;
+      const stairWidth = p.threeBed > 0 ? 11.0 : 13.5;
+      
+      let requiredLength = 0;
+      requiredLength += p.threeBed * 42.0;           // 3-bed width
+      requiredLength += p.twoBedCorner * 31.0;       // 2-bed corner width
+      requiredLength += p.twoBedInline * 38.0;       // 2-bed inline width
+      requiredLength += p.oneBedJrCorner * 15.5;     // 1-bed Jr width
+      requiredLength += p.oneBedInline * 24.5;       // 1-bed inline width
+      requiredLength += p.studio * 13.5;             // studio width
+      requiredLength += lobbyWidth;
+      requiredLength += stairWidth;
+      
+      const isConstrained = requiredLength > targetLength;
+      
+      // If it fits, use it as is
+      if (!isConstrained) {
+        projectData.length = requiredLength;
+        projectData.requiredLength = requiredLength;
+      } else {
+        // Need to reduce units - priority: 3-bed > 2B inline > 2B corner > studio > 1-bed
+        let currentLength = requiredLength;
+        const reductionPriority = [
+          { key: 'threeBed', width: 42.0 },
+          { key: 'twoBedInline', width: 38.0 },
+          { key: 'twoBedCorner', width: 31.0 },
+          { key: 'studio', width: 13.5 },
+          { key: 'oneBed', widthInline: 24.5, widthCorner: 15.5 }
+        ];
+        
+        while (currentLength > targetLength + 0.01) {
+          let unitReduced = false;
+          for (const item of reductionPriority) {
+            let count = 0;
+            if (item.key === 'threeBed') count = p.threeBed;
+            else if (item.key === 'twoBedInline') count = p.twoBedInline;
+            else if (item.key === 'twoBedCorner') count = p.twoBedCorner;
+            else if (item.key === 'studio') count = p.studio;
+            else if (item.key === 'oneBed') count = p.oneBedJrCorner + p.oneBedInline;
+            
+            if (count > 0) {
+              let widthToRemove = 0;
+              let stairAdjustment = 0;
+              
+              if (item.key === 'threeBed') {
+                widthToRemove = item.width;
+                // When removing last 3-bed, stair width changes from 11' to 13.5'
+                if (p.threeBed === 1) stairAdjustment = 13.5 - 11.0;
+                p.threeBed--;
+              } else if (item.key === 'twoBedInline') {
+                widthToRemove = item.width;
+                p.twoBedInline--;
+              } else if (item.key === 'twoBedCorner') {
+                widthToRemove = item.width;
+                p.twoBedCorner--;
+              } else if (item.key === 'studio') {
+                widthToRemove = item.width;
+                p.studio--;
+              } else if (item.key === 'oneBed') {
+                if (p.oneBedInline > 0) {
+                  widthToRemove = item.widthInline;
+                  p.oneBedInline--;
+                } else if (p.oneBedJrCorner > 0) {
+                  widthToRemove = item.widthCorner;
+                  p.oneBedJrCorner--;
+                }
+              }
+              
+              currentLength -= widthToRemove;
+              currentLength += stairAdjustment;
+              unitReduced = true;
+              break;
+            }
+          }
+          if (!unitReduced) break;
+        }
+        
+        projectData.length = currentLength;
+        projectData.requiredLength = requiredLength;
+      }
+      
+      // Calculate actual optimized units (including bonus units)
+      const twoBedPerSide = p.twoBedCorner + p.twoBedInline;
+      const oneBedPerSide = p.oneBedJrCorner + p.oneBedInline;
+      
+      let studioPerFloor = p.studio * 2;
+      let oneBedPerFloor = oneBedPerSide * 2;
+      let twoBedPerFloor = twoBedPerSide * 2;
+      let threeBedPerFloor = p.threeBed * 2;
+      
+      // Add bonus units from lobby
+      if (projectData.lobbyType === 1) {
+        studioPerFloor += 1; // 1-Bay lobby gives +1 studio per floor
+      } else if (projectData.lobbyType === 2) {
+        oneBedPerFloor += 1; // 2-Bay lobby gives +1 1-bed per floor
+      }
+      
+      projectData.optimized = {
+        studio: studioPerFloor * floors,
+        oneBed: oneBedPerFloor * floors,
+        twoBed: twoBedPerFloor * floors,
+        threeBed: threeBedPerFloor * floors
+      };
+
+      // Update UI
+      document.getElementById('project-name').textContent = projectData.projectName;
+      document.getElementById('result-length').textContent = projectData.length.toFixed(1) + ' ft';
+      document.getElementById('result-required').textContent = projectData.requiredLength.toFixed(1) + ' ft';
+      document.getElementById('result-target').textContent = projectData.targetLength + ' ft';
+      document.getElementById('result-remaining').textContent = (projectData.targetLength - projectData.length).toFixed(1) + ' ft';
+      
+      document.getElementById('summary-floors').textContent = projectData.floors;
+      const totalOptimized = projectData.optimized.studio + projectData.optimized.oneBed + projectData.optimized.twoBed + projectData.optimized.threeBed;
+      document.getElementById('summary-units').textContent = totalOptimized;
+      document.getElementById('summary-length').textContent = projectData.length.toFixed(1) + ' ft';
+
+      // Build comparison table
+      const table = document.getElementById('comparison-table');
+      table.innerHTML = '';
+      ['studio', 'oneBed', 'twoBed', 'threeBed'].forEach((key, idx) => {
+        const labels = ['Studio', '1 Bed', '2 Bed', '3 Bed'];
+        const wanted = projectData.targets[key];
+        const fit = projectData.optimized[key];
+        const diff = fit - wanted;
+        
+        const row = table.insertRow();
+        row.innerHTML = `
+          <td><strong>${labels[idx]}</strong></td>
+          <td>${wanted}</td>
+          <td><strong>${fit}</strong></td>
+          <td style="color: ${diff === 0 ? '#16a34a' : diff > 0 ? '#2563eb' : '#ea580c'}">
+            ${diff === 0 ? '✓' : (diff > 0 ? '+' : '') + diff}
+          </td>
+        `;
+      });
+
+      const totalRow = table.insertRow();
+      const totalWanted = projectData.targets.studio + projectData.targets.oneBed + projectData.targets.twoBed + projectData.targets.threeBed;
+      totalRow.innerHTML = `
+        <td><strong>TOTAL</strong></td>
+        <td><strong>${totalWanted}</strong></td>
+        <td><strong>${totalOptimized}</strong></td>
+        <td><strong style="color: ${totalOptimized >= totalWanted ? '#2563eb' : '#ea580c'}">
+          ${totalOptimized >= totalWanted ? '+' : ''}${totalOptimized - totalWanted}
+        </strong></td>
+      `;
+      totalRow.style.borderTop = '2px solid #d1d5db';
+      totalRow.style.background = '#f9fafb';
+
+      // Show explanation if constrained
+      const explanationDiv = document.querySelector('#phase2-content .card:nth-child(2) .info-box');
+      if (explanationDiv) explanationDiv.remove();
+      
+      if (isConstrained) {
+        const explanation = document.createElement('div');
+        explanation.className = 'info-box';
+        explanation.innerHTML = `
+          <strong>💡 Why the changes?</strong> The building length constraint (${targetLength} ft) limited the total units we could fit.
+          Required length was ${requiredLength.toFixed(1)} ft, so we reduced units to ${projectData.length.toFixed(1)} ft.
+          The optimizer adjusted the mix to maximize value while staying within your site constraints.
+        `;
+        document.querySelector('#phase2-content .card:nth-child(2)').appendChild(explanation);
+      }
+
+      // Show phase 2
+      document.getElementById('phase1-content').style.display = 'none';
+      document.getElementById('phase2-content').style.display = 'block';
+      document.getElementById('phase3-content').style.display = 'none';
+      document.getElementById('step1-num').className = 'step-num active';
+      document.getElementById('step2-num').className = 'step-num active';
+      document.getElementById('step3-num').className = 'step-num inactive';
+
+      // Update banner color
+      const banner = document.getElementById('status-banner');
+      if (projectData.targetLength >= projectData.requiredLength) {
+        banner.className = 'status-banner success';
+      } else {
+        banner.className = 'status-banner warning';
+      }
+
+      // Generate floor plan visualization
+      generateFloorPlan(p, projectData.lobbyType, p.threeBed > 0 ? 11.0 : 13.5);
+    }
+
+    function generateFloorPlan(placement, lobbyType, stairWidth) {
+      const svg = document.getElementById('floor-plan-svg');
+      svg.innerHTML = '';
+
+      const unitColors = {
+        studio: '#93C5FD',
+        oneBedJr: '#86EFAC',
+        oneBed: '#6EE7B7',
+        twoBedCorner: '#C4B5FD',
+        twoBedInline: '#D8B4FE',
+        threeBed: '#FCA5A5',
+        lobby: '#FDE047',
+        stair: '#D1D5DB'
+      };
+
+      const unitWidths = {
+        studio: 13.5,
+        oneBedJr: 15.5,
+        oneBed: 24.5,
+        twoBedCorner: 31.0,
+        twoBedInline: 38.0,
+        threeBed: 42.0
+      };
+
+      const lobbyWidth = lobbyType === 1 ? 13.5 : 24.5;
+      const scale = 2.5; // pixels per foot
+
+      // Build unit layout
+      const leftSide = [];
+      const rightSide = [];
+
+      // Collect inline units
+      const inlineUnits = [];
+      for (let i = 0; i < placement.twoBedInline; i++) inlineUnits.push({ type: 'twoBedInline', width: 38.0 });
+      for (let i = 0; i < placement.oneBedInline; i++) inlineUnits.push({ type: 'oneBed', width: 24.5 });
+
+      // Special placement for studios across from stairs
+      let leftPos2Unit = null;
+      let rightPosBeforeBottomCorner = null;
+
+      if (stairWidth === 13.5 && placement.studio >= 2) {
+        leftPos2Unit = { type: 'studio', width: 13.5, special: '◆' };
+        rightPosBeforeBottomCorner = { type: 'studio', width: 13.5, special: '◆' };
+        for (let i = 0; i < placement.studio - 2; i++) inlineUnits.push({ type: 'studio', width: 13.5 });
+      } else {
+        for (let i = 0; i < placement.studio; i++) inlineUnits.push({ type: 'studio', width: 13.5 });
+      }
+
+      const halfInline = Math.ceil(inlineUnits.length / 2);
+      const threeBedPerFloor = placement.threeBed * 2;
+
+      // LEFT SIDE
+      // Top corner
+      if (placement.threeBed >= 1) {
+        leftSide.push({ type: 'threeBed', width: 42.0, label: '3 Bed' });
+      } else if (placement.twoBedCorner >= 1) {
+        leftSide.push({ type: 'twoBedCorner', width: 31.0, label: '2B Corner' });
+      } else if (placement.oneBedJrCorner >= 1) {
+        leftSide.push({ type: 'oneBedJr', width: 15.5, label: '1B Jr' });
+      }
+
+      // Studio across from right stair
+      if (leftPos2Unit) leftSide.push({ ...leftPos2Unit, label: 'Studio' });
+
+      // First half inline
+      for (let i = 0; i < halfInline; i++) {
+        const unit = inlineUnits[i];
+        leftSide.push({ ...unit, label: unit.type === 'oneBed' ? '1 Bed' : unit.type === 'twoBedInline' ? '2B Inline' : 'Studio' });
+      }
+
+      // Lobby
+      leftSide.push({ type: 'lobby', width: lobbyWidth, label: lobbyType === 1 ? '1-Bay' : lobbyType === 2 ? '2-Bay' : '4-Bay' });
+
+      // Second half inline
+      for (let i = halfInline; i < inlineUnits.length; i++) {
+        const unit = inlineUnits[i];
+        leftSide.push({ ...unit, label: unit.type === 'oneBed' ? '1 Bed' : unit.type === 'twoBedInline' ? '2B Inline' : 'Studio' });
+      }
+
+      // Left stair
+      leftSide.push({ type: 'stair', width: stairWidth, label: 'Stair' });
+
+      // Bottom corner
+      if (threeBedPerFloor === 4) {
+        leftSide.push({ type: 'threeBed', width: 42.0, label: '3 Bed' });
+      } else if (threeBedPerFloor === 2) {
+        leftSide.push({ type: 'twoBedCorner', width: 31.0, label: '2B Corner' });
+      } else if (placement.twoBedCorner >= 2) {
+        leftSide.push({ type: 'twoBedCorner', width: 31.0, label: '2B Corner' });
+      } else if (placement.oneBedJrCorner >= 1) {
+        leftSide.push({ type: 'oneBedJr', width: 15.5, label: '1B Jr' });
+      }
+
+      // RIGHT SIDE (mirror logic)
+      if (threeBedPerFloor === 4) {
+        rightSide.push({ type: 'threeBed', width: 42.0, label: '3 Bed' });
+      } else if (threeBedPerFloor === 2) {
+        rightSide.push({ type: 'twoBedCorner', width: 31.0, label: '2B Corner' });
+      } else if (placement.twoBedCorner >= 2) {
+        rightSide.push({ type: 'twoBedCorner', width: 31.0, label: '2B Corner' });
+      } else if (placement.oneBedJrCorner >= 1) {
+        rightSide.push({ type: 'oneBedJr', width: 15.5, label: '1B Jr' });
+      }
+
+      // Right stair (position 2)
+      rightSide.push({ type: 'stair', width: stairWidth, label: 'Stair' });
+
+      // First half inline (same as left)
+      for (let i = 0; i < halfInline; i++) {
+        const unit = inlineUnits[i];
+        rightSide.push({ ...unit, label: unit.type === 'oneBed' ? '1 Bed' : unit.type === 'twoBedInline' ? '2B Inline' : 'Studio' });
+      }
+
+      // Bonus unit or lobby
+      if (lobbyType === 1) {
+        rightSide.push({ type: 'studio', width: 13.5, label: 'Studio', special: '★' });
+      } else if (lobbyType === 2) {
+        rightSide.push({ type: 'oneBed', width: 24.5, label: '1 Bed', special: '★' });
+      } else {
+        rightSide.push({ type: 'lobby', width: lobbyWidth, label: '4-Bay' });
+      }
+
+      // Second half inline
+      for (let i = halfInline; i < inlineUnits.length; i++) {
+        const unit = inlineUnits[i];
+        rightSide.push({ ...unit, label: unit.type === 'oneBed' ? '1 Bed' : unit.type === 'twoBedInline' ? '2B Inline' : 'Studio' });
+      }
+
+      // Studio across from left stair
+      if (rightPosBeforeBottomCorner) rightSide.push({ ...rightPosBeforeBottomCorner, label: 'Studio' });
+
+      // Bottom corner
+      if (placement.threeBed >= 1) {
+        rightSide.push({ type: 'threeBed', width: 42.0, label: '3 Bed' });
+      } else if (placement.twoBedCorner >= 1) {
+        rightSide.push({ type: 'twoBedCorner', width: 31.0, label: '2B Corner' });
+      } else if (placement.oneBedJrCorner >= 1) {
+        rightSide.push({ type: 'oneBedJr', width: 15.5, label: '1B Jr' });
+      }
+
+      // Draw SVG
+      const maxHeight = Math.max(
+        leftSide.reduce((sum, u) => sum + u.width * scale, 0),
+        rightSide.reduce((sum, u) => sum + u.width * scale, 0)
+      );
+
+      svg.setAttribute('height', maxHeight + 20);
+
+      // Left side units
+      let yPos = 10;
+      leftSide.forEach(unit => {
+        const height = unit.width * scale;
+        const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+        rect.setAttribute('x', 10);
+        rect.setAttribute('y', yPos);
+        rect.setAttribute('width', 130);
+        rect.setAttribute('height', height);
+        rect.setAttribute('fill', unitColors[unit.type] || '#E5E7EB');
+        rect.setAttribute('stroke', '#000');
+        rect.setAttribute('stroke-width', 2);
+        rect.setAttribute('rx', 4);
+        svg.appendChild(rect);
+
+        const text1 = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        text1.setAttribute('x', 75);
+        text1.setAttribute('y', yPos + height / 2 - 4);
+        text1.setAttribute('text-anchor', 'middle');
+        text1.setAttribute('font-size', 11);
+        text1.setAttribute('font-weight', 600);
+        text1.setAttribute('fill', '#1e293b');
+        text1.textContent = (unit.special || '') + ' ' + unit.label;
+        svg.appendChild(text1);
+
+        const text2 = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        text2.setAttribute('x', 75);
+        text2.setAttribute('y', yPos + height / 2 + 10);
+        text2.setAttribute('text-anchor', 'middle');
+        text2.setAttribute('font-size', 9);
+        text2.setAttribute('fill', '#475569');
+        text2.textContent = unit.width + "'";
+        svg.appendChild(text2);
+
+        yPos += height;
+      });
+
+      // Corridor
+      const corridor = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+      corridor.setAttribute('x', 140);
+      corridor.setAttribute('y', 10);
+      corridor.setAttribute('width', 120);
+      corridor.setAttribute('height', maxHeight);
+      corridor.setAttribute('fill', '#E5E7EB');
+      corridor.setAttribute('stroke', '#9CA3AF');
+      corridor.setAttribute('stroke-width', 2);
+      corridor.setAttribute('rx', 4);
+      svg.appendChild(corridor);
+
+      const corridorText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      corridorText.setAttribute('x', 200);
+      corridorText.setAttribute('y', maxHeight / 2 + 10);
+      corridorText.setAttribute('text-anchor', 'middle');
+      corridorText.setAttribute('font-size', 12);
+      corridorText.setAttribute('font-weight', 700);
+      corridorText.setAttribute('fill', '#374151');
+      corridorText.setAttribute('transform', `rotate(-90 200 ${maxHeight / 2 + 10})`);
+      corridorText.textContent = 'CORRIDOR';
+      svg.appendChild(corridorText);
+
+      // Right side units
+      yPos = 10;
+      rightSide.forEach(unit => {
+        const height = unit.width * scale;
+        const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+        rect.setAttribute('x', 260);
+        rect.setAttribute('y', yPos);
+        rect.setAttribute('width', 130);
+        rect.setAttribute('height', height);
+        rect.setAttribute('fill', unitColors[unit.type] || '#E5E7EB');
+        rect.setAttribute('stroke', '#000');
+        rect.setAttribute('stroke-width', 2);
+        rect.setAttribute('rx', 4);
+        svg.appendChild(rect);
+
+        const text1 = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        text1.setAttribute('x', 325);
+        text1.setAttribute('y', yPos + height / 2 - 4);
+        text1.setAttribute('text-anchor', 'middle');
+        text1.setAttribute('font-size', 11);
+        text1.setAttribute('font-weight', 600);
+        text1.setAttribute('fill', '#1e293b');
+        text1.textContent = (unit.special || '') + ' ' + unit.label;
+        svg.appendChild(text1);
+
+        const text2 = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        text2.setAttribute('x', 325);
+        text2.setAttribute('y', yPos + height / 2 + 10);
+        text2.setAttribute('text-anchor', 'middle');
+        text2.setAttribute('font-size', 9);
+        text2.setAttribute('fill', '#475569');
+        text2.textContent = unit.width + "'";
+        svg.appendChild(text2);
+
+        yPos += height;
+      });
+    }
+
+    function goToPhase3() {
+      currentPhase = 3;
+
+      // Calculate costs (simplified)
+      const totalUnits = projectData.optimized.studio + projectData.optimized.oneBed + projectData.optimized.twoBed + projectData.optimized.threeBed;
+      const gsf = projectData.length * 72 * projectData.floors;
+      
+      const baseSite = 21567408;
+      const baseGC = 8088967;
+      const baseFab = 16040830;
+      
+      const siteCost = baseSite * projectData.propertyFactor;
+      const gcCost = baseGC * projectData.propertyFactor;
+      const fabCost = baseFab * projectData.factoryFactor;
+      const modularCost = gcCost + fabCost;
+      
+      const savings = siteCost - modularCost;
+      const savingsPercent = (savings / siteCost * 100);
+      const isSavings = savings > 0;
+
+      // Update UI
+      document.getElementById('cost-project-name').textContent = projectData.projectName;
+      document.getElementById('cost-summary').textContent = `${projectData.floors} Floors • ${totalUnits} Units • ${gsf.toLocaleString()} GSF`;
+      
+      document.getElementById('site-location').textContent = '📍 Property location with factor ' + projectData.propertyFactor.toFixed(2);
+      document.getElementById('site-total').textContent = '$' + (siteCost / 1000000).toFixed(1) + 'M';
+      document.getElementById('site-sf').textContent = '$' + Math.round(siteCost / gsf);
+      document.getElementById('site-unit').textContent = '$' + Math.round(siteCost / totalUnits / 1000) + 'K';
+      
+      document.getElementById('modular-locations').textContent = `📍 Site: ${projectData.propertyFactor.toFixed(2)} | 🏭 Factory: ${projectData.factoryFactor.toFixed(2)}`;
+      document.getElementById('modular-total').textContent = '$' + (modularCost / 1000000).toFixed(1) + 'M';
+      document.getElementById('modular-sf').textContent = '$' + Math.round(modularCost / gsf);
+      document.getElementById('modular-unit').textContent = '$' + Math.round(modularCost / totalUnits / 1000) + 'K';
+      
+      // Update savings/excess box
+      const diffBox = document.getElementById('diff-box');
+      const diffLabel = document.getElementById('diff-label');
+      
+      if (isSavings) {
+        diffBox.className = 'savings-box';
+        diffLabel.textContent = '💚 YOU SAVE';
+        document.getElementById('savings-amount').textContent = '$' + (Math.abs(savings) / 1000000).toFixed(1) + 'M';
+        document.getElementById('savings-percent').textContent = Math.abs(savingsPercent).toFixed(1) + '% Less';
+      } else {
+        diffBox.className = 'excess-box';
+        diffLabel.textContent = '⚠️ ADDITIONAL INVESTMENT';
+        diffLabel.style.color = '#14532d';
+        document.getElementById('savings-amount').textContent = '$' + (Math.abs(savings) / 1000000).toFixed(1) + 'M';
+        document.getElementById('savings-amount').style.color = '#14532d';
+        document.getElementById('savings-percent').textContent = Math.abs(savingsPercent).toFixed(1) + '% More';
+        document.getElementById('savings-percent').style.color = '#14532d';
+      }
+
+      // Division groups based on MasterFormat PDF
+      const divisionGroups = [
+        {
+          name: 'Concrete, Masonry & Metals',
+          divisions: [
+            { code: '03', name: 'Concrete', site: 1126, gc: 1134, fab: 0 },
+            { code: '04', name: 'Masonry', site: 267, gc: 113, fab: 0 },
+            { code: '05', name: 'Metal', site: 717, gc: 0, fab: 224 }
+          ]
+        },
+        {
+          name: 'Rooms',
+          divisions: [
+            { code: '06', name: 'Wood & Plastics', site: 2259, gc: 1, fab: 3851 },
+            { code: '07', name: 'Thermal & Moisture Protection', site: 1253, gc: 367, fab: 1765 },
+            { code: '08', name: 'Openings', site: 1925, gc: 156, fab: 1804 },
+            { code: '09', name: 'Finishes', site: 3232, gc: 1635, fab: 2443 }
+          ]
+        },
+        {
+          name: 'Equipment & Special Construction',
+          divisions: [
+            { code: '10', name: 'Specialties', site: 0, gc: 0, fab: 0 },
+            { code: '11', name: 'Equipment', site: 401, gc: 0, fab: 409 },
+            { code: '12', name: 'Furnishing', site: 969, gc: 0, fab: 988 },
+            { code: '13', name: 'Special Construction', site: 10, gc: 10, fab: 0 },
+            { code: '14', name: 'Conveying Equipment', site: 433, gc: 433, fab: 0 }
+          ]
+        },
+        {
+          name: 'MEPs',
+          divisions: [
+            { code: '21', name: 'Fire Protection', site: 472, gc: 93, fab: 394 },
+            { code: '22', name: 'Plumbing', site: 2019, gc: 1011, fab: 1029 },
+            { code: '23', name: 'HVAC', site: 2578, gc: 348, fab: 2274 },
+            { code: '26', name: 'Electrical', site: 3583, gc: 2448, fab: 1158 }
+          ]
+        },
+        {
+          name: 'Site Work (Estimate)',
+          divisions: [
+            { code: '31', name: 'Earthwork', site: 169, gc: 170, fab: 0 },
+            { code: '32', name: 'Exterior Improvements', site: 123, gc: 123, fab: 0 },
+            { code: '33', name: 'Utilities', site: 41, gc: 41, fab: 0 }
+          ]
+        },
+        {
+          name: 'Charges & Logistics (Estimate)',
+          divisions: [
+            { code: 'GC', name: 'GC Charges', site: 3907, gc: 1485, fab: 0 },
+            { code: 'MOD', name: 'Modular Logistics', site: 0, gc: 0, fab: 1128 }
+          ]
+        }
+      ];
+
+      const divTable = document.getElementById('division-table');
+      divTable.innerHTML = '';
+      
+      let totalSite = 0;
+      let totalGC = 0;
+      let totalFab = 0;
+
+      divisionGroups.forEach(group => {
+        // Group header
+        const groupRow = divTable.insertRow();
+        groupRow.innerHTML = `<td colspan="7" style="background: #f3f4f6; font-weight: bold; padding: 8px 12px;">${group.name}</td>`;
+        
+        let groupSite = 0;
+        let groupGC = 0;
+        let groupFab = 0;
+        
+        // Individual divisions
+        group.divisions.forEach(div => {
+          if (div.site === 0 && div.gc === 0 && div.fab === 0) return; // Skip empty rows
+          
+          const siteAdj = div.site * projectData.propertyFactor;
+          const gcAdj = div.gc * projectData.propertyFactor;
+          const fabAdj = div.fab * projectData.factoryFactor;
+          const modTotal = gcAdj + fabAdj;
+          
+          groupSite += siteAdj;
+          groupGC += gcAdj;
+          groupFab += fabAdj;
+          
+          const row = divTable.insertRow();
+          row.innerHTML = `
+            <td style="padding-left: 24px;"><strong>${div.code}</strong> ${div.name}</td>
+            <td style="text-align: right;">$${Math.round(siteAdj)}K</td>
+            <td style="text-align: right; color: #6b7280;">$${Math.round(siteAdj * 1000 / gsf)}</td>
+            <td style="text-align: right; color: #2563eb;">$${Math.round(gcAdj)}K</td>
+            <td style="text-align: right; color: #16a34a;">$${Math.round(fabAdj)}K</td>
+            <td style="text-align: right;"><strong>$${Math.round(modTotal)}K</strong></td>
+            <td style="text-align: right; color: #6b7280;">$${Math.round(modTotal * 1000 / gsf)}</td>
+          `;
+        });
+        
+        // Group subtotal
+        const subtotalRow = divTable.insertRow();
+        const groupModTotal = groupGC + groupFab;
+        subtotalRow.innerHTML = `
+          <td style="font-weight: 600; background: #fafafa;">${group.name} Subtotal</td>
+          <td style="text-align: right; font-weight: 600; background: #fafafa;">$${Math.round(groupSite)}K</td>
+          <td style="text-align: right; background: #fafafa; color: #6b7280;">$${Math.round(groupSite * 1000 / gsf)}</td>
+          <td style="text-align: right; font-weight: 600; background: #fafafa; color: #2563eb;">$${Math.round(groupGC)}K</td>
+          <td style="text-align: right; font-weight: 600; background: #fafafa; color: #16a34a;">$${Math.round(groupFab)}K</td>
+          <td style="text-align: right; font-weight: 600; background: #fafafa;">$${Math.round(groupModTotal)}K</td>
+          <td style="text-align: right; background: #fafafa; color: #6b7280;">$${Math.round(groupModTotal * 1000 / gsf)}</td>
+        `;
+        subtotalRow.style.borderBottom = '2px solid #d1d5db';
+        
+        totalSite += groupSite;
+        totalGC += groupGC;
+        totalFab += groupFab;
+      });
+
+      // Grand total
+      const totalRow = divTable.insertRow();
+      const totalMod = totalGC + totalFab;
+      totalRow.innerHTML = `
+        <td style="font-weight: bold; font-size: 16px; background: #e5e7eb;">Total Hard Construction Cost</td>
+        <td style="text-align: right; font-weight: bold; font-size: 16px; background: #e5e7eb;">$${Math.round(totalSite)}K</td>
+        <td style="text-align: right; font-weight: bold; background: #e5e7eb; color: #374151;">$${Math.round(totalSite * 1000 / gsf)}</td>
+        <td style="text-align: right; font-weight: bold; font-size: 16px; background: #e5e7eb; color: #2563eb;">$${Math.round(totalGC)}K</td>
+        <td style="text-align: right; font-weight: bold; font-size: 16px; background: #e5e7eb; color: #16a34a;">$${Math.round(totalFab)}K</td>
+        <td style="text-align: right; font-weight: bold; font-size: 16px; background: #e5e7eb;">$${Math.round(totalMod)}K</td>
+        <td style="text-align: right; font-weight: bold; background: #e5e7eb; color: #374151;">$${Math.round(totalMod * 1000 / gsf)}</td>
+      `;
+      totalRow.style.borderTop = '3px solid #374151';
+
+      // Show phase 3
+      document.getElementById('phase1-content').style.display = 'none';
+      document.getElementById('phase2-content').style.display = 'none';
+      document.getElementById('phase3-content').style.display = 'block';
+      document.getElementById('step1-num').className = 'step-num active';
+      document.getElementById('step2-num').className = 'step-num active';
+      document.getElementById('step3-num').className = 'step-num active';
+
+      // Initialize scenario comparison
+      updateScenarios();
+      document.getElementById('scenario-a-property').addEventListener('change', updateScenarios);
+      document.getElementById('scenario-a-factory').addEventListener('change', updateScenarios);
+      document.getElementById('scenario-b-property').addEventListener('change', updateScenarios);
+      document.getElementById('scenario-b-factory').addEventListener('change', updateScenarios);
+    }
+
+    function updateScenarios() {
+      const baseSite = 21567408;
+      const baseGC = 8088967;
+      const baseFab = 16040830;
+
+      // Scenario A
+      const aPropFactor = parseFloat(document.getElementById('scenario-a-property').value);
+      const aFactFactor = parseFloat(document.getElementById('scenario-a-factory').value);
+      const aSite = baseSite * aPropFactor;
+      const aGC = baseGC * aPropFactor;
+      const aFab = baseFab * aFactFactor;
+      const aModular = aGC + aFab;
+      const aDiff = aSite - aModular;
+
+      document.getElementById('scenario-a-site').textContent = '$' + (aSite / 1000000).toFixed(1) + 'M';
+      document.getElementById('scenario-a-modular').textContent = '$' + (aModular / 1000000).toFixed(1) + 'M';
+      
+      if (aDiff > 0) {
+        document.getElementById('scenario-a-diff').textContent = '-$' + (Math.abs(aDiff) / 1000000).toFixed(1) + 'M savings';
+        document.getElementById('scenario-a-diff').style.color = '#14532d';
+      } else {
+        document.getElementById('scenario-a-diff').textContent = '+$' + (Math.abs(aDiff) / 1000000).toFixed(1) + 'M excess';
+        document.getElementById('scenario-a-diff').style.color = '#92400e';
+      }
+
+      // Scenario B
+      const bPropFactor = parseFloat(document.getElementById('scenario-b-property').value);
+      const bFactFactor = parseFloat(document.getElementById('scenario-b-factory').value);
+      const bSite = baseSite * bPropFactor;
+      const bGC = baseGC * bPropFactor;
+      const bFab = baseFab * bFactFactor;
+      const bModular = bGC + bFab;
+      const bDiff = bSite - bModular;
+
+      document.getElementById('scenario-b-site').textContent = '$' + (bSite / 1000000).toFixed(1) + 'M';
+      document.getElementById('scenario-b-modular').textContent = '$' + (bModular / 1000000).toFixed(1) + 'M';
+      
+      if (bDiff > 0) {
+        document.getElementById('scenario-b-diff').textContent = '-$' + (Math.abs(bDiff) / 1000000).toFixed(1) + 'M savings';
+        document.getElementById('scenario-b-diff').style.color = '#14532d';
+      } else {
+        document.getElementById('scenario-b-diff').textContent = '+$' + (Math.abs(bDiff) / 1000000).toFixed(1) + 'M excess';
+        document.getElementById('scenario-b-diff').style.color = '#92400e';
+      }
+
+      // Generate insight
+      const comparisonDiff = bDiff - aDiff;
+      const insight = document.getElementById('scenario-insight');
+      
+      if (Math.abs(comparisonDiff) < 100000) {
+        insight.textContent = 'Both scenarios have similar economics. Location factors result in comparable costs.';
+      } else if (comparisonDiff > 0) {
+        insight.textContent = `Scenario B saves $${(Math.abs(comparisonDiff) / 1000000).toFixed(1)}M more than Scenario A. ${bDiff > 0 ? 'Higher-cost markets show greater modular advantages.' : 'Factory location optimization drives the difference.'}`;
+      } else {
+        insight.textContent = `Scenario A saves $${(Math.abs(comparisonDiff) / 1000000).toFixed(1)}M more than Scenario B. ${aDiff > 0 ? 'This location combination is more favorable for modular construction.' : 'Consider optimizing factory location for better economics.'}`;
+      }
+    }
+
+    function downloadReport() {
+      // Generate a comprehensive text report
+      const totalUnits = projectData.optimized.studio + projectData.optimized.oneBed + projectData.optimized.twoBed + projectData.optimized.threeBed;
+      const gsf = projectData.length * 72 * projectData.floors;
+      
+      const baseSite = 21567408;
+      const baseGC = 8088967;
+      const baseFab = 16040830;
+      
+      const siteCost = baseSite * projectData.propertyFactor;
+      const gcCost = baseGC * projectData.propertyFactor;
+      const fabCost = baseFab * projectData.factoryFactor;
+      const modularCost = gcCost + fabCost;
+      const savings = siteCost - modularCost;
+      
+      const report = `
+RaaP MODULAR FEASIBILITY REPORT
+================================
+
+PROJECT: ${projectData.projectName}
+Generated: ${new Date().toLocaleDateString()}
+
+BUILDING SPECIFICATIONS
+-----------------------
+Floors: ${projectData.floors}
+Total Units: ${totalUnits}
+Building Length: ${projectData.length.toFixed(1)} ft
+Building Width: 72 ft
+Gross Square Feet: ${gsf.toLocaleString()} sf
+
+UNIT MIX
+--------
+Studio: ${projectData.optimized.studio} units
+1 Bedroom: ${projectData.optimized.oneBed} units
+2 Bedroom: ${projectData.optimized.twoBed} units
+3 Bedroom: ${projectData.optimized.threeBed} units
+
+TARGET vs OPTIMIZED
+-------------------
+Studio: ${projectData.targets.studio} → ${projectData.optimized.studio} (${projectData.optimized.studio - projectData.targets.studio >= 0 ? '+' : ''}${projectData.optimized.studio - projectData.targets.studio})
+1 Bed: ${projectData.targets.oneBed} → ${projectData.optimized.oneBed} (${projectData.optimized.oneBed - projectData.targets.oneBed >= 0 ? '+' : ''}${projectData.optimized.oneBed - projectData.targets.oneBed})
+2 Bed: ${projectData.targets.twoBed} → ${projectData.optimized.twoBed} (${projectData.optimized.twoBed - projectData.targets.twoBed >= 0 ? '+' : ''}${projectData.optimized.twoBed - projectData.targets.twoBed})
+3 Bed: ${projectData.targets.threeBed} → ${projectData.optimized.threeBed} (${projectData.optimized.threeBed - projectData.targets.threeBed >= 0 ? '+' : ''}${projectData.optimized.threeBed - projectData.targets.threeBed})
+
+COST ANALYSIS
+-------------
+Location Factors:
+- Property: ${projectData.propertyFactor.toFixed(2)}
+- Factory: ${projectData.factoryFactor.toFixed(2)}
+
+Traditional Site-Built:
+- Total Cost: $${(siteCost / 1000000).toFixed(2)}M
+- Cost per SF: $${Math.round(siteCost / gsf)}
+- Cost per Unit: $${Math.round(siteCost / totalUnits / 1000)}K
+
+RaaP Modular:
+- Modular GC: $${(gcCost / 1000000).toFixed(2)}M
+- Fabricator: $${(fabCost / 1000000).toFixed(2)}M
+- Total Cost: $${(modularCost / 1000000).toFixed(2)}M
+- Cost per SF: $${Math.round(modularCost / gsf)}
+- Cost per Unit: $${Math.round(modularCost / totalUnits / 1000)}K
+
+${savings > 0 ? 'SAVINGS' : 'ADDITIONAL INVESTMENT'}: $${(Math.abs(savings) / 1000000).toFixed(2)}M (${Math.abs((savings / siteCost * 100)).toFixed(1)}%)
+
+ADDITIONAL MODULAR BENEFITS
+---------------------------
+✓ 40% faster construction time
+✓ Higher quality control (factory built)
+✓ Less weather delays
+✓ Reduced site disruption
+
+---
+Generated by RaaP ModularFeasibility Calculator
+      `.trim();
+      
+      // Create download
+      const blob = new Blob([report], { type: 'text/plain' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `RaaP_${projectData.projectName.replace(/\s+/g, '_')}_Report.txt`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+
+    function printReport() {
+      window.print();
+    }
+
+    // Assembly data
+    const assemblyData = {
+      foundation: [
+        { code: 'A10101051700', name: 'Foundation wall, CIP, 4\' height, pumped, 6" thick', description: 'Cast-in-place concrete foundation wall, 4 foot height, includes excavation, formwork, reinforcing steel, concrete placement (pumped), waterproofing', cost: 76.84, unit: 'LF', scope: 'GC' },
+        { code: 'A10101051703', name: 'Shaft foundation wall, CIP, 4\' height, 6" thick, waterproofed', description: 'Foundation wall for elevator and stair shafts, cast-in-place, 4 foot height, includes waterproofing membrane', cost: 85.50, unit: 'LF', scope: 'GC' },
+        { code: 'A10301202240', name: 'Slab on grade, 4" thick, reinforced, 4" gravel', description: 'Concrete slab on grade, 4 inch thickness, non-industrial use, reinforced with wire mesh, includes 4 inch gravel base, vapor barrier', cost: 8.75, unit: 'SF', scope: 'GC' }
+      ],
+      electrical: [
+        { code: 'D50101200400', name: 'Overhead service installation', description: 'Overhead service installation, includes breakers, metering, 20\' conduit & wire, 3 phase, 4 wire, 120/208 V, 800 A', cost: 20822.80, unit: 'EA', scope: 'GC' },
+        { code: 'D50102400280', name: 'Switchgear installation', description: 'Switchgear installation, includes switchboard, panels & circuit breaker, 120/208 V, 3 phase, 800 A', cost: 21969.00, unit: 'EA', scope: 'GC' },
+        { code: 'D50201250560', name: 'Receptacles', description: 'Receptacles including plate, box, conduit, wire, 10 per 1000 SF, 1.2 W per SF, with typical circuiting', cost: 318.27, unit: '1000 SF', scope: '58% GC, 42% Fab' },
+        { code: 'D50201250720', name: 'Light fixtures, recessed', description: 'Light fixture, recessed, round, 150W incandescent lamp, includes wiring and installation', cost: 365.12, unit: 'EA', scope: '58% GC, 42% Fab' }
+      ],
+      openings: [
+        { code: 'B20201081101', name: 'Window: Fiberglass 3×4', description: 'Windows, fiberglass, single hung, insulated glass, 36"×48"', cost: 1366.13, unit: 'EA', scope: 'Fab' },
+        { code: 'B20201083451', name: 'Window: Vinyl 3×4', description: 'Windows, vinyl, double-hung, insulated glass (3\'–0"×3\'–6")', cost: 654.63, unit: 'EA', scope: 'Fab' }
+      ]
+    };
+
+    let currentFilter = 'all';
+
+    function filterAssemblies(category) {
+      currentFilter = category;
+      
+      // Update button styles
+      ['all', 'foundation', 'electrical', 'openings'].forEach(cat => {
+        const btn = document.getElementById(`filter-${cat}`);
+        if (cat === category) {
+          btn.className = 'btn';
+          btn.style.background = '#2563eb';
+          btn.style.color = 'white';
+        } else {
+          btn.className = 'btn btn-secondary';
+          btn.style.background = '';
+          btn.style.color = '';
+        }
+      });
+      
+      displayAssemblies(category);
+    }
+
+    function searchAssemblies() {
+      const query = document.getElementById('assembly-search').value.toLowerCase();
+      displayAssemblies(currentFilter, query);
+    }
+
+    function displayAssemblies(category = 'all', searchQuery = '') {
+      const resultsDiv = document.getElementById('assembly-results');
+      let assemblies = [];
+      
+      if (category === 'all') {
+        assemblies = [...assemblyData.foundation, ...assemblyData.electrical, ...assemblyData.openings];
+      } else {
+        assemblies = assemblyData[category] || [];
+      }
+      
+      if (searchQuery) {
+        assemblies = assemblies.filter(a => 
+          a.name.toLowerCase().includes(searchQuery) || 
+          a.description.toLowerCase().includes(searchQuery) ||
+          a.code.toLowerCase().includes(searchQuery)
+        );
+      }
+      
+      if (assemblies.length === 0) {
+        resultsDiv.innerHTML = '<div style="color: #6b7280; text-align: center; padding: 40px;">No assemblies found</div>';
+        return;
+      }
+      
+      resultsDiv.innerHTML = assemblies.map(assembly => `
+        <div style="background: white; padding: 12px; border-radius: 8px; margin-bottom: 12px; border: 1px solid #e5e7eb;">
+          <div style="display: flex; justify-content: between; align-items: start; margin-bottom: 8px;">
+            <div style="flex: 1;">
+              <div style="font-weight: 600; color: #1f2937; margin-bottom: 4px;">${assembly.name}</div>
+              <div style="font-size: 12px; color: #6b7280; font-family: monospace;">${assembly.code}</div>
+            </div>
+            <div style="text-align: right;">
+              <div style="font-weight: 600; color: #2563eb; font-size: 16px;">$${assembly.cost.toLocaleString()}</div>
+              <div style="font-size: 11px; color: #6b7280;">per ${assembly.unit}</div>
+            </div>
+          </div>
+          <div style="font-size: 13px; color: #374151; margin-bottom: 8px;">${assembly.description}</div>
+          <div style="display: flex; gap: 8px; align-items: center;">
+            <span style="background: #dbeafe; color: #1e40af; padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: 600;">
+              ${assembly.scope}
+            </span>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // Chatbot functionality
+    function sendChatMessage() {
+      const input = document.getElementById('chat-input');
+      const message = input.value.trim();
+      
+      if (!message) return;
+      
+      // Add user message
+      addChatMessage('user', message);
+      input.value = '';
+      
+      // Generate response
+      setTimeout(() => {
+        const response = generateChatResponse(message);
+        addChatMessage('assistant', response);
+      }, 500);
+    }
+
+    function askQuickQuestion(question) {
+      document.getElementById('chat-input').value = question;
+      sendChatMessage();
+    }
+
+    function addChatMessage(sender, message) {
+      const chatDiv = document.getElementById('chat-messages');
+      const isUser = sender === 'user';
+      
+      const messageDiv = document.createElement('div');
+      messageDiv.style.cssText = `
+        background: ${isUser ? '#2563eb' : 'white'};
+        color: ${isUser ? 'white' : '#1f2937'};
+        padding: 12px;
+        border-radius: 8px;
+        margin-bottom: 12px;
+        ${!isUser ? 'border-left: 4px solid #2563eb;' : ''}
+      `;
+      
+      messageDiv.innerHTML = `
+        <div style="font-size: 12px; color: ${isUser ? 'rgba(255,255,255,0.8)' : '#6b7280'}; margin-bottom: 4px;">
+          ${isUser ? '👤 You' : '💬 Assistant'}
+        </div>
+        <div style="font-size: 14px;">${message}</div>
+      `;
+      
+      chatDiv.appendChild(messageDiv);
+      chatDiv.scrollTop = chatDiv.scrollHeight;
+    }
+
+    function generateChatResponse(message) {
+      const lowerMessage = message.toLowerCase();
+      const totalUnits = projectData.optimized ? 
+        (projectData.optimized.studio + projectData.optimized.oneBed + projectData.optimized.twoBed + projectData.optimized.threeBed) : 105;
+      const gsf = projectData.length ? (projectData.length * 72 * projectData.floors) : 78336;
+      
+      // Electrical questions
+      if (lowerMessage.includes('electrical') || lowerMessage.includes('electric')) {
+        return `The electrical costs include several major components:<br><br>
+          <strong>Service & Distribution:</strong><br>
+          • Overhead service: $20,823 (main electrical service to building)<br>
+          • Switchgear: $21,969 (distribution panels and circuit breakers)<br>
+          • Feeders & panels: ~$500K (distributing power throughout building)<br><br>
+          <strong>In-Unit Fixtures (${totalUnits} units):</strong><br>
+          • Receptacles: ~$33K (10 outlets per 1000 SF)<br>
+          • Light fixtures: ~$38K (recessed lighting, 150W per fixture)<br>
+          • Switches: ~$2K (wall switches throughout)<br><br>
+          <strong>Building Systems:</strong><br>
+          • Fire alarm & communication: $92K<br>
+          • Emergency systems and backup power<br><br>
+          The Modular GC handles service/distribution (58% of cost), while the Fabricator pre-installs unit fixtures (42%).`;
+      }
+      
+      // Foundation questions
+      if (lowerMessage.includes('foundation') || lowerMessage.includes('concrete')) {
+        const perimeter = projectData.length ? ((projectData.length + 72) * 2) : 975;
+        const slabArea = projectData.length ? (projectData.length * 72) : 19584;
+        return `The foundation includes:<br><br>
+          <strong>Assembly A10101051700 - Foundation Wall</strong><br>
+          • ${perimeter.toFixed(0)} LF perimeter × $303.54/LF = $${(perimeter * 303.54 / 1000).toFixed(0)}K<br>
+          • Cast-in-place concrete, 4' height, 6" thick<br>
+          • Includes: excavation, formwork, rebar, concrete (pumped), waterproofing<br><br>
+          <strong>Assembly A10301202240 - Slab on Grade</strong><br>
+          • ${slabArea.toLocaleString()} SF × $51.59/SF = $${(slabArea * 51.59 / 1000).toFixed(0)}K<br>
+          • 4" thick concrete slab with reinforcement<br>
+          • Includes: 4" gravel base, vapor barrier, wire mesh<br><br>
+          <strong>Elevator/Stair Shafts:</strong><br>
+          • Foundation walls for vertical circulation: ~$225K<br><br>
+          All foundation work is performed by the Modular GC at the site.`;
+      }
+      
+      // Unit/window questions
+      if (lowerMessage.includes('window') || lowerMessage.includes('how many')) {
+        const windowCount = totalUnits * 4;
+        const doorCount = totalUnits * 2;
+        return `For your ${totalUnits}-unit building:<br><br>
+          <strong>Windows:</strong> Approximately ${windowCount} windows<br>
+          • Assembly B20201081101: Fiberglass 3×4 windows @ $1,366 each<br>
+          • Assembly B20201083451: Vinyl 3×4 windows @ $655 each<br>
+          • Mix depends on unit specifications<br>
+          • Pre-installed by Fabricator in modules<br><br>
+          <strong>Doors:</strong> Approximately ${doorCount} doors<br>
+          • Entry doors per unit<br>
+          • Interior doors within units<br>
+          • Pre-hung and installed at factory<br><br>
+          <strong>Total Openings Cost:</strong> ~$1.9M<br>
+          • 92% fabricated at factory<br>
+          • 8% site installation (connections, final adjustments)`;
+      }
+      
+      // GC vs Fab questions
+      if (lowerMessage.includes('gc') || lowerMessage.includes('fab') || lowerMessage.includes('scope')) {
+        return `<strong>Modular GC (Site Work):</strong><br>
+          • Foundation (concrete, masonry)<br>
+          • Site utilities (water, sewer, power connections)<br>
+          • Elevator installation<br>
+          • Module setting and crane work<br>
+          • Final electrical/plumbing connections<br>
+          • Exterior site improvements<br>
+          • Project management and logistics<br><br>
+          <strong>Fabricator (Factory Work):</strong><br>
+          • Structural steel frames<br>
+          • Wall assemblies (interior & exterior)<br>
+          • Floor and ceiling systems<br>
+          • Pre-wired electrical (in-unit fixtures)<br>
+          • Pre-plumbed bathrooms<br>
+          • Windows and doors<br>
+          • Interior finishes and appliances<br>
+          • Factory quality control<br><br>
+          <strong>Split Scope Items:</strong><br>
+          • Electrical: 58% GC (service/distribution), 42% Fab (unit fixtures)<br>
+          • Plumbing: 49% GC (risers/connections), 51% Fab (fixtures/in-unit)`;
+      }
+      
+      // Cost driver questions
+      if (lowerMessage.includes('cost driver') || lowerMessage.includes('expensive') || lowerMessage.includes('major cost')) {
+        return `<strong>Top Cost Drivers (by division):</strong><br><br>
+          1. <strong>06 Wood & Plastics ($${Math.round(2259 * projectData.propertyFactor / 1000)}M)</strong><br>
+          • Factory-built floor/ceiling systems<br>
+          • Pre-built wall assemblies<br>
+          • Integrated finishes<br><br>
+          2. <strong>09 Finishes ($${Math.round(3232 * projectData.propertyFactor / 1000)}M)</strong><br>
+          • Paint, tiles, flooring<br>
+          • Factory precision finishing<br><br>
+          3. <strong>26 Electrical ($${Math.round(3583 * projectData.propertyFactor / 1000)}M)</strong><br>
+          • Service & distribution<br>
+          • All fixtures and wiring<br><br>
+          4. <strong>23 HVAC ($${Math.round(2578 * projectData.propertyFactor / 1000)}M)</strong><br>
+          • Unit HVAC systems<br>
+          • Central systems<br><br>
+          <strong>Per-Unit Cost Drivers:</strong><br>
+          • Building size (GSF): ${gsf.toLocaleString()} sf<br>
+          • Unit count: ${totalUnits} units<br>
+          • Bathrooms: ${totalUnits * 1.5} total<br>
+          • Location factor: ${projectData.propertyFactor?.toFixed(2) || 0.87}`;
+      }
+      
+      // Default response
+      return `I can help explain costs! Try asking about:<br><br>
+        • Specific divisions (electrical, foundation, plumbing, etc.)<br>
+        • Assembly details (windows, doors, fixtures)<br>
+        • Scope responsibilities (GC vs Fabricator)<br>
+        • Cost drivers and major expenses<br>
+        • Unit counts and quantities<br><br>
+        What would you like to know?`;
+    }
+  </script>
+</body>
+</html>
