@@ -218,7 +218,11 @@ export const calculateDivisionCosts = (
   factoryFactor,
   adjustments = {}
 ) => {
-  const scaleFactor = calculateScaleFactor(totalUnits, floors);
+  // Division costs use 1000x multiplier (costs are per 1000 units of scale)
+  // Scale factor: 1000 × unitRatio × floorMultiplier (exact from original HTML)
+  const unitRatio = totalUnits / BASE_COSTS.baseUnits;
+  const floorMultiplier = floors / BASE_COSTS.baseFloors;
+  const scaleFactor = 1000 * unitRatio * floorMultiplier;
 
   // Default adjustments
   const {

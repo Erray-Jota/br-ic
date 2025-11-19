@@ -1,250 +1,389 @@
 /**
- * UNIT OPTIMIZATION ENGINE
+ * UNIT OPTIMIZATION ENGINE (Original v3 Logic)
  *
- * This engine optimizes the unit mix for a modular multifamily building based on:
- * - Target unit mix (desired number of studios, 1BR, 2BR, 3BR)
- * - Building length constraint
- * - Modular unit widths
- * - Common area requirements
- *
- * The optimization ensures units fit within the building length while staying
- * as close as possible to the target unit mix.
+ * This engine uses the exact optimization algorithm from the original HTML app.
+ * It employs a sophisticated per-side SKU-based placement strategy with:
+ * - Corner vs Inline unit distinctions
+ * - Multi-stage optimization (shortening, mix adjustment, add-back)
+ * - Paired placement (units mirror on both sides of corridor)
  */
 
 // ============================================================================
-// CONSTANTS: Unit Dimensions
+// CONSTANTS: SKU-Based Unit Dimensions (EXACT from original)
 // ============================================================================
 
 /**
- * Standard modular unit widths (in feet)
- * These represent typical factory-built module widths for each unit type
+ * SKU widths in feet (exact from original HTML)
+ * These represent the actual module configurations used in placement
  */
-export const UNIT_WIDTHS = {
-  studio: 12,    // Studio units: 12' wide module
-  oneBed: 14,    // 1-bedroom: 14' wide module
-  twoBed: 26,    // 2-bedroom: 26' wide (typically two 13' modules)
-  threeBed: 28,  // 3-bedroom: 28' wide (two 14' modules)
+export const SKU_WIDTHS = {
+  studio: 13.5,        // Studio unit (single 13.5' module)
+  oneCorner: 15.5,     // 1BR corner unit
+  oneInline: 24.5,     // 1BR inline unit
+  twoCorner: 31.0,     // 2BR corner unit
+  twoInline: 38.0,     // 2BR inline unit
+  threeCorner: 42.0,   // 3BR corner unit (all 3BRs are corners)
 };
 
 /**
- * Standard unit sizes (Gross Square Feet per unit)
- * These include in-unit circulation and are based on typical modular layouts
+ * Lobby widths based on lobby type (exact from original)
  */
-export const UNIT_SIZES_GSF = {
-  studio: 450,     // 450 SF studio
-  oneBed: 650,     // 650 SF one-bedroom
-  twoBed: 950,     // 950 SF two-bedroom
-  threeBed: 1200,  // 1200 SF three-bedroom
+export const LOBBY_WIDTHS = {
+  1: 13.5,   // 1-Bay (single loaded)
+  2: 24.5,   // 2-Bay (double loaded) - DEFAULT
+  4: 49.0,   // 4-Bay (wrap)
 };
 
 /**
- * Default unit distribution percentages
- * Used when no target mix is provided
+ * Fixed stair width (per side)
  */
-export const DEFAULT_UNIT_MIX = {
-  studio: 25,    // 25% studios
-  oneBed: 40,    // 40% one-bedrooms
-  twoBed: 30,    // 30% two-bedrooms
-  threeBed: 5,   // 5% three-bedrooms
-};
-
-// ============================================================================
-// CONSTANTS: Building Parameters
-// ============================================================================
+export const STAIR_WIDTH = 13.5;
 
 /**
- * Base building parameters for scaling calculations
- * These represent the "baseline" project used for cost calibration
+ * Corner slots per side (architectural constraint)
+ */
+export const CORNER_SLOTS_PER_SIDE = 2;
+
+/**
+ * Base building parameters (for cost scaling)
  */
 export const BASE_BUILDING = {
   floors: 5,
   totalUnits: 120,
-  length: 280,      // feet
-  gsf: 78336,       // Total GSF for base building
-  commonAreaPct: 5, // 5% common area factor
+  length: 280,
+  gsf: 78336,
+  commonAreaPct: 5,
 };
 
 /**
- * Lobby configurations and their impact on building layout
+ * Unit sizes in GSF (for GSF calculations)
  */
-export const LOBBY_TYPES = {
-  1: { name: 'Single Loaded', width: 8, description: 'Units on one side of corridor' },
-  2: { name: 'Double Loaded', width: 6, description: 'Units on both sides of corridor' },
-  3: { name: 'Wrap', width: 10, description: 'Units wrap around core' },
+export const UNIT_SIZES_GSF = {
+  studio: 450,
+  oneBed: 650,
+  twoBed: 950,
+  threeBed: 1200,
 };
 
 // ============================================================================
-// CORE OPTIMIZATION LOGIC
+// CORE OPTIMIZATION FUNCTION (EXACT from original HTML)
 // ============================================================================
 
 /**
- * Calculates the actual width consumed by the lobby/corridor
- * @param {number} lobbyType - Type of lobby (1=single, 2=double, 3=wrap)
- * @param {number} buildingLength - Total building length in feet
- * @returns {number} Lobby width in feet
- */
-export const calculateLobbyWidth = (lobbyType, buildingLength) => {
-  const lobby = LOBBY_TYPES[lobbyType] || LOBBY_TYPES[2];
-  return lobby.width;
-};
-
-/**
- * Optimizes unit mix to fit within building length constraint
+ * Optimizes unit mix using exact original algorithm
  *
- * ALGORITHM:
- * 1. Start with target unit counts
- * 2. Calculate width required for each unit type
- * 3. Calculate total width needed (sum of all unit widths)
- * 4. If width exceeds building length:
- *    - Reduce units proportionally, prioritizing larger units first
- *    - Re-calculate until units fit
- * 5. If width is under building length:
- *    - Add units proportionally, maintaining target mix ratios
- *    - Re-calculate until building is optimally filled
+ * ALGORITHM (from original HTML):
+ * 1. Convert building-wide targets to per-side targets
+ * 2. Map to SKUs (corner vs inline)
+ * 3. STAGE 1: Threshold-based shortening
+ * 4. STAGE 2: Mix adjustments (corner→inline, type swaps)
+ * 5. STAGE 3: Add-back phase (restore units if slack)
  *
  * @param {Object} targets - Target unit counts {studio, oneBed, twoBed, threeBed}
- * @param {number} buildingLength - Available length in feet
- * @param {number} lobbyType - Lobby configuration type
+ * @param {number} buildingLength - Target building length in feet
+ * @param {number} lobbyType - Lobby type (1, 2, or 4)
  * @param {number} floors - Number of floors
- * @returns {Object} Optimized unit counts and metrics
+ * @returns {Object} Optimization results
  */
 export const optimizeUnits = (targets, buildingLength, lobbyType, floors = 5) => {
-  // Calculate available width for units (excluding lobby/corridor)
-  const lobbyWidth = calculateLobbyWidth(lobbyType, buildingLength);
-  const availableWidth = buildingLength - lobbyWidth;
+  // Lobby and stair geometry
+  const lobbyWidth = LOBBY_WIDTHS[lobbyType] || LOBBY_WIDTHS[2];
+  const stairWidth = STAIR_WIDTH;
 
-  // Start with target counts
-  let optimized = { ...targets };
+  // Total units requested (for display only)
+  const totalWanted = (targets.studio || 0) + (targets.oneBed || 0) + (targets.twoBed || 0) + (targets.threeBed || 0);
 
-  // Calculate required width for target units
-  const calculateRequiredWidth = (units) => {
-    return (
-      units.studio * UNIT_WIDTHS.studio +
-      units.oneBed * UNIT_WIDTHS.oneBed +
-      units.twoBed * UNIT_WIDTHS.twoBed +
-      units.threeBed * UNIT_WIDTHS.threeBed
-    );
+  // Helper: compute per-side units from total building-wide targets
+  const perSideFromTotal = (totalUnits) => {
+    if (!floors || floors <= 0) return 0;
+    const perFloor = totalUnits / floors;
+    return Math.ceil(perFloor / 2); // ensure even units per floor (same both sides)
   };
 
-  let requiredWidth = calculateRequiredWidth(optimized);
-  let iterations = 0;
-  const maxIterations = 50; // Prevent infinite loops
+  // Per-side user-type targets (per typical floor)
+  const perSideTargets = {
+    studio: perSideFromTotal(targets.studio || 0),
+    oneBed: perSideFromTotal(targets.oneBed || 0),
+    twoBed: perSideFromTotal(targets.twoBed || 0),
+    threeBed: perSideFromTotal(targets.threeBed || 0),
+  };
 
-  // OPTIMIZATION LOOP
-  while (Math.abs(requiredWidth - availableWidth) > 2 && iterations < maxIterations) {
-    iterations++;
+  // Initial SKU mapping per side (per typical floor)
+  let remainingCornerSlots = CORNER_SLOTS_PER_SIDE;
 
-    if (requiredWidth > availableWidth) {
-      // TOO WIDE: Reduce units (prioritize reducing larger units)
-      if (optimized.threeBed > 0) {
-        optimized.threeBed--;
-      } else if (optimized.twoBed > 0) {
-        optimized.twoBed--;
-      } else if (optimized.oneBed > 0) {
-        optimized.oneBed--;
-      } else if (optimized.studio > 0) {
-        optimized.studio--;
+  // 3-bed: treat all as corner SKUs
+  let sku_3_corner = perSideTargets.threeBed || 0;
+  const used3ForCorners = Math.min(sku_3_corner, remainingCornerSlots);
+  remainingCornerSlots -= used3ForCorners;
+
+  // 2-bed: some corner, rest inline
+  let sku_2_corner = Math.min(perSideTargets.twoBed || 0, remainingCornerSlots);
+  let sku_2_inline = Math.max(0, (perSideTargets.twoBed || 0) - sku_2_corner);
+  remainingCornerSlots -= sku_2_corner;
+
+  // 1-bed: some corner, rest inline
+  let sku_1_corner = Math.min(perSideTargets.oneBed || 0, remainingCornerSlots);
+  let sku_1_inline = Math.max(0, (perSideTargets.oneBed || 0) - sku_1_corner);
+
+  // Studios: all inline
+  let sku_studio = perSideTargets.studio || 0;
+
+  // Preserve original per-side type targets for add-back limits
+  const perSideTypeTargets = { ...perSideTargets };
+
+  // Helper: compute required length on ONE SIDE (units only, excluding lobby+stair)
+  const computeRequiredSide = () => (
+    sku_studio * SKU_WIDTHS.studio +
+    sku_1_corner * SKU_WIDTHS.oneCorner +
+    sku_1_inline * SKU_WIDTHS.oneInline +
+    sku_2_corner * SKU_WIDTHS.twoCorner +
+    sku_2_inline * SKU_WIDTHS.twoInline +
+    sku_3_corner * SKU_WIDTHS.threeCorner
+  );
+
+  // Available length on one side for units
+  const availableSide = buildingLength - lobbyWidth - stairWidth;
+
+  // ------------- STAGE 1: Threshold-based shortening -------------
+  let safetyCounter = 0;
+  while (safetyCounter++ < 1000) {
+    let requiredSide = computeRequiredSide();
+    let diff = requiredSide - availableSide;
+
+    if (diff <= 0) break; // fits or is short enough
+
+    // Small overage: prefer removing a Studio bay
+    if (diff > 0 && diff < 10) {
+      if (sku_studio > 0) {
+        sku_studio -= 1;
+        continue;
       }
-    } else {
-      // TOO NARROW: Add units (maintain target proportions)
-      const totalTarget = targets.studio + targets.oneBed + targets.twoBed + targets.threeBed;
-      const ratios = {
-        studio: targets.studio / totalTarget,
-        oneBed: targets.oneBed / totalTarget,
-        twoBed: targets.twoBed / totalTarget,
-        threeBed: targets.threeBed / totalTarget,
-      };
-
-      // Find which unit type to add based on ratios
-      const currentTotal = optimized.studio + optimized.oneBed + optimized.twoBed + optimized.threeBed;
-      const currentRatios = {
-        studio: optimized.studio / currentTotal,
-        oneBed: optimized.oneBed / currentTotal,
-        twoBed: optimized.twoBed / currentTotal,
-        threeBed: optimized.threeBed / currentTotal,
-      };
-
-      // Add unit type that's most under-represented
-      const deficits = {
-        studio: ratios.studio - currentRatios.studio,
-        oneBed: ratios.oneBed - currentRatios.oneBed,
-        twoBed: ratios.twoBed - currentRatios.twoBed,
-        threeBed: ratios.threeBed - currentRatios.threeBed,
-      };
-
-      const maxDeficitType = Object.keys(deficits).reduce((a, b) =>
-        deficits[a] > deficits[b] ? a : b
-      );
-
-      // Check if adding this unit would exceed available width
-      const widthIfAdded = requiredWidth + UNIT_WIDTHS[maxDeficitType];
-      if (widthIfAdded <= availableWidth + 2) {
-        optimized[maxDeficitType]++;
-      } else {
-        break; // Can't add any more units
-      }
+      // Fall through to next options if no studios
     }
 
-    requiredWidth = calculateRequiredWidth(optimized);
+    // Medium overage: remove 1-bed inline bay if any
+    if (diff >= 10 && diff < 20) {
+      if (sku_1_inline > 0) {
+        sku_1_inline -= 1;
+        continue;
+      }
+      // Fall through if none
+    }
+
+    // Large overage: remove 3-bed corner or 2-bed inline
+    if (diff >= 20) {
+      if (sku_3_corner > 0) {
+        sku_3_corner -= 1;
+        continue;
+      } else if (sku_2_inline > 0) {
+        sku_2_inline -= 1;
+        continue;
+      }
+      // Fall back if neither available
+    }
+
+    // Fallback if none of the above applied but diff still positive:
+    if (sku_1_inline > 0) {
+      sku_1_inline -= 1;
+    } else if (sku_studio > 0) {
+      sku_studio -= 1;
+    } else {
+      // No more SKUs to cut meaningfully
+      break;
+    }
   }
 
-  // Calculate final metrics
-  const totalOptimized = optimized.studio + optimized.oneBed + optimized.twoBed + optimized.threeBed;
-  const totalTarget = targets.studio + targets.oneBed + targets.twoBed + targets.threeBed;
+  // ------------- STAGE 2: Mix adjustments if still too long -------------
+  let requiredSideAfterStage1 = computeRequiredSide();
+  let diffAfterStage1 = requiredSideAfterStage1 - availableSide;
 
-  // Calculate GSF per unit type
+  if (diffAfterStage1 > 0) {
+    safetyCounter = 0;
+
+    // 2.1 Convert 2-bed Corner -> 1-bed Corner bays
+    while (safetyCounter++ < 1000 && diffAfterStage1 > 0 && sku_2_corner > 0) {
+      sku_2_corner -= 1;
+      sku_1_corner += 1;
+      requiredSideAfterStage1 = computeRequiredSide();
+      diffAfterStage1 = requiredSideAfterStage1 - availableSide;
+    }
+
+    // 2.2 Swap 1-bed Inline -> Studio to move toward ~50-50 Studio:1BR mix
+    const studioOneShare = () => {
+      const oneBeds = sku_1_corner + sku_1_inline;
+      const totalSmall = oneBeds + sku_studio;
+      if (totalSmall <= 0) return 0;
+      return sku_studio / totalSmall;
+    };
+
+    safetyCounter = 0;
+    while (safetyCounter++ < 1000 && diffAfterStage1 > 0 && sku_1_inline > 0) {
+      // Swap one inline 1BR for one Studio
+      sku_1_inline -= 1;
+      sku_studio += 1;
+
+      requiredSideAfterStage1 = computeRequiredSide();
+      diffAfterStage1 = requiredSideAfterStage1 - availableSide;
+
+      const share = studioOneShare();
+      // Stop swapping once Studio share is within ~40-60% range
+      if (share >= 0.4 && share <= 0.6) break;
+    }
+
+    // 2.3 If still long: remove full bays alternating Studios and 1-bed Inlines
+    safetyCounter = 0;
+    let removeStudioNext = true;
+    while (safetyCounter++ < 1000 && diffAfterStage1 > 0) {
+      let changed = false;
+
+      if (removeStudioNext && sku_studio > 0) {
+        sku_studio -= 1;
+        changed = true;
+      } else if (!removeStudioNext && sku_1_inline > 0) {
+        sku_1_inline -= 1;
+        changed = true;
+      } else if (sku_studio > 0) {
+        // Fallback if one type is gone
+        sku_studio -= 1;
+        changed = true;
+      } else if (sku_1_inline > 0) {
+        sku_1_inline -= 1;
+        changed = true;
+      } else {
+        // As a last resort we could touch 1-bed corners, but per spec we avoid this if possible
+        break;
+      }
+
+      if (!changed) break;
+
+      removeStudioNext = !removeStudioNext;
+      requiredSideAfterStage1 = computeRequiredSide();
+      diffAfterStage1 = requiredSideAfterStage1 - availableSide;
+    }
+  }
+
+  // ------------- STAGE 3: ADD-BACK - restore small units toward targets if slack -------------
+  let finalRequiredSide = computeRequiredSide();
+  let slackSide = availableSide - finalRequiredSide;
+
+  // Helper to compute current per-side type counts from SKUs
+  const computePerSideTypeCounts = () => {
+    const studios = sku_studio;
+    const oneBeds = sku_1_corner + sku_1_inline;
+    const twoBeds = sku_2_corner + sku_2_inline;
+    const threeBeds = sku_3_corner;
+    return { studios, oneBeds, twoBeds, threeBeds };
+  };
+
+  safetyCounter = 0;
+  while (safetyCounter++ < 200 && slackSide > 0.1) {
+    const typeCounts = computePerSideTypeCounts();
+
+    let added = false;
+
+    // Prefer adding Studios up to their per-side target
+    if (typeCounts.studios < perSideTypeTargets.studio && slackSide >= SKU_WIDTHS.studio) {
+      sku_studio += 1;
+      added = true;
+    }
+    // Then prefer adding 1-bed Inline up to its per-side target
+    else if (typeCounts.oneBeds < perSideTypeTargets.oneBed && slackSide >= SKU_WIDTHS.oneInline) {
+      sku_1_inline += 1;
+      added = true;
+    }
+
+    if (!added) break;
+
+    finalRequiredSide = computeRequiredSide();
+    slackSide = availableSide - finalRequiredSide;
+    if (slackSide < 0) {
+      // Undo last add if we overshot
+      if (added && typeCounts.studios < perSideTypeTargets.studio && sku_studio > 0) {
+        sku_studio -= 1;
+      } else if (added && typeCounts.oneBeds < perSideTypeTargets.oneBed && sku_1_inline > 0) {
+        sku_1_inline -= 1;
+      }
+      finalRequiredSide = computeRequiredSide();
+      slackSide = availableSide - finalRequiredSide;
+      break;
+    }
+  }
+
+  // ------------- Finalize optimized mix (convert back to building-wide unit counts) -------------
+  const finalTypeCountsSide = computePerSideTypeCounts();
+
+  const optimizedTotals = {
+    studio: finalTypeCountsSide.studios * 2 * floors,
+    oneBed: finalTypeCountsSide.oneBeds * 2 * floors,
+    twoBed: finalTypeCountsSide.twoBeds * 2 * floors,
+    threeBed: finalTypeCountsSide.threeBeds * 2 * floors,
+  };
+
+  const totalOptimized = optimizedTotals.studio + optimizedTotals.oneBed + optimizedTotals.twoBed + optimizedTotals.threeBed;
+
+  // Required building length based on final per-side units
+  const finalRequiredBuildingLength = finalRequiredSide + lobbyWidth + stairWidth;
+
+  // Calculate utilization
+  const utilizationPct = (finalRequiredSide / availableSide) * 100;
+
+  // Calculate GSF by type
   const gsfByType = {
-    studio: optimized.studio * UNIT_SIZES_GSF.studio,
-    oneBed: optimized.oneBed * UNIT_SIZES_GSF.oneBed,
-    twoBed: optimized.twoBed * UNIT_SIZES_GSF.twoBed,
-    threeBed: optimized.threeBed * UNIT_SIZES_GSF.threeBed,
+    studio: optimizedTotals.studio * UNIT_SIZES_GSF.studio,
+    oneBed: optimizedTotals.oneBed * UNIT_SIZES_GSF.oneBed,
+    twoBed: optimizedTotals.twoBed * UNIT_SIZES_GSF.twoBed,
+    threeBed: optimizedTotals.threeBed * UNIT_SIZES_GSF.threeBed,
   };
 
   const totalUnitGSF = gsfByType.studio + gsfByType.oneBed + gsfByType.twoBed + gsfByType.threeBed;
 
   return {
-    optimized,
+    optimized: optimizedTotals,
     totalOptimized,
-    requiredWidth,
-    availableWidth,
-    utilizationPct: (requiredWidth / availableWidth) * 100,
+    requiredWidth: finalRequiredBuildingLength,
+    availableWidth: buildingLength,
+    utilizationPct,
     gsfByType,
     totalUnitGSF,
     lobbyWidth,
-    convergenceIterations: iterations,
+    stairWidth,
+    // SKU breakdown for advanced use
+    skus: {
+      sku_studio,
+      sku_1_corner,
+      sku_1_inline,
+      sku_2_corner,
+      sku_2_inline,
+      sku_3_corner,
+    },
+    perSideTypeCounts: finalTypeCountsSide,
   };
 };
 
 /**
- * Calculates total building GSF including common areas
+ * Calculates total building GSF including common areas (exact from original)
  *
- * @param {Object} optimized - Optimized unit counts
- * @param {number} floors - Number of floors
- * @param {number} commonAreaPct - Common area percentage (default 5%)
- * @param {number} podiumCount - Number of podium floors (default 0)
- * @returns {Object} GSF breakdown
+ * Note: optimized contains building-wide totals (not per-floor counts)
  */
 export const calculateBuildingGSF = (optimized, floors, commonAreaPct = 5, podiumCount = 0) => {
-  // Unit GSF per floor
-  const unitGSFPerFloor =
+  // Total unit GSF (optimized already contains building-wide totals)
+  const totalUnitGSF =
     optimized.studio * UNIT_SIZES_GSF.studio +
     optimized.oneBed * UNIT_SIZES_GSF.oneBed +
     optimized.twoBed * UNIT_SIZES_GSF.twoBed +
     optimized.threeBed * UNIT_SIZES_GSF.threeBed;
 
-  // Typical floors (residential)
   const residentialFloors = floors - podiumCount;
-  const totalUnitGSF = unitGSFPerFloor * residentialFloors;
+  const unitGSFPerFloor = totalUnitGSF / residentialFloors;
 
-  // Common areas (lobbies, corridors, stairs, elevators, mechanical)
   const commonGSF = totalUnitGSF * (commonAreaPct / 100);
 
-  // Podium GSF (typically parking or amenity space)
-  const podiumGSFPerFloor = unitGSFPerFloor * 1.2; // Podiums typically 20% larger footprint
+  const podiumGSFPerFloor = unitGSFPerFloor * 1.2;
   const totalPodiumGSF = podiumGSFPerFloor * podiumCount;
 
-  // Total building GSF
   const totalGSF = totalUnitGSF + commonGSF + totalPodiumGSF;
+
+  const totalUnits = optimized.studio + optimized.oneBed + optimized.twoBed + optimized.threeBed;
 
   return {
     totalGSF,
@@ -253,28 +392,17 @@ export const calculateBuildingGSF = (optimized, floors, commonAreaPct = 5, podiu
     totalPodiumGSF,
     unitGSFPerFloor,
     residentialFloors,
-    gsfPerUnit: totalGSF / (optimized.studio + optimized.oneBed + optimized.twoBed + optimized.threeBed),
+    gsfPerUnit: totalUnits > 0 ? totalGSF / totalUnits : 0,
   };
 };
 
 /**
- * Calculates unit ratio (scale factor relative to base building)
- * Used for cost scaling
- *
- * @param {number} totalOptimized - Total optimized unit count
- * @returns {number} Unit ratio (e.g., 1.0 = same as base, 1.5 = 50% larger)
+ * Calculate scale factors (exact from original)
  */
 export const calculateUnitRatio = (totalOptimized) => {
   return totalOptimized / BASE_BUILDING.totalUnits;
 };
 
-/**
- * Calculates floor multiplier (scale factor for number of floors)
- * Used for cost scaling
- *
- * @param {number} floors - Number of floors
- * @returns {number} Floor multiplier
- */
 export const calculateFloorMultiplier = (floors) => {
   return floors / BASE_BUILDING.floors;
 };
@@ -284,15 +412,11 @@ export const calculateFloorMultiplier = (floors) => {
 // ============================================================================
 
 export default {
-  // Constants
-  UNIT_WIDTHS,
-  UNIT_SIZES_GSF,
-  DEFAULT_UNIT_MIX,
+  SKU_WIDTHS,
+  LOBBY_WIDTHS,
+  STAIR_WIDTH,
   BASE_BUILDING,
-  LOBBY_TYPES,
-
-  // Functions
-  calculateLobbyWidth,
+  UNIT_SIZES_GSF,
   optimizeUnits,
   calculateBuildingGSF,
   calculateUnitRatio,

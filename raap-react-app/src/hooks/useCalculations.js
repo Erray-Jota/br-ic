@@ -40,6 +40,7 @@ export const useCalculations = (projectData) => {
       requiredWidth: optimization.requiredWidth,
       availableWidth: optimization.availableWidth,
       utilizationPct: optimization.utilizationPct,
+      skus: optimization.skus,  // SKU breakdown for floorplan generation
 
       // Cost results
       siteCost: costs.siteBuildCost,

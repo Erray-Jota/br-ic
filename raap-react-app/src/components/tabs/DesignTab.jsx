@@ -2,7 +2,7 @@ import { useProject } from '../../contexts/ProjectContext';
 import { useCalculations } from '../../hooks/useCalculations';
 import ProjectInfoBanner from '../ProjectInfoBanner';
 import { ASSET_PATHS } from '../../data/constants';
-import { generateFloorPlan, generateFloorPlanGrid } from '../../engines/floorplanPlacementEngine';
+import { generateFloorPlan, generateSVGElements } from '../../engines/floorplanPlacementEngine';
 
 const DesignTab = () => {
   const { projectData, updateProjectData, switchTab, activeSubtabs, switchSubtab } = useProject();
@@ -302,131 +302,147 @@ const DesignTab = () => {
             </div>
           </div>
 
-          {/* Floorplan Visualization */}
+          {/* Floorplan Visualization (EXACT from original HTML) */}
           {(() => {
-            const floorPlan = generateFloorPlan(calculations.optimized, projectData.targetLength, projectData.lobbyType, projectData.floors);
-            const grid = generateFloorPlanGrid(floorPlan, 2);
+            // Determine stair width based on 3BR presence (exact from original logic)
+            const stairWidth = calculations.optimized.threeBed > 0 ? 11.0 : 13.5;
 
-            const cellColors = {
-              'VOID': '#f3f4f6',
-              'CORR': '#fef3c7',
-              'CORE': '#9ca3af',
-              'STUDIO': '#dbeafe',
-              'ONEBR': '#93c5fd',
-              'TWOBR': '#3b82f6',
-              '3BDRM': '#1e40af',
-            };
-
-            const cellLabels = {
-              'CORE': '🔧',
-              'STUDIO': 'ST',
-              'ONEBR': '1B',
-              'TWOBR': '2B',
-              '3BDRM': '3B',
-            };
-
-            const cellSize = 8; // pixels per grid cell
-            const gridWidth = grid[0].length;
-            const gridHeight = grid.length;
+            // Generate floorplan using exact original algorithm
+            const floorPlan = generateFloorPlan(calculations.skus, projectData.lobbyType, stairWidth);
+            const svgElements = generateSVGElements(floorPlan);
 
             return (
               <div style={{ background: '#f9fafb', padding: '16px', borderRadius: '8px', overflowX: 'auto' }}>
-                <div style={{ marginBottom: '12px' }}>
-                  <div style={{ display: 'flex', gap: '16px', justifyContent: 'center', flexWrap: 'wrap', fontSize: '12px' }}>
-                    {Object.entries(cellColors).map(([type, color]) => {
-                      if (type === 'VOID') return null;
-                      return (
-                        <div key={type} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                          <div style={{ width: '20px', height: '20px', background: color, border: '1px solid #d1d5db', borderRadius: '2px' }}></div>
-                          <span style={{ fontWeight: 600, color: '#374151' }}>
-                            {type === 'CORR' ? 'Corridor' : type === 'CORE' ? 'Core (Stairs/Elevator)' : type.replace('BR', ' BR')}
-                          </span>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
+                {/* SVG Floorplan (exact from original HTML rendering) */}
+                <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '16px' }}>
+                  <svg
+                    id="floor-plan-svg"
+                    width={svgElements.svgWidth}
+                    height={svgElements.svgHeight}
+                    style={{ border: '1px solid #d1d5db', borderRadius: '4px', background: 'white' }}
+                  >
+                    {/* Left Side Units */}
+                    {svgElements.leftUnits.map((unit) => (
+                      <g key={unit.id}>
+                        <rect
+                          x={unit.x}
+                          y={unit.y}
+                          width={unit.width}
+                          height={unit.height}
+                          fill={unit.fill}
+                          stroke={unit.stroke}
+                          strokeWidth={unit.strokeWidth}
+                          rx={unit.rx}
+                        />
+                        <text
+                          x={unit.x + unit.width / 2}
+                          y={unit.y + unit.height / 2 - 4}
+                          textAnchor="middle"
+                          fontSize={11}
+                          fontWeight={600}
+                          fill="#1e293b"
+                        >
+                          {unit.label}
+                        </text>
+                        <text
+                          x={unit.x + unit.width / 2}
+                          y={unit.y + unit.height / 2 + 10}
+                          textAnchor="middle"
+                          fontSize={9}
+                          fill="#475569"
+                        >
+                          {unit.subLabel}
+                        </text>
+                      </g>
+                    ))}
 
-                <div style={{ display: 'flex', justifyContent: 'center' }}>
-                  <div style={{ position: 'relative', border: '2px solid #15803D', borderRadius: '4px', background: 'white', overflow: 'hidden' }}>
-                    <svg width={gridWidth * cellSize} height={gridHeight * cellSize}>
-                      {grid.map((row, y) => (
-                        row.map((cell, x) => (
-                          <g key={`${y}-${x}`}>
-                            <rect
-                              x={x * cellSize}
-                              y={y * cellSize}
-                              width={cellSize}
-                              height={cellSize}
-                              fill={cellColors[cell] || '#ffffff'}
-                              stroke={cell === 'CORR' ? '#f59e0b' : '#e5e7eb'}
-                              strokeWidth={0.5}
-                            />
-                            {cellLabels[cell] && x % 4 === 0 && y % 4 === 0 && (
-                              <text
-                                x={x * cellSize + cellSize / 2}
-                                y={y * cellSize + cellSize / 2}
-                                fontSize={cellSize * 0.7}
-                                fontWeight="700"
-                                fill={cell === 'CORE' ? '#ffffff' : cell === '3BDRM' || cell === 'TWOBR' ? '#ffffff' : '#111827'}
-                                textAnchor="middle"
-                                dominantBaseline="middle"
-                              >
-                                {cellLabels[cell]}
-                              </text>
-                            )}
-                          </g>
-                        ))
-                      ))}
-                      {/* North label */}
-                      <text
-                        x={gridWidth * cellSize / 2}
-                        y={-5}
-                        fontSize="14"
-                        fontWeight="700"
-                        fill="#15803D"
-                        textAnchor="middle"
-                      >
-                      </text>
-                    </svg>
+                    {/* Corridor */}
+                    <rect
+                      x={svgElements.corridor.x}
+                      y={svgElements.corridor.y}
+                      width={svgElements.corridor.width}
+                      height={svgElements.corridor.height}
+                      fill={svgElements.corridor.fill}
+                      stroke={svgElements.corridor.stroke}
+                      strokeWidth={svgElements.corridor.strokeWidth}
+                      rx={svgElements.corridor.rx}
+                    />
+                    <text
+                      x={svgElements.corridor.x + svgElements.corridor.width / 2}
+                      y={svgElements.corridor.y + svgElements.corridor.height / 2 + 10}
+                      textAnchor="middle"
+                      fontSize={12}
+                      fontWeight={700}
+                      fill="#374151"
+                      transform={`rotate(-90 ${svgElements.corridor.x + svgElements.corridor.width / 2} ${svgElements.corridor.y + svgElements.corridor.height / 2 + 10})`}
+                    >
+                      {svgElements.corridor.label}
+                    </text>
 
-                    {/* Directional labels */}
-                    <div style={{ position: 'absolute', top: '-24px', left: '50%', transform: 'translateX(-50%)', fontSize: '14px', fontWeight: 700, color: '#15803D' }}>
-                      ⬆ NORTH
-                    </div>
-                    <div style={{ position: 'absolute', bottom: '-24px', left: '50%', transform: 'translateX(-50%)', fontSize: '14px', fontWeight: 700, color: '#15803D' }}>
-                      ⬇ SOUTH
-                    </div>
-                  </div>
+                    {/* Right Side Units */}
+                    {svgElements.rightUnits.map((unit) => (
+                      <g key={unit.id}>
+                        <rect
+                          x={unit.x}
+                          y={unit.y}
+                          width={unit.width}
+                          height={unit.height}
+                          fill={unit.fill}
+                          stroke={unit.stroke}
+                          strokeWidth={unit.strokeWidth}
+                          rx={unit.rx}
+                        />
+                        <text
+                          x={unit.x + unit.width / 2}
+                          y={unit.y + unit.height / 2 - 4}
+                          textAnchor="middle"
+                          fontSize={11}
+                          fontWeight={600}
+                          fill="#1e293b"
+                        >
+                          {unit.label}
+                        </text>
+                        <text
+                          x={unit.x + unit.width / 2}
+                          y={unit.y + unit.height / 2 + 10}
+                          textAnchor="middle"
+                          fontSize={9}
+                          fill="#475569"
+                        >
+                          {unit.subLabel}
+                        </text>
+                      </g>
+                    ))}
+                  </svg>
                 </div>
 
                 {/* Floor Plan Details */}
-                <div style={{ marginTop: '16px', background: 'white', padding: '12px', borderRadius: '6px', border: '1px solid #e5e7eb' }}>
+                <div style={{ background: 'white', padding: '12px', borderRadius: '6px', border: '1px solid #e5e7eb' }}>
                   <h3 style={{ fontSize: '14px', fontWeight: 700, color: '#111827', marginBottom: '8px' }}>📊 Layout Details</h3>
                   <div className="grid-3" style={{ gap: '12px', fontSize: '13px' }}>
                     <div>
-                      <span style={{ fontWeight: 600, color: '#374151' }}>Corridor Width:</span>
-                      <span style={{ marginLeft: '6px', color: '#111827' }}>{floorPlan.corridorWidth} ft</span>
+                      <span style={{ fontWeight: 600, color: '#374151' }}>Lobby Width:</span>
+                      <span style={{ marginLeft: '6px', color: '#111827' }}>{floorPlan.lobbyWidth} ft</span>
                     </div>
                     <div>
-                      <span style={{ fontWeight: 600, color: '#374151' }}>Building Depth:</span>
-                      <span style={{ marginLeft: '6px', color: '#111827' }}>{floorPlan.buildingDepth.toFixed(0)} ft</span>
+                      <span style={{ fontWeight: 600, color: '#374151' }}>Stair Width:</span>
+                      <span style={{ marginLeft: '6px', color: '#111827' }}>{floorPlan.stairWidth} ft</span>
                     </div>
                     <div>
-                      <span style={{ fontWeight: 600, color: '#374151' }}>Cores:</span>
-                      <span style={{ marginLeft: '6px', color: '#111827' }}>{floorPlan.coresNeeded}</span>
+                      <span style={{ fontWeight: 600, color: '#374151' }}>Layout Type:</span>
+                      <span style={{ marginLeft: '6px', color: '#111827' }}>Double-Loaded Corridor</span>
                     </div>
                     <div>
-                      <span style={{ fontWeight: 600, color: '#374151' }}>Units per Core:</span>
-                      <span style={{ marginLeft: '6px', color: '#111827' }}>{floorPlan.unitsPerCore}</span>
+                      <span style={{ fontWeight: 600, color: '#374151' }}>Left Side Units:</span>
+                      <span style={{ marginLeft: '6px', color: '#111827' }}>{floorPlan.leftSide.length}</span>
                     </div>
                     <div>
-                      <span style={{ fontWeight: 600, color: '#374151' }}>North Side Units:</span>
-                      <span style={{ marginLeft: '6px', color: '#111827' }}>{floorPlan.northSide.length}</span>
+                      <span style={{ fontWeight: 600, color: '#374151' }}>Right Side Units:</span>
+                      <span style={{ marginLeft: '6px', color: '#111827' }}>{floorPlan.rightSide.length}</span>
                     </div>
                     <div>
-                      <span style={{ fontWeight: 600, color: '#374151' }}>South Side Units:</span>
-                      <span style={{ marginLeft: '6px', color: '#111827' }}>{floorPlan.southSide.length}</span>
+                      <span style={{ fontWeight: 600, color: '#374151' }}>Total Per Floor:</span>
+                      <span style={{ marginLeft: '6px', color: '#111827' }}>{floorPlan.leftSide.length + floorPlan.rightSide.length - 2 /* subtract lobby & stairs */}</span>
                     </div>
                   </div>
                 </div>

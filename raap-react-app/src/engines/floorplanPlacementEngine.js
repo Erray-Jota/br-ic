@@ -1,461 +1,346 @@
 /**
- * FLOORPLAN PLACEMENT ENGINE
+ * FLOORPLAN PLACEMENT ENGINE (Original v3 Logic)
  *
- * This engine handles the placement of modular units on a floor plan following
- * architectural and modular construction best practices:
+ * This engine uses the exact floorplan generation algorithm from the original HTML app.
+ * It creates sequential placement of units along left and right sides of a corridor
+ * with special placement rules for lobbies, stairs, and corner units.
  *
- * - Double-loaded corridor layouts (units on both sides)
- * - Single-loaded corridor layouts (units on one side)
- * - Wrap layouts (units around central core)
- * - Unit adjacency rules (compatible unit types next to each other)
- * - Core placement (stairs, elevators, mechanical)
- * - End-unit conditions
- *
- * The placement engine generates a visual representation of the floor plan
- * showing unit positions, corridors, cores, and circulation.
+ * EXACT from original HTML lines 866-1110
  */
 
-import { UNIT_WIDTHS } from './unitOptimizationEngine';
-
 // ============================================================================
-// CONSTANTS: Layout Rules
+// CONSTANTS: Unit Display Configuration (EXACT from original)
 // ============================================================================
 
 /**
- * Corridor widths for different layout types (in feet)
+ * Unit colors for visual display (exact from original HTML)
  */
-export const CORRIDOR_WIDTHS = {
-  singleLoaded: 8,   // Single-loaded corridor (units one side)
-  doubleLoaded: 6,   // Double-loaded corridor (units both sides)
-  wrap: 10,          // Wrap layout (wider for circulation)
+export const UNIT_COLORS = {
+  studio: '#93C5FD',         // Light blue
+  oneBedJr: '#86EFAC',       // Light green (corner)
+  oneBed: '#6EE7B7',         // Green (inline)
+  twoBedCorner: '#C4B5FD',   // Light purple
+  twoBedInline: '#D8B4FE',   // Purple
+  threeBed: '#FCA5A5',       // Light red
+  lobby: '#FDE047',          // Yellow
+  stair: '#D1D5DB',          // Gray
 };
 
 /**
- * Unit depth (perpendicular to building length) in feet
- * These represent typical module depths
+ * Unit widths in feet (exact from original HTML - matches SKU widths)
  */
-export const UNIT_DEPTHS = {
-  studio: 28,      // Shallow depth for studios
-  oneBed: 32,      // Standard depth
-  twoBed: 32,      // Standard depth (two modules deep)
-  threeBed: 36,    // Deeper for 3BR layouts
-  corridor: 6,     // Corridor depth
+export const UNIT_WIDTHS = {
+  studio: 13.5,
+  oneBedJr: 15.5,        // 1BR corner
+  oneBed: 24.5,          // 1BR inline
+  twoBedCorner: 31.0,
+  twoBedInline: 38.0,
+  threeBed: 42.0,
 };
 
 /**
- * Core dimensions (stairs, elevators, mechanical)
+ * SVG scale factor (pixels per foot)
  */
-export const CORE_DIMENSIONS = {
-  width: 24,        // Typical core width (stairs + elevator)
-  depth: 32,        // Typical core depth
-  minUnitsPerCore: 30,  // Minimum units per core (building code typical)
-  maxUnitsPerCore: 60,  // Maximum units per core (efficiency)
-};
-
-/**
- * Unit adjacency rules
- * Defines which unit types can be placed next to each other
- * TRUE = compatible, FALSE = avoid if possible
- */
-export const ADJACENCY_MATRIX = {
-  studio: {
-    studio: true,
-    oneBed: true,
-    twoBed: false,    // Avoid - different module depths may complicate
-    threeBed: false,
-  },
-  oneBed: {
-    studio: true,
-    oneBed: true,
-    twoBed: true,
-    threeBed: true,
-  },
-  twoBed: {
-    studio: false,
-    oneBed: true,
-    twoBed: true,
-    threeBed: true,
-  },
-  threeBed: {
-    studio: false,
-    oneBed: true,
-    twoBed: true,
-    threeBed: true,
-  },
-};
-
-/**
- * Unit placement preferences
- * Score-based system for optimal placement
- */
-export const PLACEMENT_PREFERENCES = {
-  cornerUnit: 1.2,      // Premium for corner units (better light/views)
-  endUnit: 1.1,         // Slight premium for end units
-  midUnit: 1.0,         // Standard mid-corridor units
-  nearCore: 0.9,        // Slight penalty near core (noise)
-};
+export const SVG_SCALE = 2.5;
 
 // ============================================================================
-// PLACEMENT ALGORITHM
+// CORE FLOORPLAN GENERATION FUNCTION (EXACT from original HTML)
 // ============================================================================
 
 /**
- * Calculates number of cores needed based on unit count
- * @param {number} totalUnits - Total units per floor
- * @returns {number} Number of cores needed
- */
-export const calculateCoresNeeded = (totalUnits) => {
-  if (totalUnits <= CORE_DIMENSIONS.minUnitsPerCore) return 1;
-  return Math.ceil(totalUnits / CORE_DIMENSIONS.maxUnitsPerCore);
-};
-
-/**
- * Generates a floor plan layout
+ * Generates floorplan placement data using exact original algorithm
  *
- * ALGORITHM:
- * 1. Determine layout type (single/double/wrap) based on lobbyType
- * 2. Calculate core positions
- * 3. Divide building into placement zones
- * 4. Sort units by size (largest first for stability)
- * 5. Place units following rules:
- *    - Place larger units first (easier to fill gaps with smaller units)
- *    - Maintain adjacency rules
- *    - Optimize for corridor efficiency
- * 6. Generate visual grid representation
+ * ALGORITHM (from original HTML lines 866-1110):
+ * 1. Extract SKU counts from placement object
+ * 2. Build inline units pool (studios, 1BR inline, 2BR inline)
+ * 3. Handle special studio placement across from stairs
+ * 4. Build LEFT SIDE array:
+ *    - Top corner unit (3BR or 2BR corner or 1BR corner)
+ *    - Special studio (if applicable)
+ *    - First half inline units
+ *    - Lobby
+ *    - Second half inline units
+ *    - Left stair
+ *    - Bottom corner unit
+ * 5. Build RIGHT SIDE array:
+ *    - Bottom corner (mirrored from left top)
+ *    - Right stair
+ *    - First half inline units
+ *    - Bonus unit or lobby (depends on lobbyType)
+ *    - Second half inline units
+ *    - Special studio (if applicable)
+ *    - Top corner unit
+ * 6. Return SVG-ready data
  *
- * @param {Object} optimized - Optimized unit counts
- * @param {number} buildingLength - Building length in feet
- * @param {number} lobbyType - Lobby configuration (1=single, 2=double, 3=wrap)
- * @param {number} floors - Number of floors
- * @returns {Object} Floor plan layout data
+ * @param {Object} placement - SKU counts {sku_studio, sku_1_corner, sku_1_inline, sku_2_corner, sku_2_inline, sku_3_corner}
+ * @param {number} lobbyType - Lobby type (1, 2, or 4)
+ * @param {number} stairWidth - Stair width in feet (13.5 or 11.0)
+ * @returns {Object} Floorplan data with leftSide, rightSide, colors, maxHeight
  */
-export const generateFloorPlan = (optimized, buildingLength, lobbyType, floors = 5) => {
-  // Determine layout type
-  const layoutType = lobbyType === 1 ? 'singleLoaded' : lobbyType === 3 ? 'wrap' : 'doubleLoaded';
-  const corridorWidth = CORRIDOR_WIDTHS[layoutType];
+export const generateFloorPlan = (placement, lobbyType, stairWidth = 13.5) => {
+  // Extract SKU counts from placement
+  const {
+    sku_studio = 0,
+    sku_1_corner = 0,
+    sku_1_inline = 0,
+    sku_2_corner = 0,
+    sku_2_inline = 0,
+    sku_3_corner = 0,
+  } = placement;
 
-  // Calculate cores needed
-  const totalUnits = optimized.studio + optimized.oneBed + optimized.twoBed + optimized.threeBed;
-  const coresNeeded = calculateCoresNeeded(totalUnits);
+  // Determine lobby width based on lobby type
+  const lobbyWidth = lobbyType === 1 ? 13.5 : lobbyType === 4 ? 49.0 : 24.5;
 
-  // Create unit pool (all units to be placed)
-  const unitPool = [];
+  // Build unit layout arrays
+  const leftSide = [];
+  const rightSide = [];
 
-  // Add all units to pool with metadata
-  for (let i = 0; i < optimized.studio; i++) {
-    unitPool.push({ type: 'studio', width: UNIT_WIDTHS.studio, depth: UNIT_DEPTHS.studio, id: `STU-${i + 1}` });
+  // Collect inline units (these get distributed on both sides)
+  const inlineUnits = [];
+
+  // Add 2BR inline units
+  for (let i = 0; i < sku_2_inline; i++) {
+    inlineUnits.push({ type: 'twoBedInline', width: 38.0 });
   }
-  for (let i = 0; i < optimized.oneBed; i++) {
-    unitPool.push({ type: 'oneBed', width: UNIT_WIDTHS.oneBed, depth: UNIT_DEPTHS.oneBed, id: `1BR-${i + 1}` });
-  }
-  for (let i = 0; i < optimized.twoBed; i++) {
-    unitPool.push({ type: 'twoBed', width: UNIT_WIDTHS.twoBed, depth: UNIT_DEPTHS.twoBed, id: `2BR-${i + 1}` });
-  }
-  for (let i = 0; i < optimized.threeBed; i++) {
-    unitPool.push({ type: 'threeBed', width: UNIT_WIDTHS.threeBed, depth: UNIT_DEPTHS.threeBed, id: `3BR-${i + 1}` });
+
+  // Add 1BR inline units
+  for (let i = 0; i < sku_1_inline; i++) {
+    inlineUnits.push({ type: 'oneBed', width: 24.5 });
   }
 
-  // Sort by width (largest first) for stable placement
-  unitPool.sort((a, b) => b.width - a.width);
+  // Special placement for studios across from stairs (exact from original logic)
+  let leftPos2Unit = null;
+  let rightPosBeforeBottomCorner = null;
 
-  // Initialize placement arrays (north and south sides for double-loaded)
-  const northSide = [];
-  const southSide = [];
-  let currentPosition = 0;
-
-  // Place cores first
-  const corePositions = [];
-  if (coresNeeded === 1) {
-    // Single core - place at center
-    corePositions.push({
-      x: buildingLength / 2 - CORE_DIMENSIONS.width / 2,
-      width: CORE_DIMENSIONS.width,
-      type: 'core',
-    });
+  if (stairWidth === 13.5 && sku_studio >= 2) {
+    // Place two studios specially (marked with ◆)
+    leftPos2Unit = { type: 'studio', width: 13.5, special: '◆' };
+    rightPosBeforeBottomCorner = { type: 'studio', width: 13.5, special: '◆' };
+    // Add remaining studios to inline pool
+    for (let i = 0; i < sku_studio - 2; i++) {
+      inlineUnits.push({ type: 'studio', width: 13.5 });
+    }
   } else {
-    // Multiple cores - distribute evenly
-    const spacing = buildingLength / (coresNeeded + 1);
-    for (let i = 1; i <= coresNeeded; i++) {
-      corePositions.push({
-        x: spacing * i - CORE_DIMENSIONS.width / 2,
-        width: CORE_DIMENSIONS.width,
-        type: 'core',
-      });
+    // Add all studios to inline pool
+    for (let i = 0; i < sku_studio; i++) {
+      inlineUnits.push({ type: 'studio', width: 13.5 });
     }
   }
 
-  // PLACEMENT LOGIC for Double-Loaded Corridor
-  if (layoutType === 'doubleLoaded') {
-    let northPosition = 0;
-    let southPosition = 0;
-    let placingNorth = true; // Alternate between north and south
+  // Split inline units into two halves for placement
+  const halfInline = Math.ceil(inlineUnits.length / 2);
+  const threeBedPerFloor = sku_3_corner * 2; // Total 3BR units on floor (per side count * 2)
 
-    for (const unit of unitPool) {
-      // Check if placement would conflict with core
-      const positionToUse = placingNorth ? northPosition : southPosition;
-      let conflictsWithCore = false;
+  // ========== LEFT SIDE PLACEMENT ==========
 
-      for (const core of corePositions) {
-        if (
-          positionToUse < core.x + core.width &&
-          positionToUse + unit.width > core.x
-        ) {
-          conflictsWithCore = true;
-          break;
-        }
-      }
-
-      if (conflictsWithCore) {
-        // Skip to after the core
-        const blockingCore = corePositions.find(
-          (core) => positionToUse < core.x + core.width
-        );
-        if (blockingCore) {
-          if (placingNorth) {
-            northPosition = blockingCore.x + blockingCore.width;
-          } else {
-            southPosition = blockingCore.x + blockingCore.width;
-          }
-        }
-      }
-
-      // Place unit
-      const placement = {
-        ...unit,
-        x: placingNorth ? northPosition : southPosition,
-        side: placingNorth ? 'north' : 'south',
-      };
-
-      if (placingNorth) {
-        northSide.push(placement);
-        northPosition += unit.width;
-        placingNorth = false; // Alternate
-      } else {
-        southSide.push(placement);
-        southPosition += unit.width;
-        placingNorth = true; // Alternate
-      }
-    }
+  // 1. Top corner unit
+  if (sku_3_corner >= 1) {
+    leftSide.push({ type: 'threeBed', width: 42.0, label: '3 Bed' });
+  } else if (sku_2_corner >= 1) {
+    leftSide.push({ type: 'twoBedCorner', width: 31.0, label: '2B Corner' });
+  } else if (sku_1_corner >= 1) {
+    leftSide.push({ type: 'oneBedJr', width: 15.5, label: '1B Jr' });
   }
 
-  // PLACEMENT LOGIC for Single-Loaded
-  if (layoutType === 'singleLoaded') {
-    let position = 0;
-
-    for (const unit of unitPool) {
-      // Check core conflicts
-      let conflictsWithCore = false;
-      for (const core of corePositions) {
-        if (position < core.x + core.width && position + unit.width > core.x) {
-          conflictsWithCore = true;
-          const blockingCore = core;
-          position = blockingCore.x + blockingCore.width;
-          break;
-        }
-      }
-
-      const placement = {
-        ...unit,
-        x: position,
-        side: 'north',
-      };
-
-      northSide.push(placement);
-      position += unit.width;
-    }
+  // 2. Special studio across from right stair (if applicable)
+  if (leftPos2Unit) {
+    leftSide.push({ ...leftPos2Unit, label: 'Studio' });
   }
 
-  // PLACEMENT LOGIC for Wrap Layout
-  if (layoutType === 'wrap') {
-    // Simplified wrap - place units around perimeter
-    // This would be more complex in a real implementation
-    let position = 0;
-    let currentSide = 'north';
-    const sidesRotation = ['north', 'east', 'south', 'west'];
-    let sideIndex = 0;
-
-    for (const unit of unitPool) {
-      const placement = {
-        ...unit,
-        x: position,
-        side: sidesRotation[sideIndex],
-      };
-
-      if (currentSide === 'north' || currentSide === 'south') {
-        northSide.push(placement);
-      } else {
-        southSide.push(placement);
-      }
-
-      position += unit.width;
-
-      // Rotate sides when position exceeds building length
-      if (position > buildingLength) {
-        position = 0;
-        sideIndex = (sideIndex + 1) % sidesRotation.length;
-        currentSide = sidesRotation[sideIndex];
-      }
-    }
+  // 3. First half of inline units
+  for (let i = 0; i < halfInline; i++) {
+    const unit = inlineUnits[i];
+    leftSide.push({
+      ...unit,
+      label: unit.type === 'oneBed' ? '1 Bed' : unit.type === 'twoBedInline' ? '2B Inline' : 'Studio',
+    });
   }
 
-  // Calculate total building depth
-  const maxDepth = Math.max(
-    ...unitPool.map((u) => u.depth),
-    UNIT_DEPTHS.corridor
-  );
+  // 4. Lobby
+  leftSide.push({
+    type: 'lobby',
+    width: lobbyWidth,
+    label: lobbyType === 1 ? '1-Bay' : lobbyType === 2 ? '2-Bay' : '4-Bay',
+  });
 
-  const buildingDepth =
-    layoutType === 'doubleLoaded'
-      ? maxDepth * 2 + corridorWidth
-      : maxDepth + corridorWidth;
+  // 5. Second half of inline units
+  for (let i = halfInline; i < inlineUnits.length; i++) {
+    const unit = inlineUnits[i];
+    leftSide.push({
+      ...unit,
+      label: unit.type === 'oneBed' ? '1 Bed' : unit.type === 'twoBedInline' ? '2B Inline' : 'Studio',
+    });
+  }
+
+  // 6. Left stair
+  leftSide.push({ type: 'stair', width: stairWidth, label: 'Stair' });
+
+  // 7. Bottom corner unit
+  if (threeBedPerFloor === 4) {
+    // Two 3BRs per side
+    leftSide.push({ type: 'threeBed', width: 42.0, label: '3 Bed' });
+  } else if (threeBedPerFloor === 2) {
+    // One 3BR per side, bottom corner is 2BR
+    leftSide.push({ type: 'twoBedCorner', width: 31.0, label: '2B Corner' });
+  } else if (sku_2_corner >= 2) {
+    // Two 2BR corners
+    leftSide.push({ type: 'twoBedCorner', width: 31.0, label: '2B Corner' });
+  } else if (sku_1_corner >= 1) {
+    leftSide.push({ type: 'oneBedJr', width: 15.5, label: '1B Jr' });
+  }
+
+  // ========== RIGHT SIDE PLACEMENT (mirrored logic) ==========
+
+  // 1. Bottom corner (mirrors left top corner logic)
+  if (threeBedPerFloor === 4) {
+    rightSide.push({ type: 'threeBed', width: 42.0, label: '3 Bed' });
+  } else if (threeBedPerFloor === 2) {
+    rightSide.push({ type: 'twoBedCorner', width: 31.0, label: '2B Corner' });
+  } else if (sku_2_corner >= 2) {
+    rightSide.push({ type: 'twoBedCorner', width: 31.0, label: '2B Corner' });
+  } else if (sku_1_corner >= 1) {
+    rightSide.push({ type: 'oneBedJr', width: 15.5, label: '1B Jr' });
+  }
+
+  // 2. Right stair (position 2 on right side)
+  rightSide.push({ type: 'stair', width: stairWidth, label: 'Stair' });
+
+  // 3. First half of inline units (same as left)
+  for (let i = 0; i < halfInline; i++) {
+    const unit = inlineUnits[i];
+    rightSide.push({
+      ...unit,
+      label: unit.type === 'oneBed' ? '1 Bed' : unit.type === 'twoBedInline' ? '2B Inline' : 'Studio',
+    });
+  }
+
+  // 4. Bonus unit or lobby (depends on lobbyType)
+  if (lobbyType === 1) {
+    // 1-Bay: add bonus studio
+    rightSide.push({ type: 'studio', width: 13.5, label: 'Studio', special: '★' });
+  } else if (lobbyType === 2) {
+    // 2-Bay: add bonus 1BR
+    rightSide.push({ type: 'oneBed', width: 24.5, label: '1 Bed', special: '★' });
+  } else {
+    // 4-Bay: add 4-bay lobby
+    rightSide.push({ type: 'lobby', width: lobbyWidth, label: '4-Bay' });
+  }
+
+  // 5. Second half of inline units
+  for (let i = halfInline; i < inlineUnits.length; i++) {
+    const unit = inlineUnits[i];
+    rightSide.push({
+      ...unit,
+      label: unit.type === 'oneBed' ? '1 Bed' : unit.type === 'twoBedInline' ? '2B Inline' : 'Studio',
+    });
+  }
+
+  // 6. Special studio across from left stair (if applicable)
+  if (rightPosBeforeBottomCorner) {
+    rightSide.push({ ...rightPosBeforeBottomCorner, label: 'Studio' });
+  }
+
+  // 7. Top corner unit
+  if (sku_3_corner >= 1) {
+    rightSide.push({ type: 'threeBed', width: 42.0, label: '3 Bed' });
+  } else if (sku_2_corner >= 1) {
+    rightSide.push({ type: 'twoBedCorner', width: 31.0, label: '2B Corner' });
+  } else if (sku_1_corner >= 1) {
+    rightSide.push({ type: 'oneBedJr', width: 15.5, label: '1B Jr' });
+  }
+
+  // Calculate max height for SVG (tallest side determines SVG height)
+  const leftHeight = leftSide.reduce((sum, u) => sum + u.width * SVG_SCALE, 0);
+  const rightHeight = rightSide.reduce((sum, u) => sum + u.width * SVG_SCALE, 0);
+  const maxHeight = Math.max(leftHeight, rightHeight);
 
   return {
-    layoutType,
-    northSide,
-    southSide,
-    corePositions,
-    corridorWidth,
-    buildingLength,
-    buildingDepth,
-    totalUnits,
-    coresNeeded,
-    unitsPerCore: Math.ceil(totalUnits / coresNeeded),
+    leftSide,
+    rightSide,
+    lobbyWidth,
+    stairWidth,
+    maxHeight,
+    colors: UNIT_COLORS,
+    scale: SVG_SCALE,
   };
 };
 
 /**
- * Generates a visual grid representation of the floor plan
- * Returns a 2D array where each cell represents a specific area
+ * Generates SVG elements data for rendering (exact from original HTML logic)
  *
- * Cell types:
- * - 'STUDIO', 'ONEBR', 'TWOBR', '3BDRM' - Unit types
- * - 'CORR' - Corridor
- * - 'CORE' - Stairs/Elevator core
- * - 'VOID' - Empty space
+ * This prepares the data needed to render the SVG floor plan in React.
+ * The original HTML created SVG elements directly; this returns data that
+ * React can use to render SVG components.
  *
- * @param {Object} floorPlan - Floor plan from generateFloorPlan()
- * @param {number} gridResolution - Feet per grid cell (default 2)
- * @returns {Array} 2D grid array
+ * @param {Object} floorplanData - Data from generateFloorPlan()
+ * @returns {Object} SVG elements data
  */
-export const generateFloorPlanGrid = (floorPlan, gridResolution = 2) => {
-  const { buildingLength, buildingDepth, northSide, southSide, corridorWidth, corePositions } = floorPlan;
+export const generateSVGElements = (floorplanData) => {
+  const { leftSide, rightSide, maxHeight, colors, scale } = floorplanData;
 
-  // Calculate grid dimensions
-  const gridWidth = Math.ceil(buildingLength / gridResolution);
-  const gridHeight = Math.ceil(buildingDepth / gridResolution);
-
-  // Initialize grid with void
-  const grid = Array(gridHeight)
-    .fill(null)
-    .map(() => Array(gridWidth).fill('VOID'));
-
-  const corridorStart = Math.floor((buildingDepth / 2 - corridorWidth / 2) / gridResolution);
-  const corridorEnd = Math.ceil((buildingDepth / 2 + corridorWidth / 2) / gridResolution);
-
-  // Fill corridor
-  for (let y = corridorStart; y < corridorEnd; y++) {
-    for (let x = 0; x < gridWidth; x++) {
-      grid[y][x] = 'CORR';
-    }
-  }
-
-  // Helper to get cell type label
-  const getCellType = (unitType) => {
-    const typeMap = {
-      studio: 'STUDIO',
-      oneBed: 'ONEBR',
-      twoBed: 'TWOBR',
-      threeBed: '3BDRM',
-    };
-    return typeMap[unitType] || 'UNIT';
+  const elements = {
+    leftUnits: [],
+    rightUnits: [],
+    corridor: null,
   };
 
-  // Place north side units
-  for (const unit of northSide) {
-    const startX = Math.floor(unit.x / gridResolution);
-    const endX = Math.ceil((unit.x + unit.width) / gridResolution);
-    const startY = 0;
-    const endY = corridorStart;
+  // Generate left side units
+  let yPos = 10;
+  leftSide.forEach((unit, index) => {
+    const height = unit.width * scale;
+    elements.leftUnits.push({
+      id: `left-${index}`,
+      x: 10,
+      y: yPos,
+      width: 130,
+      height,
+      fill: colors[unit.type] || '#E5E7EB',
+      stroke: '#000',
+      strokeWidth: 2,
+      rx: 4,
+      label: (unit.special || '') + ' ' + unit.label,
+      subLabel: unit.width + "'",
+    });
+    yPos += height;
+  });
 
-    for (let y = startY; y < endY; y++) {
-      for (let x = startX; x < endX && x < gridWidth; x++) {
-        grid[y][x] = getCellType(unit.type);
-      }
-    }
-  }
+  // Generate corridor
+  elements.corridor = {
+    x: 140,
+    y: 10,
+    width: 120,
+    height: maxHeight,
+    fill: '#E5E7EB',
+    stroke: '#9CA3AF',
+    strokeWidth: 2,
+    rx: 4,
+    label: 'CORRIDOR',
+  };
 
-  // Place south side units
-  for (const unit of southSide) {
-    const startX = Math.floor(unit.x / gridResolution);
-    const endX = Math.ceil((unit.x + unit.width) / gridResolution);
-    const startY = corridorEnd;
-    const endY = gridHeight;
-
-    for (let y = startY; y < endY; y++) {
-      for (let x = startX; x < endX && x < gridWidth; x++) {
-        grid[y][x] = getCellType(unit.type);
-      }
-    }
-  }
-
-  // Place cores
-  for (const core of corePositions) {
-    const startX = Math.floor(core.x / gridResolution);
-    const endX = Math.ceil((core.x + core.width) / gridResolution);
-    const coreDepth = CORE_DIMENSIONS.depth / gridResolution;
-    const startY = Math.floor((buildingDepth / 2 - coreDepth / 2) / gridResolution);
-    const endY = Math.ceil((buildingDepth / 2 + coreDepth / 2) / gridResolution);
-
-    for (let y = startY; y < endY && y < gridHeight; y++) {
-      for (let x = startX; x < endX && x < gridWidth; x++) {
-        grid[y][x] = 'CORE';
-      }
-    }
-  }
-
-  return grid;
-};
-
-/**
- * Calculates efficiency metrics for a floor plan
- *
- * @param {Object} floorPlan - Floor plan object
- * @param {Object} optimized - Optimized unit counts
- * @returns {Object} Efficiency metrics
- */
-export const calculateFloorPlanEfficiency = (floorPlan, optimized) => {
-  const { buildingLength, buildingDepth, corridorWidth, coresNeeded } = floorPlan;
-
-  // Total building footprint
-  const totalFootprint = buildingLength * buildingDepth;
-
-  // Corridor area
-  const corridorArea = buildingLength * corridorWidth;
-
-  // Core area
-  const coreArea = coresNeeded * CORE_DIMENSIONS.width * CORE_DIMENSIONS.depth;
-
-  // Unit area (approximate)
-  const unitArea =
-    optimized.studio * UNIT_WIDTHS.studio * UNIT_DEPTHS.studio +
-    optimized.oneBed * UNIT_WIDTHS.oneBed * UNIT_DEPTHS.oneBed +
-    optimized.twoBed * UNIT_WIDTHS.twoBed * UNIT_DEPTHS.twoBed +
-    optimized.threeBed * UNIT_WIDTHS.threeBed * UNIT_DEPTHS.threeBed;
-
-  // Net-to-gross efficiency
-  const netToGross = (unitArea / totalFootprint) * 100;
-
-  // Circulation efficiency (lower is better)
-  const circulationPct = ((corridorArea + coreArea) / totalFootprint) * 100;
+  // Generate right side units
+  yPos = 10;
+  rightSide.forEach((unit, index) => {
+    const height = unit.width * scale;
+    elements.rightUnits.push({
+      id: `right-${index}`,
+      x: 260,
+      y: yPos,
+      width: 130,
+      height,
+      fill: colors[unit.type] || '#E5E7EB',
+      stroke: '#000',
+      strokeWidth: 2,
+      rx: 4,
+      label: (unit.special || '') + ' ' + unit.label,
+      subLabel: unit.width + "'",
+    });
+    yPos += height;
+  });
 
   return {
-    totalFootprint,
-    unitArea,
-    corridorArea,
-    coreArea,
-    netToGross,
-    circulationPct,
-    unitsPerCore: Math.ceil((optimized.studio + optimized.oneBed + optimized.twoBed + optimized.threeBed) / coresNeeded),
+    ...elements,
+    svgWidth: 400,
+    svgHeight: maxHeight + 20,
   };
 };
 
@@ -464,16 +349,9 @@ export const calculateFloorPlanEfficiency = (floorPlan, optimized) => {
 // ============================================================================
 
 export default {
-  // Constants
-  CORRIDOR_WIDTHS,
-  UNIT_DEPTHS,
-  CORE_DIMENSIONS,
-  ADJACENCY_MATRIX,
-  PLACEMENT_PREFERENCES,
-
-  // Functions
-  calculateCoresNeeded,
+  UNIT_COLORS,
+  UNIT_WIDTHS,
+  SVG_SCALE,
   generateFloorPlan,
-  generateFloorPlanGrid,
-  calculateFloorPlanEfficiency,
+  generateSVGElements,
 };
