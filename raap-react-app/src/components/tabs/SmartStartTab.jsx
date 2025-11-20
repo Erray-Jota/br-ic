@@ -16,13 +16,13 @@ const SmartStartTab = () => {
       <div className="subtab-container">
         <div className="subtab-nav">
           <button onClick={() => switchSubtab('smartstart', 1)} className={`subtab-btn ${activeSubtabs.smartstart === 1 ? 'active-subtab' : ''}`}>
-            1. Summary & 4-6 Week Process
+            Overview
           </button>
           <button onClick={() => switchSubtab('smartstart', 2)} className={`subtab-btn ${activeSubtabs.smartstart === 2 ? 'active-subtab' : ''}`}>
-            2. City Confidence & Entitlement
+            Entitlement
           </button>
           <button onClick={() => switchSubtab('smartstart', 3)} className={`subtab-btn ${activeSubtabs.smartstart === 3 ? 'active-subtab' : ''}`}>
-            3. Firm Pricing & Risk Mitigation
+            Estimates
           </button>
         </div>
       </div>
