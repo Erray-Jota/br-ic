@@ -1,7 +1,7 @@
 import { useProject } from '../contexts/ProjectContext';
 
 const Header = () => {
-  const { projectData } = useProject();
+  const { showProjectsPage } = useProject();
 
   return (
     <div className="header">
@@ -28,7 +28,20 @@ const Header = () => {
           ModularFeasibility
         </span>
       </div>
-      <p style={{ fontSize: '28px', color: '#374151' }}>{projectData.projectName}</p>
+      <button
+        onClick={showProjectsPage}
+        className="btn btn-primary"
+        style={{
+          padding: '10px 20px',
+          fontSize: '16px',
+          fontWeight: 600,
+          display: 'flex',
+          alignItems: 'center',
+          gap: '8px'
+        }}
+      >
+        📁 Projects
+      </button>
     </div>
   );
 };
