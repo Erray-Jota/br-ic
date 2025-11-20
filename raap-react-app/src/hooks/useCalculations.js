@@ -65,8 +65,8 @@ export const useCalculations = (projectData) => {
       timeSavings: timeMetrics.timeSavings,
       timeSavingsPercent: timeMetrics.timeSavingsPercent,
 
-      // Required length (for display)
-      requiredLength: targetLength,
+      // Required length (from optimization engine - based on optimized unit mix)
+      requiredLength: optimization.requiredWidth,
 
       // Scale factors
       unitRatio,
