@@ -45,6 +45,7 @@ const CostAnalysisTab = () => {
 
   // Assembly explorer state
   const [assemblySearch, setAssemblySearch] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('All');
   const [chatMessages, setChatMessages] = useState([
     { role: 'assistant', content: 'Hello! I can help explain construction costs and assemblies. Ask me about specific assemblies, material alternatives, or construction methods.' }
   ]);
@@ -628,74 +629,217 @@ const CostAnalysisTab = () => {
               Full scenario comparison coming soon with detailed breakdown by division
             </p>
           </div>
+
+          {/* DIVISION BREAKDOWN (same as Summary tab) */}
+          <div className="card" style={{ marginTop: '12px' }}>
+            <h2>📊 Cost Breakdown by Division (MasterFormat)</h2>
+            <p className="small-text" style={{ marginBottom: '12px' }}>
+              Click on any group to expand/collapse division details
+            </p>
+
+            <div style={{ marginTop: '12px', overflowX: 'auto' }}>
+              <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '14px' }}>
+                <thead>
+                  <tr style={{ background: '#f3f4f6', borderBottom: '2px solid #d1d5db' }}>
+                    <th style={{ padding: '10px', textAlign: 'left', fontWeight: 700 }}>Division</th>
+                    <th style={{ padding: '10px', textAlign: 'right', fontWeight: 700, color: '#DC2626' }}>Site Built</th>
+                    <th style={{ padding: '10px', textAlign: 'right', fontWeight: 700, color: '#2563eb' }}>Modular GC</th>
+                    <th style={{ padding: '10px', textAlign: 'right', fontWeight: 700, color: '#16a34a' }}>Fabricator</th>
+                    <th style={{ padding: '10px', textAlign: 'right', fontWeight: 700 }}>Total Modular</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {Object.entries(groupedDivisions).map(([groupName, divisions]) => {
+                    const groupSiteCost = divisions.reduce((sum, d) => sum + d.siteCost, 0);
+                    const groupGCCost = divisions.reduce((sum, d) => sum + d.gcCost, 0);
+                    const groupFabCost = divisions.reduce((sum, d) => sum + d.fabCost, 0);
+                    const groupModularTotal = divisions.reduce((sum, d) => sum + d.modularTotal, 0);
+                    const isCollapsed = collapsedGroups[groupName];
+
+                    return (
+                      <>
+                        {/* Group Header with Subtotals */}
+                        <tr
+                          key={`group-${groupName}`}
+                          style={{
+                            background: '#e5e7eb',
+                            borderTop: '2px solid #9ca3af',
+                            cursor: 'pointer',
+                            userSelect: 'none'
+                          }}
+                          onClick={() => toggleGroup(groupName)}
+                        >
+                          <td style={{ padding: '10px', fontWeight: 700, fontSize: '14px', color: '#111827' }}>
+                            <span style={{ marginRight: '8px' }}>{isCollapsed ? '▶' : '▼'}</span>
+                            {groupName}
+                          </td>
+                          <td style={{ padding: '10px', textAlign: 'right', fontWeight: 700, color: '#DC2626' }}>
+                            {formatCurrency(groupSiteCost)}
+                          </td>
+                          <td style={{ padding: '10px', textAlign: 'right', fontWeight: 700, color: '#2563eb' }}>
+                            {formatCurrency(groupGCCost)}
+                          </td>
+                          <td style={{ padding: '10px', textAlign: 'right', fontWeight: 700, color: '#16a34a' }}>
+                            {formatCurrency(groupFabCost)}
+                          </td>
+                          <td style={{ padding: '10px', textAlign: 'right', fontWeight: 700, color: '#111827' }}>
+                            {formatCurrency(groupModularTotal)}
+                          </td>
+                        </tr>
+
+                        {/* Division Rows (only show if not collapsed) */}
+                        {!isCollapsed && divisions.map((div, i) => (
+                          <tr key={`${groupName}-${i}`} style={{ borderBottom: '1px solid #e5e7eb' }}>
+                            <td style={{ padding: '8px', paddingLeft: '32px' }}>
+                              <span style={{ fontWeight: 600, color: '#6b7280', marginRight: '6px' }}>{div.code}</span>
+                              {div.name}
+                            </td>
+                            <td style={{ padding: '8px', textAlign: 'right', color: '#DC2626' }}>
+                              {formatCurrency(div.siteCost)}
+                            </td>
+                            <td style={{ padding: '8px', textAlign: 'right', color: '#2563eb' }}>
+                              {formatCurrency(div.gcCost)}
+                            </td>
+                            <td style={{ padding: '8px', textAlign: 'right', color: '#16a34a' }}>
+                              {formatCurrency(div.fabCost)}
+                            </td>
+                            <td style={{ padding: '8px', textAlign: 'right', fontWeight: 600 }}>
+                              {formatCurrency(div.modularTotal)}
+                            </td>
+                          </tr>
+                        ))}
+                      </>
+                    );
+                  })}
+
+                  {/* TOTAL ROW */}
+                  <tr style={{ background: '#374151', color: 'white', borderTop: '3px solid #111827' }}>
+                    <td style={{ padding: '12px', fontWeight: 700, fontSize: '16px' }}>TOTAL COST</td>
+                    <td style={{ padding: '12px', textAlign: 'right', fontWeight: 700, fontSize: '16px' }}>
+                      {formatMega(divisionCosts.totals.siteCost)}
+                    </td>
+                    <td style={{ padding: '12px', textAlign: 'right', fontWeight: 700, fontSize: '16px' }}>
+                      {formatMega(divisionCosts.totals.gcCost)}
+                    </td>
+                    <td style={{ padding: '12px', textAlign: 'right', fontWeight: 700, fontSize: '16px' }}>
+                      {formatMega(divisionCosts.totals.fabCost)}
+                    </td>
+                    <td style={{ padding: '12px', textAlign: 'right', fontWeight: 700, fontSize: '16px' }}>
+                      {formatMega(divisionCosts.totals.modularTotal)}
+                    </td>
+                  </tr>
+
+                  {/* SAVINGS ROW */}
+                  <tr style={{ background: divisionCosts.totals.savings > 0 ? '#f0fdf4' : '#fef2f2', border: `2px solid ${divisionCosts.totals.savings > 0 ? '#86efac' : '#fca5a5'}` }}>
+                    <td style={{ padding: '12px', fontWeight: 700, fontSize: '16px', color: divisionCosts.totals.savings > 0 ? '#15803D' : '#DC2626' }}>
+                      {divisionCosts.totals.savings > 0 ? '✅ SAVINGS' : '⚠️ PREMIUM'}
+                    </td>
+                    <td colSpan="4" style={{ padding: '12px', textAlign: 'right', fontWeight: 700, fontSize: '18px', color: divisionCosts.totals.savings > 0 ? '#15803D' : '#DC2626' }}>
+                      {formatMega(divisionCosts.totals.savings)} ({divisionCosts.totals.savingsPercent.toFixed(1)}%)
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
       )}
 
       {/* ASSEMBLY EXPLORER SUB TAB */}
       {activeSubtabs.cost === 3 && (
-        <div className="card">
-          <h2>🔍 Assembly Explorer</h2>
-          <p className="small-text" style={{ marginBottom: '12px' }}>
-            Explore individual assemblies to understand cost components at a granular level
-          </p>
+        <div>
+          {/* Title and Search */}
+          <div className="card" style={{ marginBottom: '12px' }}>
+            <h2>🔍 Assembly Explorer</h2>
+            <p className="small-text" style={{ marginBottom: '12px' }}>
+              Search and explore construction assemblies with RSMeans codes
+            </p>
 
-          {/* Search/Filter */}
-          <div className="form-group" style={{ marginBottom: '16px' }}>
+            {/* Search Bar */}
             <input
               type="text"
               className="form-input"
-              placeholder="Search assemblies by code or description..."
+              placeholder="Search assemblies (e.g., 'foundation', 'electrical', 'window')..."
               value={assemblySearch}
               onChange={(e) => setAssemblySearch(e.target.value)}
+              style={{ margin: 0 }}
             />
           </div>
 
-          {/* Assembly Directory */}
-          <div style={{ background: '#f9fafb', padding: '16px', borderRadius: '8px', border: '1px solid #e5e7eb' }}>
-            <h3 style={{ fontSize: '14px', fontWeight: 700, color: '#111827', marginBottom: '12px' }}>📁 Assembly Directory (Sample)</h3>
-
-            <div style={{ fontSize: '13px' }}>
-              {/* Sample assemblies */}
-              {[
-                { code: 'B1010-105', desc: 'Wood Frame Exterior Wall, 2x6 @ 16" OC, R-21', siteCost: 18.50, modCost: 22.30, unit: 'SF' },
-                { code: 'B2010-201', desc: 'Basement Floor Slab, 4" Concrete, 6x6 WWF', siteCost: 6.75, modCost: 4.20, unit: 'SF' },
-                { code: 'C1010-115', desc: 'Wood Floor Joist, 2x10 @ 16" OC', siteCost: 7.85, modCost: 12.40, unit: 'SF' },
-                { code: 'C3010-210', desc: 'Gypsum Board, 5/8" Type X, Taped & Finished', siteCost: 2.45, modCost: 3.10, unit: 'SF' },
-                { code: 'D2010-310', desc: 'Sprinkler System, Wet Pipe, Light Hazard', siteCost: 4.85, modCost: 5.20, unit: 'SF' },
-                { code: 'D5010-240', desc: 'Electrical Service, 400A, 3-Phase', siteCost: 12500, modCost: 11800, unit: 'EA' },
-              ].filter(assembly =>
-                !assemblySearch ||
-                assembly.code.toLowerCase().includes(assemblySearch.toLowerCase()) ||
-                assembly.desc.toLowerCase().includes(assemblySearch.toLowerCase())
-              ).map((assembly, i) => (
-                <div key={i} style={{ background: 'white', padding: '12px', borderRadius: '6px', marginBottom: '8px', border: '1px solid #e5e7eb' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '6px' }}>
-                    <div>
-                      <span style={{ fontWeight: 700, color: '#374151', marginRight: '8px' }}>{assembly.code}</span>
-                      <span style={{ color: '#111827' }}>{assembly.desc}</span>
-                    </div>
-                    <span style={{ fontSize: '12px', color: '#6b7280', fontWeight: 600 }}>per {assembly.unit}</span>
-                  </div>
-                  <div style={{ display: 'flex', gap: '16px', fontSize: '14px' }}>
-                    <div>
-                      <span style={{ color: '#DC2626', fontWeight: 600 }}>Site: </span>
-                      <span style={{ fontWeight: 700, color: '#111827' }}>{formatCurrency(assembly.siteCost)}</span>
-                    </div>
-                    <div>
-                      <span style={{ color: '#16a34a', fontWeight: 600 }}>Modular: </span>
-                      <span style={{ fontWeight: 700, color: '#111827' }}>{formatCurrency(assembly.modCost)}</span>
-                    </div>
-                    <div>
-                      <span style={{ color: assembly.siteCost > assembly.modCost ? '#16a34a' : '#DC2626', fontWeight: 600 }}>
-                        {assembly.siteCost > assembly.modCost ? 'Savings' : 'Premium'}:
-                      </span>
-                      <span style={{ fontWeight: 700, color: assembly.siteCost > assembly.modCost ? '#16a34a' : '#DC2626' }}>
-                        {' '}{formatCurrency(Math.abs(assembly.siteCost - assembly.modCost))}
-                      </span>
-                    </div>
-                  </div>
+          {/* Categories (Left) + Assembly List (Right) */}
+          <div className="card">
+            <div style={{ display: 'grid', gridTemplateColumns: '180px 1fr', gap: '16px' }}>
+              {/* Categories Sidebar */}
+              <div>
+                <h3 style={{ fontSize: '14px', fontWeight: 700, color: '#111827', marginBottom: '8px' }}>Categories</h3>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                  {['All', 'Foundation', 'Electrical', 'Openings'].map((category) => (
+                    <button
+                      key={category}
+                      onClick={() => setSelectedCategory(category)}
+                      style={{
+                        padding: '8px 12px',
+                        border: selectedCategory === category ? '2px solid #16a34a' : '1px solid #e5e7eb',
+                        borderRadius: '4px',
+                        background: selectedCategory === category ? '#f0fdf4' : '#ffffff',
+                        color: selectedCategory === category ? '#15803D' : '#374151',
+                        fontWeight: selectedCategory === category ? 700 : 600,
+                        fontSize: '13px',
+                        cursor: 'pointer',
+                        textAlign: 'left',
+                        transition: 'all 0.2s'
+                      }}
+                    >
+                      {category}
+                    </button>
+                  ))}
                 </div>
-              ))}
+              </div>
+
+              {/* Assembly List */}
+              <div>
+                <div style={{ fontSize: '13px' }}>
+                  {[
+                    { code: 'A1010101700', desc: 'Foundation Wall, 6" thick', siteCost: 76.84, modCost: 65.20, unit: 'LF', category: 'Foundation' },
+                    { code: 'D5010120400', desc: 'Overhead service installation', siteCost: 20822.8, modCost: 18500, unit: 'EA', category: 'Electrical' },
+                    { code: 'B2020108110', desc: 'Window: Fiberglass 3×4', siteCost: 1366.13, modCost: 1240, unit: 'EA', category: 'Openings' },
+                    { code: 'B2010-201', desc: 'Basement Floor Slab, 4" Concrete, 6x6 WWF', siteCost: 6.75, modCost: 4.20, unit: 'SF', category: 'Foundation' },
+                    { code: 'C1010-115', desc: 'Wood Floor Joist, 2x10 @ 16" OC', siteCost: 7.85, modCost: 12.40, unit: 'SF', category: 'Foundation' },
+                    { code: 'D5010-240', desc: 'Electrical Service, 400A, 3-Phase', siteCost: 12500, modCost: 11800, unit: 'EA', category: 'Electrical' },
+                  ]
+                    .filter(assembly => {
+                      const matchesSearch = !assemblySearch ||
+                        assembly.code.toLowerCase().includes(assemblySearch.toLowerCase()) ||
+                        assembly.desc.toLowerCase().includes(assemblySearch.toLowerCase());
+                      const matchesCategory = selectedCategory === 'All' || assembly.category === selectedCategory;
+                      return matchesSearch && matchesCategory;
+                    })
+                    .map((assembly, i) => (
+                      <div key={i} style={{ background: '#f9fafb', padding: '12px', borderRadius: '6px', marginBottom: '8px', border: '1px solid #e5e7eb' }}>
+                        <div style={{ marginBottom: '6px' }}>
+                          <span style={{ display: 'inline-block', fontWeight: 700, color: '#0369a1', marginRight: '8px', background: '#e0f2fe', padding: '2px 6px', borderRadius: '3px', fontSize: '12px' }}>
+                            {assembly.code}
+                          </span>
+                          <span style={{ color: '#111827', fontSize: '14px', fontWeight: 500 }}>{assembly.desc}</span>
+                        </div>
+                        <div style={{ display: 'flex', gap: '16px', fontSize: '13px', flexWrap: 'wrap' }}>
+                          <div>
+                            <span style={{ color: '#6b7280', fontWeight: 600 }}>${assembly.siteCost.toLocaleString()}</span>
+                            <span style={{ color: '#9ca3af', fontSize: '11px', marginLeft: '4px' }}>/ {assembly.unit}</span>
+                          </div>
+                          <div style={{ display: 'flex', gap: '12px' }}>
+                            <div>
+                              <span style={{ color: '#DC2626', fontWeight: 600, fontSize: '11px' }}>GC</span>
+                            </div>
+                            <div>
+                              <span style={{ color: '#16a34a', fontWeight: 600, fontSize: '11px' }}>Fab</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                </div>
+              </div>
             </div>
           </div>
 

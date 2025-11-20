@@ -7,7 +7,7 @@ const TabNavigation = () => {
     { id: 1, label: '🎯 Introduction' },
     { id: 2, label: '📋 Project' },
     { id: 3, label: '📐 Design' },
-    { id: 4, label: '💰 Cost Analysis' },
+    { id: 4, label: '💰 Cost' },
     { id: 5, label: '✨ Other Factors' },
     { id: 6, label: '✅ Portfolio' },
     { id: 7, label: '🚀 SmartStart' },
