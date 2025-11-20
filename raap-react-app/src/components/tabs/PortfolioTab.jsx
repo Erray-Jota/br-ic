@@ -136,10 +136,6 @@ const PortfolioTab = () => {
           Continue to SmartStart Deep Dive →
         </button>
       </div>
-
-      <div className="flex-end" style={{ marginTop: '15px' }}>
-        <button className="btn btn-secondary" onClick={() => switchTab(5)}>← Back to Other Factors</button>
-      </div>
     </div>
   );
 };

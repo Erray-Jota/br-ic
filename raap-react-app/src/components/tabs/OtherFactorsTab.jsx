@@ -243,12 +243,6 @@ const OtherFactorsTab = () => {
             </div>
           </div>
         )}
-
-        {/* Navigation */}
-        <div className="flex-end" style={{ marginTop: '15px' }}>
-          <button className="btn btn-secondary" onClick={() => switchTab(4)}>← Back to Cost Analysis</button>
-          <button className="btn btn-primary" onClick={() => switchTab(6)}>Continue → Portfolio</button>
-        </div>
       </div>
     </div>
   );

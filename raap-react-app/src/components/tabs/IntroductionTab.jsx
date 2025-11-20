@@ -53,16 +53,6 @@ const IntroductionTab = () => {
           RaaP flips this: We start with a **factory-optimized design** and a **detailed cost model** — giving you feasibility, savings, and confidence.
         </p>
       </div>
-
-      <div style={{ textAlign: 'center', marginTop: '15px' }}>
-        <button
-          onClick={() => switchTab(2)}
-          className="btn btn-primary"
-          style={{ padding: '12px 24px', fontSize: '16px', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)' }}
-        >
-          ▶ Start my ModularFeasibility demo
-        </button>
-      </div>
     </div>
   );
 };
