@@ -1,8 +1,11 @@
 import { useProject } from '../../contexts/ProjectContext';
 import { useCalculations, formatMega, formatCurrency, formatTime } from '../../hooks/useCalculations';
 import ProjectInfoBanner from '../ProjectInfoBanner';
+import { raapCities } from '../../data/raapCities';
 
 const ProjectTab = () => {
+  // Sort cities by cost factor (descending) for better UX
+  const sortedCities = [...raapCities].sort((a, b) => b.factor - a.factor);
   const { projectData, updateProjectData, switchTab } = useProject();
   const calculations = useCalculations(projectData);
 
@@ -37,20 +40,17 @@ const ProjectTab = () => {
           <h2>🏢 Building Configuration</h2>
           <div className="grid-2">
             <div className="form-group">
-              <label className="form-label">📍 Location</label>
+              <label className="form-label">📍 Property Location</label>
               <select
                 className="form-select"
                 value={projectData.propertyFactor}
                 onChange={(e) => handleInputChange('propertyFactor', parseFloat(e.target.value))}
               >
-                <option value="1.35">San Francisco, CA</option>
-                <option value="1.32">New York, NY</option>
-                <option value="1.23">Chicago, IL</option>
-                <option value="1.18">Los Angeles, CA</option>
-                <option value="0.90">Denver, CO</option>
-                <option value="0.87">Phoenix, AZ</option>
-                <option value="0.85">Houston, TX</option>
-                <option value="0.85">Miami, FL</option>
+                {sortedCities.map((city, index) => (
+                  <option key={index} value={city.factor}>
+                    {city.city}, {city.state} ({city.factor})
+                  </option>
+                ))}
               </select>
             </div>
             <div className="form-group">

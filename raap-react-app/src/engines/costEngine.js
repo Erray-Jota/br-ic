@@ -19,6 +19,7 @@
  */
 
 import { MASTER_DIVISIONS } from '../data/constants';
+import { raapCities } from '../data/raapCities';
 
 // ============================================================================
 // CONSTANTS: Base Cost Model
@@ -50,44 +51,13 @@ export const BASE_COSTS = {
  * Location factors by region/city
  * These adjust costs based on labor rates, material costs, and regulations
  * Source: RSMeans City Cost Indexes
+ *
+ * Built from raapCities database with 615 US cities
  */
-export const LOCATION_FACTORS = {
-  // West Coast (High)
-  'San Francisco, CA': 1.42,
-  'Los Angeles, CA': 1.28,
-  'Seattle, WA': 1.18,
-  'Portland, OR': 1.15,
-  'San Diego, CA': 1.21,
-
-  // Mountain West (Medium-Low)
-  'Denver, CO': 0.98,
-  'Boise, ID': 0.87,
-  'Salt Lake City, UT': 0.92,
-  'Phoenix, AZ': 0.94,
-
-  // Southwest (Medium)
-  'Austin, TX': 0.91,
-  'Dallas, TX': 0.89,
-  'Houston, TX': 0.88,
-
-  // Midwest (Medium-Low)
-  'Chicago, IL': 1.12,
-  'Minneapolis, MN': 1.06,
-  'Kansas City, MO': 0.86,
-
-  // Southeast (Low-Medium)
-  'Atlanta, GA': 0.88,
-  'Nashville, TN': 0.84,
-  'Charlotte, NC': 0.82,
-
-  // Northeast (High)
-  'New York, NY': 1.51,
-  'Boston, MA': 1.32,
-  'Washington, DC': 1.09,
-
-  // Default
-  'National Average': 1.00,
-};
+export const LOCATION_FACTORS = raapCities.reduce((acc, city) => {
+  acc[`${city.city}, ${city.state}`] = city.factor;
+  return acc;
+}, { 'National Average': 1.00 });
 
 /**
  * Site condition cost multipliers
