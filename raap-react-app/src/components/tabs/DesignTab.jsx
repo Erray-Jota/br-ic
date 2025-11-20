@@ -28,7 +28,7 @@ const DesignTab = () => {
   }[projectData.floors];
 
   const remainingLength = projectData.targetLength - calculations.requiredLength;
-  const isConstraintMet = remainingLength >= -5;
+  const isConstraintMet = remainingLength >= 0;
 
   return (
     <div>
@@ -39,27 +39,40 @@ const DesignTab = () => {
       {/* Design Metrics Banner */}
       <div className="project-info-banner">
         <div className="cost-column">
-          <div className="metric-label">BUILDING LENGTH (REQUIRED)</div>
+          <div className="metric-label">BUILDING LENGTH REQUIRED</div>
           <div className="metric-main-value" style={{ color: '#111827' }}>
             {calculations.requiredLength.toFixed(1)} ft
           </div>
           <div className="cost-details-inline">
             <div className="cost-sub-group">
-              <span className="cost-sub-label">TARGET:</span>
-              <span className="cost-sub-value">{projectData.targetLength} ft</span>
+              <span className="cost-sub-label">FLOORS:</span>
+              <span className="cost-sub-value">{projectData.floors}</span>
             </div>
           </div>
         </div>
 
         <div className="cost-column">
-          <div className="metric-label">BUILDING LENGTH (REMAINING)</div>
+          <div className="metric-label">BUILDING LENGTH TARGET</div>
+          <div className="metric-main-value" style={{ color: '#111827' }}>
+            {projectData.targetLength} ft
+          </div>
+          <div className="cost-details-inline">
+            <div className="cost-sub-group">
+              <span className="cost-sub-label">SLIDER SETTING</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="cost-column">
+          <div className="metric-label">BUILDING LENGTH REMAINING</div>
           <div className="metric-main-value" style={{ color: isConstraintMet ? '#16A34A' : '#DC2626' }}>
             {Math.round(remainingLength)} ft
           </div>
           <div className="cost-details-inline">
             <div className="cost-sub-group">
-              <span className="cost-sub-label">FLOORS:</span>
-              <span className="cost-sub-value">{projectData.floors}</span>
+              <span className="cost-sub-label" style={{ color: isConstraintMet ? '#16A34A' : '#DC2626' }}>
+                {isConstraintMet ? 'ADEQUATE' : 'TOO SHORT'}
+              </span>
             </div>
           </div>
         </div>
@@ -120,36 +133,9 @@ const DesignTab = () => {
                 </button>
               </h2>
 
-              <div className="form-group">
-                <label className="form-label">Project Name</label>
-                <input
-                  type="text"
-                  className="form-input"
-                  value={projectData.projectName}
-                  onChange={(e) => handleInputChange('projectName', e.target.value)}
-                />
-              </div>
-
-              <div className="form-group" style={{ marginTop: '4px' }}>
-                <label className="form-label">
-                  Building Length (Target: {projectData.targetLength} ft)
-                </label>
-                <input
-                  type="range"
-                  min="100"
-                  max="400"
-                  value={projectData.targetLength}
-                  step="5"
-                  onChange={(e) => handleInputChange('targetLength', parseInt(e.target.value))}
-                  style={{ width: '100%', height: '8px' }}
-                />
-                <div style={{ textAlign: 'center', fontSize: '18px', fontWeight: 700, margin: '4px 0' }}>
-                  {projectData.targetLength} ft
-                </div>
-              </div>
-
-              <div className="grid-3" style={{ marginTop: '4px' }}>
-                <div className="form-group">
+              {/* Lobby and Building Length Slider (side by side) */}
+              <div className="grid-2" style={{ gap: '12px', marginBottom: '12px' }}>
+                <div className="form-group" style={{ marginBottom: 0 }}>
                   <label className="form-label">Lobby</label>
                   <select className="form-select" value={projectData.lobbyType} onChange={(e) => handleInputChange('lobbyType', parseInt(e.target.value))}>
                     <option value="1">1-Bay</option>
@@ -157,58 +143,62 @@ const DesignTab = () => {
                     <option value="4">4-Bay</option>
                   </select>
                 </div>
-                <div className="form-group">
-                  <label className="form-label">Podium</label>
-                  <select className="form-select" value={projectData.podiumCount} onChange={(e) => handleInputChange('podiumCount', parseInt(e.target.value))}>
-                    <option value="0">0</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                  </select>
-                </div>
-                <div className="form-group">
-                  <label className="form-label">Ground Floor Common Area %</label>
+
+                <div className="form-group" style={{ marginBottom: 0 }}>
+                  <label className="form-label">Building Length: {projectData.targetLength} ft</label>
                   <input
                     type="range"
-                    min="0"
-                    max="100"
-                    value={projectData.commonAreaPct}
+                    min="100"
+                    max="400"
+                    value={projectData.targetLength}
                     step="5"
-                    onChange={(e) => handleInputChange('commonAreaPct', parseInt(e.target.value))}
-                    style={{ width: '100%', height: '8px', padding: 0 }}
+                    onChange={(e) => handleInputChange('targetLength', parseInt(e.target.value))}
+                    style={{
+                      width: '100%',
+                      height: '8px',
+                      accentColor: isConstraintMet ? '#16a34a' : '#dc2626'
+                    }}
                   />
-                  <div className="small-text" style={{ textAlign: 'center' }}>{projectData.commonAreaPct}%</div>
+                </div>
+              </div>
+
+              {/* Target Unit Mix */}
+              <div>
+                <h3 style={{ fontSize: '16px', fontWeight: 700, color: '#111827', marginBottom: '8px' }}>
+                  🎯 Target Unit Mix
+                  <span style={{ fontSize: '13px', fontWeight: 600, color: '#6b7280', marginLeft: '8px' }}>
+                    (Required: {calculations.requiredLength.toFixed(1)} ft)
+                  </span>
+                </h3>
+                <p className="small-text" style={{ marginBottom: '8px' }}>Enter target units. Final mix will be proposed on right.</p>
+
+                <div className="grid-4" style={{ gap: '8px' }}>
+                  <div className="unit-input-container">
+                    <label>Studio</label>
+                    <input type="number" value={projectData.targets.studio} min="0" onChange={(e) => handleTargetChange('studio', e.target.value)} />
+                  </div>
+                  <div className="unit-input-container">
+                    <label>1 Bed</label>
+                    <input type="number" value={projectData.targets.oneBed} min="0" onChange={(e) => handleTargetChange('oneBed', e.target.value)} />
+                  </div>
+                  <div className="unit-input-container">
+                    <label>2 Bed</label>
+                    <input type="number" value={projectData.targets.twoBed} min="0" onChange={(e) => handleTargetChange('twoBed', e.target.value)} />
+                  </div>
+                  <div className="unit-input-container">
+                    <label>3 Bed</label>
+                    <input type="number" value={projectData.targets.threeBed} min="0" onChange={(e) => handleTargetChange('threeBed', e.target.value)} />
+                  </div>
                 </div>
               </div>
             </div>
 
-            {/* Unit Mix */}
+            {/* Right Side: Proposed Unit Mix and Total GSF */}
             <div className="card">
-              <h2>🎯 Target Unit Mix</h2>
-              <p className="small-text" style={{ marginBottom: '8px' }}>Enter target units. Final mix will be proposed below.</p>
+              <h2>📊 Proposed Unit Mix ({calculations.totalOptimized} Total)</h2>
+              <p className="small-text" style={{ marginBottom: '8px' }}>Optimized mix based on your target inputs and building length.</p>
 
               <div className="grid-4" style={{ gap: '8px' }}>
-                <div className="unit-input-container">
-                  <label>Studio</label>
-                  <input type="number" value={projectData.targets.studio} min="0" onChange={(e) => handleTargetChange('studio', e.target.value)} />
-                </div>
-                <div className="unit-input-container">
-                  <label>1 Bed</label>
-                  <input type="number" value={projectData.targets.oneBed} min="0" onChange={(e) => handleTargetChange('oneBed', e.target.value)} />
-                </div>
-                <div className="unit-input-container">
-                  <label>2 Bed</label>
-                  <input type="number" value={projectData.targets.twoBed} min="0" onChange={(e) => handleTargetChange('twoBed', e.target.value)} />
-                </div>
-                <div className="unit-input-container">
-                  <label>3 Bed</label>
-                  <input type="number" value={projectData.targets.threeBed} min="0" onChange={(e) => handleTargetChange('threeBed', e.target.value)} />
-                </div>
-              </div>
-
-              <h3 style={{ fontSize: '16px', fontWeight: 700, color: '#111827', marginTop: '10px', borderTop: '1px solid #f3f4f6', paddingTop: '6px' }}>
-                Proposed Unit Mix ({calculations.totalOptimized} Total)
-              </h3>
-              <div className="grid-4" style={{ gap: '8px', marginTop: '8px' }}>
                 {['Studio', '1 Bed', '2 Bed', '3 Bed'].map((label, index) => {
                   const key = ['studio', 'oneBed', 'twoBed', 'threeBed'][index];
                   const count = calculations.optimized[key];
@@ -219,6 +209,26 @@ const DesignTab = () => {
                     </div>
                   );
                 })}
+              </div>
+
+              {/* Total GSF Box */}
+              <div style={{
+                background: '#f0fdf4',
+                border: '2px solid #16a34a',
+                borderRadius: '8px',
+                padding: '16px',
+                marginTop: '16px',
+                textAlign: 'center'
+              }}>
+                <div style={{ fontSize: '13px', fontWeight: 600, color: '#15803D', marginBottom: '6px' }}>
+                  TOTAL GROSS SQUARE FEET
+                </div>
+                <div style={{ fontSize: '32px', fontWeight: 700, color: '#111827' }}>
+                  {(calculations.totalOptimized * projectData.floors * 900).toLocaleString()} SF
+                </div>
+                <div className="small-text" style={{ marginTop: '4px', color: '#15803D' }}>
+                  {calculations.totalOptimized} units/floor × {projectData.floors} floors × 900 SF/unit
+                </div>
               </div>
             </div>
           </div>
