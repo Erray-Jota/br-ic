@@ -199,7 +199,7 @@ const DesignTab = () => {
                   {Math.round(calculations.totalGSF).toLocaleString()} SF
                 </div>
                 <div className="small-text" style={{ marginTop: '4px', color: '#15803D' }}>
-                  {(calculations.totalOptimized / projectData.floors).toFixed(0)} units/floor × {projectData.floors} floors (with {(5).toFixed(1)}% common area)
+                  {(calculations.totalOptimized / projectData.floors).toFixed(0)} units/floor × {projectData.floors} floors
                 </div>
               </div>
             </div>
