@@ -53,11 +53,11 @@ const PortfolioTab = () => {
 
   return (
     <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '20px 20px 0 20px' }}>
-      <h1 style={{ fontSize: '32px', fontWeight: 800, color: '#15803D', textAlign: 'center', marginBottom: '10px' }}>
-        The RaaP Way: From Feasibility to Fabrication
+      <h1 style={{ fontSize: '32px', fontWeight: 800, color: '#2D5A3D', textAlign: 'center', marginBottom: '10px' }}>
+        Three Products. One Mission: De-Risk Modular.
       </h1>
-      <p style={{ fontSize: '18px', color: '#4b5563', textAlign: 'center', marginBottom: '25px' }}>
-        The ModularFeasibility assessment confirms your project works. Now, lock in the timeline, costs, and quality with our tiered services.
+      <p style={{ fontSize: '16px', color: '#6b7280', textAlign: 'center', marginBottom: '25px' }}>
+        From feasibility to fabrication, RaaP guides you through modular construction with firm costs, partner certainty, and factory-ready design.
       </p>
 
       {/* Workflow Graphic Placeholder */}

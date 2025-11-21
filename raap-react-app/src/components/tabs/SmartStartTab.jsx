@@ -5,11 +5,11 @@ const SmartStartTab = () => {
 
   return (
     <div style={{ maxWidth: '900px', margin: '0 auto', paddingTop: '20px' }}>
-      <h1 style={{ fontSize: '32px', fontWeight: 800, color: '#F59E0B', textAlign: 'center', marginBottom: '15px' }}>
-        What if you could know in 2 weeks instead of 6 months?
+      <h1 style={{ fontSize: '32px', fontWeight: 800, color: '#2D5A3D', textAlign: 'center', marginBottom: '15px' }}>
+        SmartStart: Know in 2 Weeks, Launch in 6 Months
       </h1>
-      <p style={{ fontSize: '18px', color: '#4b5563', textAlign: 'center', marginBottom: '30px' }}>
-        "This is exactly what goes into SmartStart — but customized to your site, your zoning, your program, and your budget."
+      <p style={{ fontSize: '16px', color: '#6b7280', textAlign: 'center', marginBottom: '30px' }}>
+        Turn your project vision into a financeable, modular-optimized package. Firm costs. Zero surprises. Maximum certainty.
       </p>
 
       {/* Sub-tabs */}
@@ -30,15 +30,15 @@ const SmartStartTab = () => {
       {/* Subtab 1: Summary & Process */}
       {activeSubtabs.smartstart === 1 && (
         <div className="card" style={{ padding: '16px' }}>
-          <h3 style={{ fontSize: '20px', fontWeight: 700, color: '#F59E0B', marginBottom: '10px' }}>
-            SmartStart Overview: The Ultimate De-risking Package
+          <h3 style={{ fontSize: '22px', fontWeight: 800, color: '#F59E0B', marginBottom: '10px' }}>
+            The SmartStart Promise: Certainty Before Capital
           </h3>
           <p style={{ fontSize: '16px', color: '#111827', marginBottom: '15px' }}>
-            For a <strong>fixed fee of $10K</strong>, we eliminate the <strong>$50K–$150K soft cost gamble</strong> of traditional feasibility, delivering a financeable, city-ready package in just 2 weeks. This is the ultimate insurance for your project's timeline and budget.
+            <strong>$10K investment.</strong> <strong>$50K–$150K soft cost savings.</strong> In just 2 weeks, you'll have a firm cost, modular-optimized design, and entitlement-ready package. No surprises. No rework. Maximum negotiation power when you're ready to build.
           </p>
 
-          <h4 style={{ fontSize: '18px', fontWeight: 700, color: '#111827', marginTop: '20px', borderTop: '1px solid #e5e7eb', paddingTop: '15px' }}>
-            4-6 Week SmartStart Delivery Process
+          <h4 style={{ fontSize: '18px', fontWeight: 800, color: '#2D5A3D', marginTop: '20px', borderTop: '2px solid #2D5A3D', paddingTop: '15px' }}>
+            2-Week Delivery Process: Risk → Certainty
           </h4>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>

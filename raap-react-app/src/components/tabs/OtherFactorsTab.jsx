@@ -18,9 +18,12 @@ const OtherFactorsTab = () => {
 
   return (
     <div>
-      <h1 style={{ fontSize: '18px', fontWeight: 700, color: '#111827', marginBottom: '8px', textAlign: 'center' }}>
-        Advanced Modular Feasibility Factors
+      <h1 style={{ fontSize: '28px', fontWeight: 800, color: '#2D5A3D', marginBottom: '8px', textAlign: 'center' }}>
+        De-Risk, Accelerate & Lock In Savings
       </h1>
+      <p style={{ fontSize: '16px', color: '#6b7280', textAlign: 'center', marginBottom: '20px' }}>
+        Three critical levers to derisk modular construction and protect your project's timeline, costs, and quality.
+      </p>
 
       {/* Sub-tabs */}
       <div className="subtab-container">
@@ -47,11 +50,11 @@ const OtherFactorsTab = () => {
         {/* Build Time Tab */}
         {activeSubtabs.factors === 1 && (
           <div className="card" style={{ padding: '16px' }}>
-            <h2 style={{ fontSize: '20px', color: '#F59E0B', marginBottom: '4px' }}>
-              6 Months Faster to Groundbreaking = Revenue 6 Months Sooner.
+            <h2 style={{ fontSize: '24px', color: '#F59E0B', fontWeight: 800, marginBottom: '8px' }}>
+              ⚡ SPEED: 6 Months Faster to Revenue
             </h2>
             <p style={{ fontSize: '16px', color: '#4b5563', marginBottom: '15px' }}>
-              SmartStart collapses the slowest parts of development: feasibility, design, cost, and pre-con.
+              RaaP SmartStart collapses traditional timelines by eliminating design rework, speculative bidding, and coordination delays. You're groundbreaking while competitors are still in design.
             </p>
 
             {/* Summary Metrics */}
@@ -89,11 +92,11 @@ const OtherFactorsTab = () => {
         {/* Marketplace Tab */}
         {activeSubtabs.factors === 2 && (
           <div className="card" style={{ padding: '16px' }}>
-            <h2 style={{ fontSize: '20px', color: '#15803D', marginBottom: '4px' }}>
-              Stop Searching. Start Building.
+            <h2 style={{ fontSize: '24px', color: '#2D5A3D', fontWeight: 800, marginBottom: '8px' }}>
+              🛡️ RISK: Partner Selection That Prevents Project Failure
             </h2>
             <p style={{ fontSize: '16px', color: '#4b5563', marginBottom: '15px' }}>
-              We ensure your factory alignment, GC expertise, and scope clarity matter as much as design and cost.
+              A factory that can't deliver. A GC misaligned with modular logic. Scope creep that derails costs. We mitigate these risks through a rigorous 4-pillar evaluation framework ensuring long-term success.
             </p>
 
             {/* Filters */}
@@ -142,11 +145,11 @@ const OtherFactorsTab = () => {
         {/* Selection Tab */}
         {activeSubtabs.factors === 3 && (
           <div className="card" style={{ padding: '16px' }}>
-            <h2 style={{ fontSize: '20px', color: '#DC2626', marginBottom: '4px' }}>
-              Mitigate Risk. Maximize Value.
+            <h2 style={{ fontSize: '24px', color: '#DC2626', fontWeight: 800, marginBottom: '8px' }}>
+              💰 COST: Real Numbers Before You Commit Capital
             </h2>
             <p style={{ fontSize: '16px', color: '#4b5563', marginBottom: '15px' }}>
-              We use a weighted, 4-pillar analysis to select the ideal partner, ensuring long-term project success.
+              Know if your project pencils BEFORE entitlement. Firm bids from 3–5 fabricators eliminate speculative estimates and give you negotiation power to lock in your margin.
             </p>
 
             {/* 4-Pillar Banner */}
@@ -180,11 +183,11 @@ const OtherFactorsTab = () => {
         {/* Logistics Tab */}
         {activeSubtabs.factors === 4 && (
           <div className="card" style={{ padding: '16px' }}>
-            <h2 style={{ fontSize: '20px', color: '#2563EB', marginBottom: '4px' }}>
-              Zero Surprises on Delivery Day.
+            <h2 style={{ fontSize: '24px', color: '#2563EB', fontWeight: 800, marginBottom: '8px' }}>
+              🚚 LOGISTICS: Zero Surprises. Maximum Site Efficiency.
             </h2>
             <p style={{ fontSize: '16px', color: '#4b5563', marginBottom: '15px' }}>
-              We assess transportation, staging, and installation requirements upfront, guaranteeing minimal site constraints.
+              Transportation clearance, crane staging, site access—we solve these upfront so your setting team executes flawlessly and on schedule.
             </p>
 
             <div className="grid-2" style={{ gap: '20px' }}>
@@ -217,11 +220,11 @@ const OtherFactorsTab = () => {
         {/* Sustainability Tab */}
         {activeSubtabs.factors === 5 && (
           <div className="card" style={{ padding: '16px' }}>
-            <h2 style={{ fontSize: '20px', color: '#16A34A', marginBottom: '4px' }}>
-              Net Zero Performance. Built-In.
+            <h2 style={{ fontSize: '24px', color: '#16A34A', fontWeight: 800, marginBottom: '8px' }}>
+              🌱 SUSTAINABILITY: Performance Standards Built Into Modular.
             </h2>
             <p style={{ fontSize: '16px', color: '#4b5563', marginBottom: '15px' }}>
-              We deliver a 5.0/5.0 score, proving the design readily supports Net Zero Energy (NZE) and PHIUS standards.
+              Modular factory QC and precision assembly deliver Net Zero Energy standards inherently. We optimize for minimal costed upgrades while maximizing long-term ROI.
             </p>
 
             {/* Summary Metrics */}
