@@ -37,7 +37,7 @@ const DesignTab = () => {
       </h1>
 
       {/* Design Metrics Banner */}
-      <div className="project-info-banner">
+      <div className="project-info-banner design-metrics-banner">
         <div className="cost-column">
           <div className="metric-label">BUILDING LENGTH REQUIRED</div>
           <div className="metric-main-value" style={{ color: '#111827' }}>

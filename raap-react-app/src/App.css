@@ -148,6 +148,11 @@
   gap: 20px;
 }
 
+/* Design tab uses 4 columns */
+.design-metrics-banner {
+  grid-template-columns: repeat(4, 1fr) !important;
+}
+
 .cost-column {
   display: flex;
   flex-direction: column;
