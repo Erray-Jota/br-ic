@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useProject } from '../contexts/ProjectContext';
 import { useMobile } from '../hooks/useMobile';
+import { COLORS, FONTS } from '../styles/theme';
 
 const ResponsiveTabNavigation = () => {
   const { activeTab, switchTab, activeSubtabs, switchSubtab } = useProject();
@@ -38,12 +39,12 @@ const ResponsiveTabNavigation = () => {
     return (
       <div
         style={{
-          background: 'white',
-          borderBottom: '1px solid #e5e7eb',
+          background: `linear-gradient(90deg, ${COLORS.green.bg} 0%, #ffffff 50%, ${COLORS.blue.bg} 100%)`,
+          borderBottom: `3px solid ${COLORS.green.dark}`,
           position: 'sticky',
           top: 0,
           zIndex: 10,
-          boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
+          boxShadow: '0 4px 12px rgba(6, 95, 70, 0.15)',
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
@@ -68,13 +69,14 @@ const ResponsiveTabNavigation = () => {
           style={{
             padding: '6px 12px',
             fontSize: '11px',
-            background: mobilePreviewMode ? '#2D5A3D' : '#e5e7eb',
-            color: mobilePreviewMode ? 'white' : '#374151',
-            border: 'none',
-            borderRadius: '4px',
+            background: mobilePreviewMode ? COLORS.green.dark : COLORS.gray.bg,
+            color: mobilePreviewMode ? COLORS.white : COLORS.gray.medium,
+            border: `2px solid ${COLORS.green.dark}`,
+            borderRadius: '6px',
             cursor: 'pointer',
             fontWeight: 600,
             whiteSpace: 'nowrap',
+            transition: 'all 0.2s',
           }}
         >
           📱 Mobile Preview
@@ -101,9 +103,10 @@ const ResponsiveTabNavigation = () => {
         bottom: 0,
         left: 0,
         right: 0,
-        background: 'white',
+        background: COLORS.white,
         zIndex: 100,
-        boxShadow: '0 -2px 8px rgba(0,0,0,0.1)',
+        boxShadow: '0 -4px 12px rgba(6, 95, 70, 0.15)',
+        borderTop: `3px solid ${COLORS.green.dark}`,
         transform: isHidden ? 'translateY(100%)' : 'translateY(0)',
         transition: 'transform 0.3s ease',
       }}

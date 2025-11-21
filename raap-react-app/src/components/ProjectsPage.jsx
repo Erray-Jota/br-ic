@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useProject } from '../contexts/ProjectContext';
 import { useCalculations, formatMega } from '../hooks/useCalculations';
 import { ASSET_PATHS } from '../data/constants';
+import { COLORS, FONTS, SPACING, STYLE_PRESETS } from '../styles/theme';
 
 const ProjectCard = ({ project, onOpen, onEdit, onDuplicate, onDelete }) => {
   const [isHovered, setIsHovered] = useState(false);
@@ -35,7 +36,7 @@ const ProjectCard = ({ project, onOpen, onEdit, onDuplicate, onDelete }) => {
         style={{
           width: '200px',
           minHeight: '180px',
-          background: 'linear-gradient(135deg, #15803D 0%, #16a34a 100%)',
+          background: `linear-gradient(135deg, ${COLORS.green.dark} 0%, ${COLORS.green.light} 100%)`,
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -137,14 +138,15 @@ const ProjectCard = ({ project, onOpen, onEdit, onDuplicate, onDelete }) => {
             }}
             style={{
               padding: '8px 12px',
-              background: '#2563eb',
-              color: 'white',
+              background: COLORS.blue.main,
+              color: COLORS.white,
               border: 'none',
               borderRadius: '6px',
               fontSize: '13px',
-              fontWeight: 600,
+              fontWeight: FONTS.weight.bold,
               cursor: 'pointer',
               boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+              transition: 'all 0.2s',
             }}
           >
             ✏️ Edit
@@ -156,14 +158,15 @@ const ProjectCard = ({ project, onOpen, onEdit, onDuplicate, onDelete }) => {
             }}
             style={{
               padding: '8px 12px',
-              background: '#16a34a',
-              color: 'white',
+              background: COLORS.green.light,
+              color: COLORS.white,
               border: 'none',
               borderRadius: '6px',
               fontSize: '13px',
-              fontWeight: 600,
+              fontWeight: FONTS.weight.bold,
               cursor: 'pointer',
               boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+              transition: 'all 0.2s',
             }}
           >
             📋 Duplicate
@@ -175,14 +178,15 @@ const ProjectCard = ({ project, onOpen, onEdit, onDuplicate, onDelete }) => {
             }}
             style={{
               padding: '8px 12px',
-              background: '#dc2626',
-              color: 'white',
+              background: COLORS.red.main,
+              color: COLORS.white,
               border: 'none',
               borderRadius: '6px',
               fontSize: '13px',
-              fontWeight: 600,
+              fontWeight: FONTS.weight.bold,
               cursor: 'pointer',
               boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+              transition: 'all 0.2s',
             }}
           >
             🗑️ Delete
@@ -197,28 +201,37 @@ const ProjectsPage = () => {
   const { projects, openProject, createNewProject, duplicateProject, deleteProject, hideProjectsPage } = useProject();
 
   return (
-    <div style={{ padding: '40px', minHeight: 'calc(100vh - 140px)', background: '#f9fafb' }}>
+    <div style={{ padding: SPACING['4xl'], minHeight: 'calc(100vh - 140px)', background: COLORS.gray.bg }}>
       <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
+        {/* Hero Section */}
+        <div style={{ background: `linear-gradient(135deg, ${COLORS.green.bg} 0%, #ffffff 100%)`, padding: SPACING['3xl'], borderRadius: '12px', border: `3px solid ${COLORS.green.light}`, marginBottom: SPACING['3xl'], boxShadow: '0 4px 12px rgba(6, 95, 70, 0.1)', textAlign: 'center' }}>
+          <h1 style={{ fontSize: FONTS.sizes['4xl'], fontWeight: FONTS.weight.black, color: COLORS.green.dark, margin: 0, marginBottom: SPACING.md }}>
+            🏗️ Your Modular Projects
+          </h1>
+          <p style={{ fontSize: FONTS.sizes.md, color: COLORS.gray.medium, margin: 0, fontWeight: FONTS.weight.bold }}>
+            Complete workflow system for modular construction development
+          </p>
+        </div>
+
         {/* Header */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '32px' }}>
-          <div>
-            <h1 style={{ fontSize: '32px', fontWeight: 700, color: '#111827', marginBottom: '8px' }}>
-              Your Projects
-            </h1>
-            <p style={{ fontSize: '16px', color: '#6b7280', margin: 0 }}>
-              Complete workflow system for modular construction development
-            </p>
-          </div>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: SPACING['3xl'] }}>
+          <div></div>
           <button
             onClick={createNewProject}
             className="btn btn-success"
             style={{
-              padding: '12px 24px',
-              fontSize: '16px',
-              fontWeight: 700,
+              padding: SPACING.lg + ' ' + SPACING['2xl'],
+              fontSize: FONTS.sizes.lg,
+              fontWeight: FONTS.weight.black,
               display: 'flex',
               alignItems: 'center',
-              gap: '8px',
+              gap: SPACING.md,
+              background: COLORS.green.dark,
+              color: COLORS.white,
+              border: 'none',
+              borderRadius: '8px',
+              cursor: 'pointer',
+              transition: 'all 0.2s',
             }}
           >
             + New Project
@@ -248,22 +261,22 @@ const ProjectsPage = () => {
             style={{
               textAlign: 'center',
               padding: '80px 20px',
-              background: 'white',
+              background: COLORS.white,
               borderRadius: '12px',
-              border: '2px dashed #e5e7eb',
+              border: `3px dashed ${COLORS.green.light}`,
             }}
           >
-            <div style={{ fontSize: '64px', marginBottom: '16px' }}>📁</div>
-            <h3 style={{ fontSize: '20px', fontWeight: 700, color: '#111827', marginBottom: '8px' }}>
+            <div style={{ fontSize: '64px', marginBottom: SPACING.lg }}>📁</div>
+            <h3 style={{ fontSize: FONTS.sizes['2xl'], fontWeight: FONTS.weight.black, color: COLORS.gray.dark, marginBottom: SPACING.md }}>
               No projects yet
             </h3>
-            <p style={{ fontSize: '16px', color: '#6b7280', marginBottom: '24px' }}>
+            <p style={{ fontSize: FONTS.sizes.md, color: COLORS.gray.medium, marginBottom: SPACING['2xl'], fontWeight: FONTS.weight.bold }}>
               Create your first modular construction project to get started
             </p>
             <button
               onClick={createNewProject}
               className="btn btn-success"
-              style={{ padding: '12px 24px', fontSize: '16px', fontWeight: 700 }}
+              style={{ padding: SPACING.lg + ' ' + SPACING['2xl'], fontSize: FONTS.sizes.lg, fontWeight: FONTS.weight.black, background: COLORS.green.dark, color: COLORS.white, border: 'none', borderRadius: '8px', cursor: 'pointer' }}
             >
               + Create Your First Project
             </button>

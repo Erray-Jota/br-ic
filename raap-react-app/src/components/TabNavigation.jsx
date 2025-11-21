@@ -1,4 +1,5 @@
 import { useProject } from '../contexts/ProjectContext';
+import { COLORS, FONTS, SPACING } from '../styles/theme';
 
 const TabNavigation = () => {
   const { activeTab, switchTab } = useProject();
@@ -16,12 +17,12 @@ const TabNavigation = () => {
   return (
     <div
       style={{
-        background: 'white',
-        borderBottom: '1px solid #e5e7eb',
+        background: `linear-gradient(90deg, ${COLORS.green.bg} 0%, #ffffff 50%, ${COLORS.blue.bg} 100%)`,
+        borderBottom: `3px solid ${COLORS.green.dark}`,
         position: 'sticky',
         top: 0,
         zIndex: 10,
-        boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
+        boxShadow: '0 4px 12px rgba(6, 95, 70, 0.15)',
       }}
     >
       <div className="container" style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 20px' }}>
