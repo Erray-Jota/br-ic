@@ -13,5 +13,8 @@ export default defineConfig({
       clientPort: 443,
       protocol: 'wss',
     }
+  },
+  define: {
+    'import.meta.env.VITE_GOOGLE_API_KEY': JSON.stringify(process.env.GOOGLE_API_KEY || '')
   }
 })
