@@ -10,6 +10,9 @@ const ResponsiveTabNavigation = () => {
     { id: 2, label: '📋 Project', shortLabel: 'Project' },
     { id: 3, label: '📐 Design', shortLabel: 'Design' },
     { id: 4, label: '💰 Cost', shortLabel: 'Cost' },
+    { id: 5, label: '⚙️ Other Factors', shortLabel: 'Factors' },
+    { id: 6, label: '🎨 Portfolio', shortLabel: 'Portfolio' },
+    { id: 7, label: '✨ SmartStart', shortLabel: 'SmartStart' },
   ];
 
   // Desktop top navigation
@@ -62,7 +65,9 @@ const ResponsiveTabNavigation = () => {
     );
   }
 
-  // Mobile bottom navigation
+  // Mobile bottom navigation - only show first 4 tabs on mobile
+  const mobileVisibleTabs = tabs.slice(0, 4);
+  
   return (
     <div
       style={{
@@ -79,7 +84,7 @@ const ResponsiveTabNavigation = () => {
         boxShadow: '0 -2px 8px rgba(0,0,0,0.1)',
       }}
     >
-      {tabs.map((tab) => (
+      {mobileVisibleTabs.map((tab) => (
         <button
           key={tab.id}
           onClick={() => switchTab(tab.id)}
