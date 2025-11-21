@@ -37,19 +37,27 @@ const LocationInput = ({ value, onChange, label, placeholder = 'Enter city or zi
 
   // Search using Google Geocoding API directly
   const searchLocations = async (query) => {
+    console.log('🔍 LocationInput - API Key present:', !!apiKey);
+    console.log('🔍 LocationInput - Query:', query);
+
     if (!apiKey || query.length < 2) {
+      if (!apiKey) {
+        console.warn('⚠️ No Google API key found! Check your .env file');
+      }
       setSuggestions([]);
       return;
     }
 
     try {
+      console.log('🌐 Fetching locations from Google Geocoding API...');
       // Use Geocoding API to find locations
       const response = await fetch(
         `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(query)}&country=us&key=${apiKey}`
       );
-      
+
       const data = await response.json();
-      
+      console.log('📍 Google API Response:', data);
+
       if (data.status === 'OK' && data.results && data.results.length > 0) {
         const results = data.results.slice(0, 8).map((result) => {
           const location = result.geometry.location;
