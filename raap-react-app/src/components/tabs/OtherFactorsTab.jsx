@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { GoogleMap, LoadScript, MarkerF, DirectionsRenderer, GoogleMapsProvider } from '@react-google-maps/api';
+import { GoogleMap, LoadScript, MarkerF, DirectionsRenderer } from '@react-google-maps/api';
 import { useProject } from '../../contexts/ProjectContext';
 import { DUMMY_PARTNERS, DEFAULT_SITE_LOCATION, FACTORY_LOCATIONS } from '../../data/constants';
 
@@ -137,44 +137,42 @@ const OtherFactorsTab = () => {
             {apiKey && (
               <div style={{ marginBottom: '20px', borderRadius: '8px', overflow: 'hidden', height: '400px', border: '2px solid #e5e7eb' }}>
                 <LoadScript googleMapsApiKey={apiKey}>
-                  <GoogleMapsProvider>
-                    <GoogleMap
-                      mapContainerStyle={{ width: '100%', height: '100%' }}
-                      center={DEFAULT_SITE_LOCATION}
-                      zoom={4}
-                    >
-                      {/* Site Location */}
+                  <GoogleMap
+                    mapContainerStyle={{ width: '100%', height: '100%' }}
+                    center={DEFAULT_SITE_LOCATION}
+                    zoom={4}
+                  >
+                    {/* Site Location */}
+                    <MarkerF
+                      position={DEFAULT_SITE_LOCATION}
+                      title="Project Site"
+                      icon={{
+                        path: window.google?.maps?.SymbolPath?.CIRCLE || 0,
+                        scale: 12,
+                        fillColor: '#2D5A3D',
+                        fillOpacity: 1,
+                        strokeColor: '#fff',
+                        strokeWeight: 2,
+                      }}
+                    />
+                    
+                    {/* Partner Markers */}
+                    {filteredPartners.map((partner, idx) => (
                       <MarkerF
-                        position={DEFAULT_SITE_LOCATION}
-                        title="Project Site"
+                        key={idx}
+                        position={{ lat: partner.lat, lng: partner.lng }}
+                        title={`${partner.name} (${partner.category})`}
                         icon={{
                           path: window.google?.maps?.SymbolPath?.CIRCLE || 0,
-                          scale: 12,
-                          fillColor: '#2D5A3D',
-                          fillOpacity: 1,
+                          scale: 10,
+                          fillColor: partner.category === 'Fabricator' ? '#F59E0B' : partner.category === 'GC' ? '#3B82F6' : partner.category === 'AoR' ? '#8B5CF6' : '#EC4899',
+                          fillOpacity: 0.9,
                           strokeColor: '#fff',
                           strokeWeight: 2,
                         }}
                       />
-                      
-                      {/* Partner Markers */}
-                      {filteredPartners.map((partner, idx) => (
-                        <MarkerF
-                          key={idx}
-                          position={{ lat: partner.lat, lng: partner.lng }}
-                          title={`${partner.name} (${partner.category})`}
-                          icon={{
-                            path: window.google?.maps?.SymbolPath?.CIRCLE || 0,
-                            scale: 10,
-                            fillColor: partner.category === 'Fabricator' ? '#F59E0B' : partner.category === 'GC' ? '#3B82F6' : partner.category === 'AoR' ? '#8B5CF6' : '#EC4899',
-                            fillOpacity: 0.9,
-                            strokeColor: '#fff',
-                            strokeWeight: 2,
-                          }}
-                        />
-                      ))}
-                    </GoogleMap>
-                  </GoogleMapsProvider>
+                    ))}
+                  </GoogleMap>
                 </LoadScript>
               </div>
             )}
@@ -309,20 +307,18 @@ const OtherFactorsTab = () => {
             {apiKey && (
               <div style={{ marginBottom: '20px', borderRadius: '8px', overflow: 'hidden', height: '400px', border: '2px solid #e5e7eb' }}>
                 <LoadScript googleMapsApiKey={apiKey}>
-                  <GoogleMapsProvider>
-                    <GoogleMap
-                      mapContainerStyle={{ width: '100%', height: '100%' }}
-                      center={DEFAULT_SITE_LOCATION}
-                      zoom={6}
-                    >
-                      {directions && <DirectionsRenderer directions={directions} />}
-                      {!directions && (
-                        <>
-                          <MarkerF position={DEFAULT_SITE_LOCATION} title="Project Site" />
-                        </>
-                      )}
-                    </GoogleMap>
-                  </GoogleMapsProvider>
+                  <GoogleMap
+                    mapContainerStyle={{ width: '100%', height: '100%' }}
+                    center={DEFAULT_SITE_LOCATION}
+                    zoom={6}
+                  >
+                    {directions && <DirectionsRenderer directions={directions} />}
+                    {!directions && (
+                      <>
+                        <MarkerF position={DEFAULT_SITE_LOCATION} title="Project Site" />
+                      </>
+                    )}
+                  </GoogleMap>
                 </LoadScript>
               </div>
             )}
