@@ -312,18 +312,20 @@ const CostAnalysisTab = () => {
                   </div>
 
                   {/* Actual Unit Mix (4 Display Boxes) */}
-                  <label className="form-label">Actual Unit Mix</label>
-                  <div className="grid-4" style={{ gap: '8px', marginBottom: '12px' }}>
-                    {['Studio', '1BR', '2BR', '3BR'].map((label, i) => {
-                      const key = ['studio', 'oneBed', 'twoBed', 'threeBed'][i];
-                      const actual = calculations.optimized[key];
-                      return (
-                        <div key={key} style={{ padding: '8px', background: '#f0fdf4', borderRadius: '6px', textAlign: 'center', border: '1px solid #86efac' }}>
-                          <div style={{ fontSize: '11px', fontWeight: 600, color: '#15803D', marginBottom: '4px' }}>{label}</div>
-                          <div style={{ fontSize: '16px', fontWeight: 700, color: '#111827' }}>{actual}</div>
-                        </div>
-                      );
-                    })}
+                  <div style={{ marginBottom: 0 }}>
+                    <label className="form-label" style={{ marginBottom: '6px' }}>Actual Unit Mix</label>
+                    <div className="grid-4" style={{ gap: '6px', marginBottom: 0 }}>
+                      {['Studio', '1BR', '2BR', '3BR'].map((label, i) => {
+                        const key = ['studio', 'oneBed', 'twoBed', 'threeBed'][i];
+                        const actual = calculations.optimized[key];
+                        return (
+                          <div key={key} style={{ padding: '4px 6px', background: '#f0fdf4', borderRadius: '4px', textAlign: 'center', border: '1px solid #86efac' }}>
+                            <div style={{ fontSize: '9px', fontWeight: 600, color: '#15803D', marginBottom: '2px' }}>{label}</div>
+                            <div style={{ fontSize: '14px', fontWeight: 700, color: '#111827' }}>{actual}</div>
+                          </div>
+                        );
+                      })}
+                    </div>
                   </div>
 
                   {/* Save Project Button */}
