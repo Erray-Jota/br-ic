@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { GoogleMap, LoadScript, MarkerF, DirectionsRenderer } from '@react-google-maps/api';
 import { useProject } from '../../contexts/ProjectContext';
 import { DUMMY_PARTNERS, DEFAULT_SITE_LOCATION, FACTORY_LOCATIONS } from '../../data/constants';
 
@@ -7,7 +6,7 @@ const OtherFactorsTab = () => {
   const { switchTab, activeSubtabs, switchSubtab, projectData } = useProject();
   const [filterCategory, setFilterCategory] = useState('All');
   const [searchTerm, setSearchTerm] = useState('');
-  const [directions, setDirections] = useState(null);
+  const [selectedFactory, setSelectedFactory] = useState('');
   
   const apiKey = import.meta.env.VITE_GOOGLE_API_KEY || '';
   
@@ -21,24 +20,23 @@ const OtherFactorsTab = () => {
     return icons[category] || '📍';
   };
   
-  const handleDirections = (factoryLat, factoryLng) => {
-    if (!apiKey) {
-      console.log('Google Maps API key not configured');
-      return;
+  const getMarketplaceMapUrl = () => {
+    const markers = filteredPartners.slice(0, 25).map((p, i) => {
+      const colors = { 'Fabricator': 'FFA500', 'GC': '4169E1', 'AoR': '9370DB', 'Consultant': 'FF69B4' };
+      const color = colors[p.category] || 'FF0000';
+      return `${p.lat},${p.lng}`;
+    }).join('|');
+    
+    return `https://maps.googleapis.com/maps/api/staticmap?center=${DEFAULT_SITE_LOCATION.lat},${DEFAULT_SITE_LOCATION.lng}&zoom=4&size=800x400&style=feature:all|element:labels|visibility:off&markers=color:0x2D5A3D|${DEFAULT_SITE_LOCATION.lat},${DEFAULT_SITE_LOCATION.lng}|label:S&markers=color:0xF59E0B|${markers.split('|').slice(0, 10).join('|')}&key=${apiKey}`;
+  };
+  
+  const getLogisticsMapUrl = () => {
+    if (!selectedFactory || !FACTORY_LOCATIONS[selectedFactory]) {
+      return `https://maps.googleapis.com/maps/api/staticmap?center=${DEFAULT_SITE_LOCATION.lat},${DEFAULT_SITE_LOCATION.lng}&zoom=6&size=800x400&markers=color:0x2D5A3D|${DEFAULT_SITE_LOCATION.lat},${DEFAULT_SITE_LOCATION.lng}&key=${apiKey}`;
     }
-    const directionsService = new window.google.maps.DirectionsService();
-    directionsService.route(
-      {
-        origin: { lat: factoryLat, lng: factoryLng },
-        destination: DEFAULT_SITE_LOCATION,
-        travelMode: window.google.maps.TravelMode.DRIVING,
-      },
-      (result, status) => {
-        if (status === window.google.maps.DirectionsStatus.OK) {
-          setDirections(result);
-        }
-      }
-    );
+    
+    const factory = FACTORY_LOCATIONS[selectedFactory];
+    return `https://maps.googleapis.com/maps/api/staticmap?center=${DEFAULT_SITE_LOCATION.lat},${DEFAULT_SITE_LOCATION.lng}&zoom=6&size=800x400&markers=color:0xF59E0B|${factory.lat},${factory.lng}|label:F&markers=color:0x2D5A3D|${DEFAULT_SITE_LOCATION.lat},${DEFAULT_SITE_LOCATION.lng}|label:S&key=${apiKey}`;
   };
 
   const filteredPartners = DUMMY_PARTNERS.filter(partner => {
@@ -135,45 +133,13 @@ const OtherFactorsTab = () => {
             
             {/* Google Maps - Partner Locations */}
             {apiKey && (
-              <div style={{ marginBottom: '20px', borderRadius: '8px', overflow: 'hidden', height: '400px', border: '2px solid #e5e7eb' }}>
-                <LoadScript googleMapsApiKey={apiKey}>
-                  <GoogleMap
-                    mapContainerStyle={{ width: '100%', height: '100%' }}
-                    center={DEFAULT_SITE_LOCATION}
-                    zoom={4}
-                  >
-                    {/* Site Location */}
-                    <MarkerF
-                      position={DEFAULT_SITE_LOCATION}
-                      title="Project Site"
-                      icon={{
-                        path: window.google?.maps?.SymbolPath?.CIRCLE || 0,
-                        scale: 12,
-                        fillColor: '#2D5A3D',
-                        fillOpacity: 1,
-                        strokeColor: '#fff',
-                        strokeWeight: 2,
-                      }}
-                    />
-                    
-                    {/* Partner Markers */}
-                    {filteredPartners.map((partner, idx) => (
-                      <MarkerF
-                        key={idx}
-                        position={{ lat: partner.lat, lng: partner.lng }}
-                        title={`${partner.name} (${partner.category})`}
-                        icon={{
-                          path: window.google?.maps?.SymbolPath?.CIRCLE || 0,
-                          scale: 10,
-                          fillColor: partner.category === 'Fabricator' ? '#F59E0B' : partner.category === 'GC' ? '#3B82F6' : partner.category === 'AoR' ? '#8B5CF6' : '#EC4899',
-                          fillOpacity: 0.9,
-                          strokeColor: '#fff',
-                          strokeWeight: 2,
-                        }}
-                      />
-                    ))}
-                  </GoogleMap>
-                </LoadScript>
+              <div style={{ marginBottom: '20px', borderRadius: '8px', overflow: 'hidden', border: '2px solid #e5e7eb' }}>
+                <img 
+                  src={getMarketplaceMapUrl()} 
+                  alt="Partner Locations Map" 
+                  style={{ width: '100%', height: '400px', objectFit: 'cover' }}
+                  onError={() => console.log('Map failed to load')}
+                />
               </div>
             )}
             {!apiKey && (
@@ -281,12 +247,8 @@ const OtherFactorsTab = () => {
                 Select Factory for Route Analysis:
               </label>
               <select
-                onChange={(e) => {
-                  const factory = FACTORY_LOCATIONS[e.target.value];
-                  if (factory && apiKey) {
-                    handleDirections(factory.lat, factory.lng);
-                  }
-                }}
+                value={selectedFactory}
+                onChange={(e) => setSelectedFactory(e.target.value)}
                 style={{
                   width: '100%',
                   maxWidth: '300px',
@@ -305,21 +267,13 @@ const OtherFactorsTab = () => {
             
             {/* Google Maps - Route */}
             {apiKey && (
-              <div style={{ marginBottom: '20px', borderRadius: '8px', overflow: 'hidden', height: '400px', border: '2px solid #e5e7eb' }}>
-                <LoadScript googleMapsApiKey={apiKey}>
-                  <GoogleMap
-                    mapContainerStyle={{ width: '100%', height: '100%' }}
-                    center={DEFAULT_SITE_LOCATION}
-                    zoom={6}
-                  >
-                    {directions && <DirectionsRenderer directions={directions} />}
-                    {!directions && (
-                      <>
-                        <MarkerF position={DEFAULT_SITE_LOCATION} title="Project Site" />
-                      </>
-                    )}
-                  </GoogleMap>
-                </LoadScript>
+              <div style={{ marginBottom: '20px', borderRadius: '8px', overflow: 'hidden', border: '2px solid #e5e7eb' }}>
+                <img 
+                  src={getLogisticsMapUrl()} 
+                  alt="Logistics Route Map" 
+                  style={{ width: '100%', height: '400px', objectFit: 'cover' }}
+                  onError={() => console.log('Map failed to load')}
+                />
               </div>
             )}
             {!apiKey && (
