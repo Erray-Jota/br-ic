@@ -113,7 +113,9 @@ const ProjectTab = () => {
                 type="number"
                 value={projectData.targets.studio}
                 min="0"
+                onFocus={(e) => e.target.select()}
                 onChange={(e) => handleTargetChange('studio', e.target.value)}
+                style={{ textAlign: 'center', fontSize: '18px', fontWeight: 600, padding: '8px' }}
               />
             </div>
             <div className="unit-input-container">
@@ -122,7 +124,9 @@ const ProjectTab = () => {
                 type="number"
                 value={projectData.targets.oneBed}
                 min="0"
+                onFocus={(e) => e.target.select()}
                 onChange={(e) => handleTargetChange('oneBed', e.target.value)}
+                style={{ textAlign: 'center', fontSize: '18px', fontWeight: 600, padding: '8px' }}
               />
             </div>
             <div className="unit-input-container">
@@ -131,7 +135,9 @@ const ProjectTab = () => {
                 type="number"
                 value={projectData.targets.twoBed}
                 min="0"
+                onFocus={(e) => e.target.select()}
                 onChange={(e) => handleTargetChange('twoBed', e.target.value)}
+                style={{ textAlign: 'center', fontSize: '18px', fontWeight: 600, padding: '8px' }}
               />
             </div>
             <div className="unit-input-container">
@@ -140,23 +146,12 @@ const ProjectTab = () => {
                 type="number"
                 value={projectData.targets.threeBed}
                 min="0"
+                onFocus={(e) => e.target.select()}
                 onChange={(e) => handleTargetChange('threeBed', e.target.value)}
+                style={{ textAlign: 'center', fontSize: '18px', fontWeight: 600, padding: '8px' }}
               />
             </div>
           </div>
-        </div>
-      </div>
-
-      {/* Factory Location */}
-      <div className="card" style={{ marginTop: '12px' }}>
-        <h2>🏭 Factory Location</h2>
-        <div className="grid-1">
-          <LocationInput
-            label="Factory Location"
-            value={projectData.factoryLocation}
-            placeholder="Enter city or zip code"
-            onChange={handleFactoryLocationChange}
-          />
         </div>
       </div>
 
