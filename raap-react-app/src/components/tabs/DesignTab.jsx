@@ -695,34 +695,18 @@ const DesignTab = () => {
             <h2 style={{ fontSize: isEffectivelyMobile ? '14px' : '18px' }}>📐 Floor Plan Layout</h2>
             
             <div style={{ overflowX: 'auto', background: '#f9fafb', padding: isEffectivelyMobile ? '8px' : '12px', borderRadius: '8px', marginBottom: '0' }}>
-              <div style={{ display: 'flex', justifyContent: 'center', minWidth: isEffectivelyMobile ? 'max-content' : '100%', minHeight: isEffectivelyMobile ? '400px' : '500px' }}>
-                <div style={{ 
-                  display: 'flex', 
-                  flexDirection: 'column', 
-                  alignItems: 'center', 
-                  justifyContent: 'center',
-                  gap: '16px',
-                  padding: '32px',
-                  textAlign: 'center',
-                  color: '#6b7280'
-                }}>
-                  <svg width="120" height="120" viewBox="0 0 120 120" fill="none">
-                    {/* Double-loaded corridor layout diagram */}
-                    <rect x="10" y="20" width="15" height="80" fill="#e5e7eb" stroke="#9ca3af" strokeWidth="1" />
-                    <rect x="30" y="20" width="20" height="35" fill="#dbeafe" stroke="#3b82f6" strokeWidth="1" />
-                    <rect x="55" y="20" width="20" height="35" fill="#dbeafe" stroke="#3b82f6" strokeWidth="1" />
-                    <rect x="30" y="60" width="20" height="35" fill="#dbeafe" stroke="#3b82f6" strokeWidth="1" />
-                    <rect x="55" y="60" width="20" height="35" fill="#dbeafe" stroke="#3b82f6" strokeWidth="1" />
-                    <rect x="80" y="20" width="15" height="80" fill="#e5e7eb" stroke="#9ca3af" strokeWidth="1" />
-                    <text x="60" y="108" textAnchor="middle" fontSize="10" fill="#6b7280">Typical Floor</text>
-                  </svg>
-                  <div style={{ fontSize: isEffectivelyMobile ? '11px' : '13px', color: '#6b7280', fontWeight: 500 }}>
-                    {calculations.totalOptimized <= 12 ? 'Short Layout (~10 units)' : calculations.totalOptimized <= 25 ? 'Medium Layout (~20 units)' : 'Large Layout (~30 units)'}
-                  </div>
-                  <div style={{ fontSize: isEffectivelyMobile ? '10px' : '12px', color: '#9ca3af' }}>
-                    Double-loaded corridor • {calculations.totalOptimized <= 12 ? '4' : calculations.totalOptimized <= 25 ? '6' : '8'} units per side
-                  </div>
-                </div>
+              <div style={{ display: 'flex', justifyContent: 'center', minWidth: isEffectivelyMobile ? 'max-content' : '100%' }}>
+                <img
+                  src={
+                    calculations.totalOptimized <= 12
+                      ? ASSET_PATHS.LAYOUT_SHORT
+                      : calculations.totalOptimized <= 25
+                      ? ASSET_PATHS.LAYOUT_MEDIUM
+                      : ASSET_PATHS.LAYOUT_LONG
+                  }
+                  alt="Floor Layout"
+                  style={{ width: isEffectivelyMobile ? '800px' : '1200px', height: 'auto', objectFit: 'contain', display: 'block' }}
+                />
               </div>
             </div>
           </div>
