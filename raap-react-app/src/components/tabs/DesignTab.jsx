@@ -695,7 +695,7 @@ const DesignTab = () => {
             <h2 style={{ fontSize: isEffectivelyMobile ? '14px' : '18px' }}>📐 Floor Plan Layout</h2>
             
             <div style={{ overflowX: 'auto', background: '#f9fafb', padding: isEffectivelyMobile ? '8px' : '12px', borderRadius: '8px', marginBottom: '0' }}>
-              <div style={{ display: 'flex', justifyContent: 'center', minWidth: '100%' }}>
+              <div style={{ display: 'flex', justifyContent: 'center', minWidth: isEffectivelyMobile ? 'max-content' : '100%' }}>
                 <img
                   src={
                     calculations.totalOptimized <= 12
@@ -705,7 +705,7 @@ const DesignTab = () => {
                       : ASSET_PATHS.LAYOUT_LONG
                   }
                   alt="Floor Layout"
-                  style={{ width: isEffectivelyMobile ? '500px' : '1000px', height: 'auto', objectFit: 'contain', display: 'block' }}
+                  style={{ width: isEffectivelyMobile ? '650px' : '1000px', height: 'auto', objectFit: 'contain', display: 'block' }}
                 />
               </div>
             </div>
