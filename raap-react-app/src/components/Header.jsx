@@ -43,20 +43,20 @@ const Header = () => {
             alignItems: 'center',
             gap: '6px',
             flexShrink: 0,
-            background: `linear-gradient(135deg, ${COLORS.gold.main} 0%, #f59e0b 100%)`,
-            color: COLORS.white,
-            border: 'none',
+            background: COLORS.white,
+            color: COLORS.green.dark,
+            border: `2px solid ${COLORS.green.dark}`,
             borderRadius: '8px',
             cursor: 'pointer',
-            boxShadow: '0 4px 12px rgba(245, 158, 11, 0.3)',
+            boxShadow: '0 2px 8px rgba(45, 90, 61, 0.15)',
             transition: 'all 0.3s',
           }}
           onMouseEnter={(e) => {
-            e.target.style.boxShadow = '0 6px 20px rgba(245, 158, 11, 0.4)';
+            e.target.style.boxShadow = '0 4px 12px rgba(45, 90, 61, 0.25)';
             e.target.style.transform = 'translateY(-2px)';
           }}
           onMouseLeave={(e) => {
-            e.target.style.boxShadow = '0 4px 12px rgba(245, 158, 11, 0.3)';
+            e.target.style.boxShadow = '0 2px 8px rgba(45, 90, 61, 0.15)';
             e.target.style.transform = 'translateY(0)';
           }}
         >
@@ -101,20 +101,20 @@ const Header = () => {
           display: 'flex',
           alignItems: 'center',
           gap: '8px',
-          background: `linear-gradient(135deg, ${COLORS.gold.main} 0%, #f59e0b 100%)`,
-          color: COLORS.white,
-          border: 'none',
+          background: COLORS.white,
+          color: COLORS.green.dark,
+          border: `2px solid ${COLORS.green.dark}`,
           borderRadius: '8px',
           cursor: 'pointer',
-          boxShadow: '0 4px 12px rgba(245, 158, 11, 0.3)',
+          boxShadow: '0 2px 8px rgba(45, 90, 61, 0.15)',
           transition: 'all 0.3s',
         }}
         onMouseEnter={(e) => {
-          e.target.style.boxShadow = '0 6px 20px rgba(245, 158, 11, 0.4)';
+          e.target.style.boxShadow = '0 4px 12px rgba(45, 90, 61, 0.25)';
           e.target.style.transform = 'translateY(-2px)';
         }}
         onMouseLeave={(e) => {
-          e.target.style.boxShadow = '0 4px 12px rgba(245, 158, 11, 0.3)';
+          e.target.style.boxShadow = '0 2px 8px rgba(45, 90, 61, 0.15)';
           e.target.style.transform = 'translateY(0)';
         }}
       >

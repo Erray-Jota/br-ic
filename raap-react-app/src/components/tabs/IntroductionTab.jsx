@@ -33,9 +33,12 @@ const IntroductionTab = () => {
 
       {/* Problems Section */}
       <div className="card" style={{ marginBottom: SPACING.lg, background: COLORS.white }}>
-        <h2 style={{ fontSize: isEffectivelyMobile ? FONTS.sizes.md : FONTS.sizes.xl, fontWeight: FONTS.weight.black, color: COLORS.red.dark, marginBottom: SPACING.md, display: 'flex', alignItems: 'center', gap: SPACING.sm }}>
-          <span>⚠️</span> Why modular hasn't worked (yet)
-        </h2>
+        <div style={{ display: 'flex', gap: SPACING.lg, alignItems: 'flex-start', marginBottom: SPACING.md }}>
+          <span style={{ fontSize: isEffectivelyMobile ? FONTS.sizes['2xl'] : FONTS.sizes['3xl'], flexShrink: 0 }}>⚠️</span>
+          <h2 style={{ fontSize: isEffectivelyMobile ? FONTS.sizes.md : FONTS.sizes.xl, fontWeight: FONTS.weight.black, color: COLORS.red.dark, margin: 0 }}>
+            Why modular hasn't worked (yet)
+          </h2>
+        </div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: isEffectivelyMobile ? '8px' : '12px' }}>
           {[
             'Designs not factory optimized',
