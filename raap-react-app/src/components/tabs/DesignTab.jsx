@@ -217,7 +217,7 @@ const DesignTab = () => {
             <ul style={{ listStyle: 'none', paddingLeft: 0, margin: 0, fontSize: isEffectivelyMobile ? '12px' : '16px', color: '#374151' }}>
               <li style={{ marginBottom: '4px', display: 'flex', alignItems: 'flex-start', gap: '6px' }}>
                 <span style={{ color: '#16a34a', fontWeight: 'bold', fontSize: isEffectivelyMobile ? '14px' : '18px', flexShrink: 0 }}>✓</span>
-                <span>{isEffectivelyMobile ? '2X factory throughput.' : 'Reduced factory costs: RaaP's designs can increase factory throughput by as much as 2X ($$ millions in factory savings).'}</span>
+                <span>{isEffectivelyMobile ? '2X factory throughput.' : "Reduced factory costs: RaaP's designs can increase factory throughput by as much as 2X ($$ millions in factory savings)."}</span>
               </li>
               <li style={{ marginBottom: '4px', display: 'flex', alignItems: 'flex-start', gap: '6px' }}>
                 <span style={{ color: '#16a34a', fontWeight: 'bold', fontSize: isEffectivelyMobile ? '14px' : '18px', flexShrink: 0 }}>✓</span>
