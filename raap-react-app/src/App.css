@@ -97,6 +97,12 @@
   gap: 8px;
 }
 
+.grid-3-mobile {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
 /* Buttons */
 .btn {
   padding: 8px 16px;

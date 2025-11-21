@@ -156,7 +156,7 @@ const CostAnalysisTab = () => {
       {activeSubtabs.cost === 1 && (
         <div>
           {/* COST SUMMARY BOX (3 Horizontal Boxes) */}
-          <div className="grid-3" style={{ gap: isEffectivelyMobile ? '8px' : '12px', marginBottom: '12px', display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)' }}>
+          <div className="grid-3-mobile" style={{ gap: isEffectivelyMobile ? '8px' : '12px', marginBottom: '12px' }}>
             {/* Box 1: Site Build Costs */}
             <div style={{ background: 'white', padding: isEffectivelyMobile ? '12px' : '16px', borderRadius: '8px', boxShadow: '0 1px 3px rgba(0,0,0,0.05)', border: '1px solid #e5e7eb', textAlign: 'center' }}>
               <div style={{ fontSize: isEffectivelyMobile ? '9px' : '11px', fontWeight: 700, color: '#6b7280', marginBottom: '6px', textTransform: 'uppercase' }}>Site Build Cost</div>
