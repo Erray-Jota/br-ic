@@ -444,20 +444,29 @@ export const calculateIdealRequiredLength = (targets, lobbyType, floors = 5) => 
 
 /**
  * Calculates total building GSF including common areas with exact dimensions
- * Uses SKU breakdown for accurate unit area calculation
- * Common area includes exact lobby and stair dimensions per floor
+ * Based on TARGET unit counts (not optimized), mathematically divided across floors and sides
  */
 export const calculateBuildingGSF = (optimized, floors, lobbyType = 2, skus = {}, bonusUnits = 0, podiumCount = 0) => {
-  const {
-    sku_studio = 0,
-    sku_1_corner = 0,
-    sku_1_inline = 0,
-    sku_2_corner = 0,
-    sku_2_inline = 0,
-    sku_3_corner = 0,
-  } = skus;
+  // Calculate per-side per-floor targets mathematically from optimized totals
+  const studioPerSide = (optimized.studio / floors) / 2;
+  const oneBedPerSide = (optimized.oneBed / floors) / 2;
+  const twoBedPerSide = (optimized.twoBed / floors) / 2;
+  const threeBedPerSide = (optimized.threeBed / floors) / 2;
 
-  // Calculate per-floor unit GSF using exact SKU dimensions (per side)
+  // Map to SKUs using same logic as optimization engine
+  let sku_3_corner = threeBedPerSide;
+  let remainingCorners = CORNER_SLOTS_PER_SIDE - sku_3_corner;
+
+  let sku_2_corner = Math.min(twoBedPerSide, remainingCorners);
+  let sku_2_inline = twoBedPerSide - sku_2_corner;
+  remainingCorners -= sku_2_corner;
+
+  let sku_1_corner = Math.min(oneBedPerSide, remainingCorners);
+  let sku_1_inline = oneBedPerSide - sku_1_corner;
+
+  let sku_studio = studioPerSide;
+
+  // Calculate per-floor unit GSF (per side)
   const perFloorUnitGSF =
     sku_studio * UNIT_SIZES_GSF.studio +
     sku_1_corner * UNIT_SIZES_GSF.oneCorner +
@@ -471,7 +480,6 @@ export const calculateBuildingGSF = (optimized, floors, lobbyType = 2, skus = {}
   const totalUnitGSF = perFloorBothSidesUnitGSF * floors;
 
   // Add bonus units (1-bed inlines across from lobby, 1 per floor)
-  // 2-Bay lobby has 1-bed inlines; 1-Bay has studios; 4-Bay has 1-bed inlines
   let bonusUnitGSF = 0;
   if (bonusUnits > 0) {
     const bonusType = lobbyType === 1 ? UNIT_SIZES_GSF.studio : UNIT_SIZES_GSF.oneInline;
@@ -482,7 +490,7 @@ export const calculateBuildingGSF = (optimized, floors, lobbyType = 2, skus = {}
   const lobbyGSF = lobbyType === 1 ? COMMON_AREA_DIMS.lobby_1bay : 
                    lobbyType === 4 ? COMMON_AREA_DIMS.lobby_4bay : 
                    COMMON_AREA_DIMS.lobby_2bay;
-  const stairsGSF = COMMON_AREA_DIMS.stairs; // One stair per floor
+  const stairsGSF = COMMON_AREA_DIMS.stairs;
   const perFloorCommonGSF = lobbyGSF + stairsGSF;
   const totalCommonGSF = perFloorCommonGSF * floors;
 
@@ -494,16 +502,16 @@ export const calculateBuildingGSF = (optimized, floors, lobbyType = 2, skus = {}
 
   // Debug: Log the calculation breakdown
   if (floors === 5) {
-    console.log('=== GSF CALCULATION BREAKDOWN ===');
-    console.log('SKUs per side per floor:', { sku_studio, sku_1_corner, sku_1_inline, sku_2_corner, sku_2_inline, sku_3_corner });
-    console.log('Per-floor unit GSF (per side):', perFloorUnitGSF.toFixed(1), 'SF');
-    console.log('Per-floor unit GSF (both sides):', perFloorBothSidesUnitGSF.toFixed(1), 'SF');
-    console.log('Total unit GSF (all floors):', totalUnitGSF.toFixed(1), 'SF');
-    console.log('Bonus units GSF (', bonusUnits, 'units):', bonusUnitGSF.toFixed(1), 'SF');
-    console.log('Per-floor common (lobby:', lobbyGSF.toFixed(1), '+ stairs:', stairsGSF.toFixed(1), '):', perFloorCommonGSF.toFixed(1), 'SF');
-    console.log('Total common GSF:', totalCommonGSF.toFixed(1), 'SF');
+    console.log('=== GSF CALCULATION (MATHEMATICAL) ===');
+    console.log('Target units:', optimized);
+    console.log('Per-floor per-side breakdown:', { sku_studio: sku_studio.toFixed(1), sku_1_corner: sku_1_corner.toFixed(1), sku_1_inline: sku_1_inline.toFixed(1), sku_2_corner: sku_2_corner.toFixed(1), sku_2_inline: sku_2_inline.toFixed(1), sku_3_corner: sku_3_corner.toFixed(1) });
+    console.log('Per-side unit GSF:', perFloorUnitGSF.toFixed(1), 'SF');
+    console.log('Both sides per floor:', perFloorBothSidesUnitGSF.toFixed(1), 'SF');
+    console.log('Total regular units (all floors):', totalUnitGSF.toFixed(1), 'SF');
+    console.log('Bonus units GSF:', bonusUnitGSF.toFixed(1), 'SF');
+    console.log('Common area (lobby + stairs):', perFloorCommonGSF.toFixed(1), 'SF/floor ×', floors, '=', totalCommonGSF.toFixed(1), 'SF');
     console.log('TOTAL GSF:', totalGSF.toFixed(1), 'SF');
-    console.log('================================');
+    console.log('=====================================');
   }
 
   const totalUnits = optimized.studio + optimized.oneBed + optimized.twoBed + optimized.threeBed;
