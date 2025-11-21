@@ -56,11 +56,6 @@ const DesignTab = () => {
           <div className="metric-main-value" style={{ color: '#111827' }}>
             {projectData.targetLength} ft
           </div>
-          <div className="cost-details-inline">
-            <div className="cost-sub-group">
-              <span className="cost-sub-label">SLIDER SETTING</span>
-            </div>
-          </div>
         </div>
 
         <div className="cost-column">
@@ -68,30 +63,23 @@ const DesignTab = () => {
           <div className="metric-main-value" style={{ color: isConstraintMet ? '#16A34A' : '#DC2626' }}>
             {Math.round(remainingLength)} ft
           </div>
-          <div className="cost-details-inline">
-            <div className="cost-sub-group">
-              <span className="cost-sub-label" style={{ color: isConstraintMet ? '#16A34A' : '#DC2626' }}>
-                {isConstraintMet ? 'ADEQUATE' : 'TOO SHORT'}
-              </span>
-            </div>
-          </div>
         </div>
 
-        <div className="time-column">
-          <div className="metric-label">MODULES (COUNT / EFFICIENCY)</div>
-          <div style={{ display: 'flex', gap: '8px', justifyContent: 'center', width: '100%' }}>
-            <div className="metric-main-value" style={{ fontSize: '22px', color: '#111827' }}>
-              {calculations.totalOptimized * 2}
+        <div className="cost-column">
+          <div className="metric-label">MODULES (COUNT)</div>
+          <div className="metric-main-value" style={{ color: '#111827' }}>
+            {calculations.totalOptimized * 2}
+          </div>
+          <div className="cost-details-inline">
+            <div className="cost-sub-group">
+              <span className="cost-sub-label">Floors:</span>
+              <span className="cost-sub-value">{projectData.floors}</span>
             </div>
-            <div className="cost-sub-group" style={{ alignSelf: 'center', display: 'flex', gap: '4px' }}>
-              <span style={{ fontSize: '16px', fontWeight: 700, color: '#16a34a' }}>
-                {((Object.values(calculations.optimized).filter(c => c > 0).length / 4) * 100).toFixed(1)}%
-              </span>
+            <div className="cost-sub-group">
+              <span className="cost-sub-label">Efficiency:</span>
+              <span className="cost-sub-value">{((Object.values(calculations.optimized).filter(c => c > 0).length / 4) * 100).toFixed(1)}%</span>
             </div>
           </div>
-          <span className="small-text" style={{ fontWeight: 600, marginTop: '2px' }}>
-            ({Object.values(calculations.optimized).filter(c => c > 0).length} / 4 Unit Types Used)
-          </span>
         </div>
       </div>
 
