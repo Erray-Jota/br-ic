@@ -64,23 +64,6 @@ const ResponsiveTabNavigation = () => {
             ))}
           </div>
         </div>
-        <button
-          onClick={() => setMobilePreviewMode(!mobilePreviewMode)}
-          style={{
-            padding: '6px 12px',
-            fontSize: '11px',
-            background: mobilePreviewMode ? COLORS.green.dark : COLORS.gray.bg,
-            color: mobilePreviewMode ? COLORS.white : COLORS.gray.medium,
-            border: `2px solid ${COLORS.green.dark}`,
-            borderRadius: '6px',
-            cursor: 'pointer',
-            fontWeight: 600,
-            whiteSpace: 'nowrap',
-            transition: 'all 0.2s',
-          }}
-        >
-          📱 Mobile Preview
-        </button>
       </div>
     );
   }

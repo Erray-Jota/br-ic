@@ -8,7 +8,7 @@ const ProjectCard = ({ project, onOpen, onEdit, onDuplicate, onDelete }) => {
   const [isHovered, setIsHovered] = useState(false);
   const calculations = useCalculations(project);
 
-  const totalUnits = calculations.totalOptimized * project.floors;
+  const totalUnits = calculations.totalOptimized;
   const siteCost = calculations.siteCost || 0;
   const modularCost = calculations.modularCost || 0;
   const buildTime = calculations.modularBuildTimeMonths || 31;
@@ -19,13 +19,13 @@ const ProjectCard = ({ project, onOpen, onEdit, onDuplicate, onDelete }) => {
         position: 'relative',
         display: 'flex',
         background: 'white',
-        border: '1px solid #e5e7eb',
+        border: `3px solid ${COLORS.green.light}`,
         borderRadius: '12px',
         overflow: 'hidden',
         cursor: 'pointer',
         transition: 'all 0.3s ease',
         transform: isHovered ? 'translateY(-4px)' : 'translateY(0)',
-        boxShadow: isHovered ? '0 8px 24px rgba(0,0,0,0.15)' : '0 2px 8px rgba(0,0,0,0.1)',
+        boxShadow: isHovered ? '0 12px 32px rgba(45, 90, 61, 0.2)' : '0 4px 12px rgba(45, 90, 61, 0.1)',
       }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
@@ -34,27 +34,46 @@ const ProjectCard = ({ project, onOpen, onEdit, onDuplicate, onDelete }) => {
       {/* Building Thumbnail */}
       <div
         style={{
-          width: '200px',
-          minHeight: '180px',
-          background: `linear-gradient(135deg, ${COLORS.green.dark} 0%, ${COLORS.green.light} 100%)`,
+          width: '240px',
+          minHeight: '200px',
+          background: `linear-gradient(135deg, #E8F5E9 0%, #C8E6C9 100%)`,
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
           position: 'relative',
+          overflow: 'hidden',
         }}
       >
-        <div style={{ fontSize: '64px' }}>🏢</div>
+        <img 
+          src={[
+            'https://images.unsplash.com/photo-1486325212027-8081e485255e?w=400&h=300&fit=crop',
+            'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=400&h=300&fit=crop',
+            'https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=400&h=300&fit=crop'
+          ][project.id % 3]}
+          alt={project.projectName}
+          style={{
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+            opacity: 0.85,
+          }}
+          onError={(e) => {
+            e.target.style.display = 'none';
+          }}
+        />
+        <div style={{ position: 'absolute', fontSize: '64px' }}>🏗️</div>
         <div
           style={{
             position: 'absolute',
-            bottom: '10px',
-            right: '10px',
-            background: 'rgba(255,255,255,0.9)',
-            padding: '4px 8px',
-            borderRadius: '4px',
+            bottom: '12px',
+            right: '12px',
+            background: COLORS.white,
+            padding: '6px 12px',
+            borderRadius: '6px',
             fontSize: '12px',
-            fontWeight: 700,
-            color: '#15803D',
+            fontWeight: FONTS.weight.black,
+            color: COLORS.green.dark,
+            boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
           }}
         >
           {project.floors} Floors
@@ -62,60 +81,60 @@ const ProjectCard = ({ project, onOpen, onEdit, onDuplicate, onDelete }) => {
       </div>
 
       {/* Project Info */}
-      <div style={{ flex: 1, padding: '20px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
-        <h3 style={{ fontSize: '20px', fontWeight: 700, color: '#111827', margin: 0 }}>
+      <div style={{ flex: 1, padding: SPACING.lg, display: 'flex', flexDirection: 'column', gap: SPACING.md }}>
+        <h3 style={{ fontSize: FONTS.sizes.lg, fontWeight: FONTS.weight.black, color: COLORS.gray.dark, margin: 0 }}>
           {project.projectName}
         </h3>
 
         {/* Key Metrics */}
-        <div style={{ display: 'flex', gap: '24px', flexWrap: 'wrap' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: SPACING.md }}>
           {/* Total Units */}
           <div>
-            <div style={{ fontSize: '11px', fontWeight: 600, color: '#6b7280', marginBottom: '4px' }}>
-              TOTAL UNITS
+            <div style={{ fontSize: FONTS.sizes.xs, fontWeight: FONTS.weight.bold, color: COLORS.gray.medium, marginBottom: '2px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+              Units
             </div>
-            <div style={{ fontSize: '24px', fontWeight: 700, color: '#111827' }}>
+            <div style={{ fontSize: FONTS.sizes.lg, fontWeight: FONTS.weight.black, color: COLORS.green.dark }}>
               {totalUnits}
             </div>
           </div>
 
           {/* Site Build Cost */}
           <div>
-            <div style={{ fontSize: '11px', fontWeight: 600, color: '#6b7280', marginBottom: '4px' }}>
-              SITE BUILD
+            <div style={{ fontSize: FONTS.sizes.xs, fontWeight: FONTS.weight.bold, color: COLORS.gray.medium, marginBottom: '2px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+              Site Cost
             </div>
-            <div style={{ fontSize: '18px', fontWeight: 700, color: '#DC2626' }}>
+            <div style={{ fontSize: FONTS.sizes.base, fontWeight: FONTS.weight.black, color: COLORS.red.main }}>
               {formatMega(siteCost)}
             </div>
           </div>
 
           {/* Modular Cost */}
           <div>
-            <div style={{ fontSize: '11px', fontWeight: 600, color: '#6b7280', marginBottom: '4px' }}>
-              MODULAR
+            <div style={{ fontSize: FONTS.sizes.xs, fontWeight: FONTS.weight.bold, color: COLORS.gray.medium, marginBottom: '2px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+              Modular
             </div>
-            <div style={{ fontSize: '18px', fontWeight: 700, color: '#16A34A' }}>
+            <div style={{ fontSize: FONTS.sizes.base, fontWeight: FONTS.weight.black, color: COLORS.green.light }}>
               {formatMega(modularCost)}
             </div>
           </div>
 
           {/* Build Time */}
           <div>
-            <div style={{ fontSize: '11px', fontWeight: 600, color: '#6b7280', marginBottom: '4px' }}>
-              BUILD TIME
+            <div style={{ fontSize: FONTS.sizes.xs, fontWeight: FONTS.weight.bold, color: COLORS.gray.medium, marginBottom: '2px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+              Timeline
             </div>
-            <div style={{ fontSize: '18px', fontWeight: 700, color: '#2563eb' }}>
-              {buildTime} mo
+            <div style={{ fontSize: FONTS.sizes.base, fontWeight: FONTS.weight.black, color: COLORS.blue.main }}>
+              {buildTime}mo
             </div>
           </div>
         </div>
 
         {/* Unit Mix Summary */}
-        <div style={{ display: 'flex', gap: '12px', fontSize: '13px', color: '#6b7280' }}>
-          {project.targets.studio > 0 && <span>Studio: {project.targets.studio}</span>}
-          {project.targets.oneBed > 0 && <span>1BR: {project.targets.oneBed}</span>}
-          {project.targets.twoBed > 0 && <span>2BR: {project.targets.twoBed}</span>}
-          {project.targets.threeBed > 0 && <span>3BR: {project.targets.threeBed}</span>}
+        <div style={{ display: 'flex', gap: SPACING.lg, fontSize: FONTS.sizes.sm, color: COLORS.gray.medium, fontWeight: FONTS.weight.bold }}>
+          {project.targets.studio > 0 && <span style={{ color: COLORS.blue.main }}>Studio: {project.targets.studio}</span>}
+          {project.targets.oneBed > 0 && <span style={{ color: COLORS.blue.main }}>1BR: {project.targets.oneBed}</span>}
+          {project.targets.twoBed > 0 && <span style={{ color: COLORS.blue.main }}>2BR: {project.targets.twoBed}</span>}
+          {project.targets.threeBed > 0 && <span style={{ color: COLORS.blue.main }}>3BR: {project.targets.threeBed}</span>}
         </div>
       </div>
 
@@ -218,23 +237,32 @@ const ProjectsPage = () => {
           <div></div>
           <button
             onClick={createNewProject}
-            className="btn btn-success"
             style={{
-              padding: SPACING.lg + ' ' + SPACING['2xl'],
-              fontSize: FONTS.sizes.lg,
-              fontWeight: FONTS.weight.black,
+              padding: SPACING.md + ' ' + SPACING.lg,
+              fontSize: FONTS.sizes.base,
+              fontWeight: FONTS.weight.bold,
               display: 'flex',
               alignItems: 'center',
-              gap: SPACING.md,
-              background: COLORS.green.dark,
+              gap: SPACING.sm,
+              background: `linear-gradient(135deg, ${COLORS.green.dark} 0%, ${COLORS.green.light} 100%)`,
               color: COLORS.white,
               border: 'none',
               borderRadius: '8px',
               cursor: 'pointer',
-              transition: 'all 0.2s',
+              transition: 'all 0.3s',
+              boxShadow: '0 4px 12px rgba(45, 90, 61, 0.2)',
+              letterSpacing: '0.5px',
+            }}
+            onMouseEnter={(e) => {
+              e.target.style.boxShadow = '0 6px 20px rgba(45, 90, 61, 0.3)';
+              e.target.style.transform = 'translateY(-2px)';
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.boxShadow = '0 4px 12px rgba(45, 90, 61, 0.2)';
+              e.target.style.transform = 'translateY(0)';
             }}
           >
-            + New Project
+            ✨ New Project
           </button>
         </div>
 
@@ -263,11 +291,12 @@ const ProjectsPage = () => {
               padding: '80px 20px',
               background: COLORS.white,
               borderRadius: '12px',
-              border: `3px dashed ${COLORS.green.light}`,
+              border: `3px solid ${COLORS.green.light}`,
+              boxShadow: '0 4px 12px rgba(45, 90, 61, 0.1)',
             }}
           >
-            <div style={{ fontSize: '64px', marginBottom: SPACING.lg }}>📁</div>
-            <h3 style={{ fontSize: FONTS.sizes['2xl'], fontWeight: FONTS.weight.black, color: COLORS.gray.dark, marginBottom: SPACING.md }}>
+            <div style={{ fontSize: '64px', marginBottom: SPACING.lg }}>🏗️</div>
+            <h3 style={{ fontSize: FONTS.sizes['2xl'], fontWeight: FONTS.weight.black, color: COLORS.green.dark, marginBottom: SPACING.md }}>
               No projects yet
             </h3>
             <p style={{ fontSize: FONTS.sizes.md, color: COLORS.gray.medium, marginBottom: SPACING['2xl'], fontWeight: FONTS.weight.bold }}>
@@ -275,10 +304,20 @@ const ProjectsPage = () => {
             </p>
             <button
               onClick={createNewProject}
-              className="btn btn-success"
-              style={{ padding: SPACING.lg + ' ' + SPACING['2xl'], fontSize: FONTS.sizes.lg, fontWeight: FONTS.weight.black, background: COLORS.green.dark, color: COLORS.white, border: 'none', borderRadius: '8px', cursor: 'pointer' }}
+              style={{
+                padding: SPACING.md + ' ' + SPACING.lg,
+                fontSize: FONTS.sizes.base,
+                fontWeight: FONTS.weight.bold,
+                background: `linear-gradient(135deg, ${COLORS.green.dark} 0%, ${COLORS.green.light} 100%)`,
+                color: COLORS.white,
+                border: 'none',
+                borderRadius: '8px',
+                cursor: 'pointer',
+                boxShadow: '0 4px 12px rgba(45, 90, 61, 0.2)',
+                letterSpacing: '0.5px',
+              }}
             >
-              + Create Your First Project
+              ✨ Create Your First Project
             </button>
           </div>
         )}
