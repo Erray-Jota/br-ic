@@ -196,22 +196,22 @@ const OtherFactorsTab = () => {
                   {/* Traditional Design phases sequential in one line */}
                   <div style={{ position: 'relative', height: '30px', paddingLeft: '20px', paddingRight: '20px' }}>
                     {/* Design: 0-3 mo */}
-                    <div style={{ position: 'absolute', top: '0px', left: '20px', width: 'calc(6.67% - 8px)', background: 'linear-gradient(to right, #FECACA, #FCA5A5)', height: '16px', borderRadius: '3px', border: '2px solid #DC2626', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '14px', fontWeight: 700, color: '#7F1D1D' }}>
+                    <div style={{ position: 'absolute', top: '0px', left: '20px', width: 'calc(7.5% - 4px)', background: 'linear-gradient(to right, #FECACA, #FCA5A5)', height: '16px', borderRadius: '3px', border: '2px solid #DC2626', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '14px', fontWeight: 700, color: '#7F1D1D', padding: '0 4px' }}>
                       Design
                     </div>
                     
                     {/* Entitlement: 3-15 mo */}
-                    <div style={{ position: 'absolute', top: '0px', left: 'calc(20px + 6.67%)', width: 'calc(26.67%)', background: 'linear-gradient(to right, #FCA5A5, #FBB6B6)', height: '16px', borderRadius: '3px', border: '2px solid #DC2626', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '14px', fontWeight: 700, color: '#7F1D1D' }}>
+                    <div style={{ position: 'absolute', top: '0px', left: 'calc(20px + 7.5%)', width: 'calc(29%)', background: 'linear-gradient(to right, #FCA5A5, #FBB6B6)', height: '16px', borderRadius: '3px', border: '2px solid #DC2626', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '14px', fontWeight: 700, color: '#7F1D1D', padding: '0 4px' }}>
                       Entitlement (12mo)
                     </div>
                     
                     {/* Permit Docs: 15-22 mo */}
-                    <div style={{ position: 'absolute', top: '0px', left: 'calc(20px + 33.34%)', width: 'calc(15.56%)', background: 'linear-gradient(to right, #FBB6B6, #FCA5A5)', height: '16px', borderRadius: '3px', border: '2px solid #DC2626', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '14px', fontWeight: 700, color: '#7F1D1D' }}>
+                    <div style={{ position: 'absolute', top: '0px', left: 'calc(20px + 36.5%)', width: 'calc(16.5%)', background: 'linear-gradient(to right, #FBB6B6, #FCA5A5)', height: '16px', borderRadius: '3px', border: '2px solid #DC2626', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '14px', fontWeight: 700, color: '#7F1D1D', padding: '0 4px' }}>
                       Permits (7mo)
                     </div>
                     
                     {/* GC Construction: 25-45 mo (20 months) */}
-                    <div style={{ position: 'absolute', top: '0px', left: 'calc(20px + 55.56%)', width: 'calc(44.44%)', background: 'linear-gradient(to right, #FCA5A5, #FE9B9B)', height: '18px', borderRadius: '4px', border: '2.5px solid #DC2626', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '15px', fontWeight: 800, color: '#7F1D1D', boxShadow: '0 2px 6px rgba(220, 38, 38, 0.2)' }}>
+                    <div style={{ position: 'absolute', top: '0px', left: 'calc(20px + 53%)', width: 'calc(47%)', background: 'linear-gradient(to right, #FCA5A5, #FE9B9B)', height: '18px', borderRadius: '4px', border: '2.5px solid #DC2626', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '15px', fontWeight: 800, color: '#7F1D1D', boxShadow: '0 2px 6px rgba(220, 38, 38, 0.2)', padding: '0 4px' }}>
                       🏗️ GC Construction (20mo)
                     </div>
                   </div>
@@ -223,32 +223,34 @@ const OtherFactorsTab = () => {
                   
                   <div style={{ position: 'relative', height: '110px', paddingLeft: '20px', paddingRight: '20px' }}>
                     {/* SmartStart: 0-2 mo */}
-                    <div style={{ position: 'absolute', top: '0px', left: '20px', width: 'calc(4.44% - 8px)', background: 'linear-gradient(to right, #86EFAC, #6EE7B7)', height: '14px', borderRadius: '2px', border: '2px solid #16A34A', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '12px', fontWeight: 700, color: '#065F46' }}>
-                      SmartStart
+                    <div style={{ position: 'absolute', top: '0px', left: '20px', width: 'calc(5% - 4px)', background: 'linear-gradient(to right, #86EFAC, #6EE7B7)', height: '14px', borderRadius: '2px', border: '2px solid #16A34A', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '12px', fontWeight: 700, color: '#065F46', padding: '0 2px', flexDirection: 'column', lineHeight: '1' }}>
+                      Smart
+                      <br />
+                      Start
                     </div>
                     
                     {/* Entitlement: 2-14 mo */}
-                    <div style={{ position: 'absolute', top: '0px', left: 'calc(20px + 4.44%)', width: 'calc(26.67%)', background: 'linear-gradient(to right, #86EFAC, #A7F3D0)', height: '14px', borderRadius: '2px', border: '2px solid #16A34A', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '12px', fontWeight: 700, color: '#065F46' }}>
+                    <div style={{ position: 'absolute', top: '0px', left: 'calc(20px + 5%)', width: 'calc(29%)', background: 'linear-gradient(to right, #86EFAC, #A7F3D0)', height: '14px', borderRadius: '2px', border: '2px solid #16A34A', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '12px', fontWeight: 700, color: '#065F46', padding: '0 4px' }}>
                       Entitlement (12mo)
                     </div>
                     
                     {/* EasyDesign + Permit Docs: 12-18 mo */}
-                    <div style={{ position: 'absolute', top: '18px', left: 'calc(20px + 26.67%)', width: 'calc(17.78%)', background: 'linear-gradient(to right, #A7F3D0, #6EE7B7)', height: '14px', borderRadius: '2px', border: '2px solid #16A34A', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '12px', fontWeight: 700, color: '#065F46' }}>
+                    <div style={{ position: 'absolute', top: '18px', left: 'calc(20px + 34%)', width: 'calc(18.5%)', background: 'linear-gradient(to right, #A7F3D0, #6EE7B7)', height: '14px', borderRadius: '2px', border: '2px solid #16A34A', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '12px', fontWeight: 700, color: '#065F46', padding: '0 4px' }}>
                       Permits (4mo)
                     </div>
                     
                     {/* Review: 18-23 mo */}
-                    <div style={{ position: 'absolute', top: '36px', left: 'calc(20px + 51.11%)', width: 'calc(11.11%)', background: 'linear-gradient(to right, #6EE7B7, #34D399)', height: '14px', borderRadius: '2px', border: '2px solid #16A34A', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '11px', fontWeight: 700, color: '#065F46' }}>
+                    <div style={{ position: 'absolute', top: '36px', left: 'calc(20px + 52.5%)', width: 'calc(11.5%)', background: 'linear-gradient(to right, #6EE7B7, #34D399)', height: '14px', borderRadius: '2px', border: '2px solid #16A34A', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '11px', fontWeight: 700, color: '#065F46', padding: '0 2px' }}>
                       Review
                     </div>
                     
                     {/* Fabricator: 27-31 mo */}
-                    <div style={{ position: 'absolute', top: '18px', left: 'calc(20px + 60%)', width: 'calc(8.89%)', background: 'linear-gradient(to right, #10B981, #059669)', height: '14px', borderRadius: '2px', border: '2px solid #059669', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '11px', fontWeight: 700, color: 'white' }}>
+                    <div style={{ position: 'absolute', top: '18px', left: 'calc(20px + 61%)', width: 'calc(9.5%)', background: 'linear-gradient(to right, #10B981, #059669)', height: '14px', borderRadius: '2px', border: '2px solid #059669', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '11px', fontWeight: 700, color: 'white', padding: '0 2px' }}>
                       Fabricator
                     </div>
                     
                     {/* GC Construction: 23-35 mo (8 months) */}
-                    <div style={{ position: 'absolute', top: '36px', left: 'calc(20px + 51.11%)', width: 'calc(37.78%)', background: 'linear-gradient(to right, #10B981, #047857)', height: '18px', borderRadius: '4px', border: '2.5px solid #047857', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '15px', fontWeight: 800, color: 'white', boxShadow: '0 2px 6px rgba(4, 120, 87, 0.3)' }}>
+                    <div style={{ position: 'absolute', top: '36px', left: 'calc(20px + 52.5%)', width: 'calc(38%)', background: 'linear-gradient(to right, #10B981, #047857)', height: '18px', borderRadius: '4px', border: '2.5px solid #047857', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '15px', fontWeight: 800, color: 'white', boxShadow: '0 2px 6px rgba(4, 120, 87, 0.3)', padding: '0 4px' }}>
                       🏗️ GC (8mo)
                     </div>
                     
@@ -261,14 +263,6 @@ const OtherFactorsTab = () => {
                   </div>
                 </div>
 
-                {/* TIME SAVED INDICATOR */}
-                <div style={{ position: 'absolute', top: '280px', left: '20px', right: '20px', padding: '14px', background: 'linear-gradient(to right, #FEF3C7, #FCD34D)', borderRadius: '8px', border: '2px solid #F59E0B', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px', boxShadow: '0 2px 8px rgba(245, 158, 11, 0.2)' }}>
-                  <div style={{ fontSize: '28px' }}>⏱️</div>
-                  <div>
-                    <div style={{ fontSize: '13px', fontWeight: 800, color: '#92400E' }}>10 Months Saved to Revenue</div>
-                    <div style={{ fontSize: '11px', color: '#78350F' }}>RaaP finishes in 35 months vs Traditional's 45 months</div>
-                  </div>
-                </div>
               </div>
             </div>
 
