@@ -102,7 +102,7 @@ const ProjectTab = () => {
         <div className="card">
           {isEffectivelyMobile && (
             <div style={{ display: 'flex', gap: '6px', marginBottom: '10px', alignItems: 'flex-end' }}>
-              <div style={{ flex: 1 }}>
+              <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', height: '100%' }}>
                 <LocationInput
                   label="📍 Site Location"
                   value={projectData.propertyLocation}
@@ -116,7 +116,7 @@ const ProjectTab = () => {
                   className="form-select"
                   value={projectData.floors}
                   onChange={(e) => handleInputChange('floors', parseInt(e.target.value))}
-                  style={{ display: 'block', width: '100%', fontSize: '13px', padding: '6px 4px', border: '1px solid #d1d5db', borderRadius: '4px' }}
+                  style={{ display: 'block', width: '100%', fontSize: '13px', padding: '6px 4px', border: '1px solid #d1d5db', borderRadius: '4px', boxSizing: 'border-box', height: '36px' }}
                 >
                   <option value="3">3</option>
                   <option value="4">4</option>

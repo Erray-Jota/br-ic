@@ -529,9 +529,11 @@
   }
 
   .header {
-    padding: 6px 8px;
-    margin-bottom: 6px;
+    padding: 6px 8px !important;
+    margin-bottom: 6px !important;
     display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
     align-items: center !important;
     justify-content: space-between !important;
     gap: 8px !important;
@@ -539,8 +541,16 @@
 
   .header > div:first-child {
     display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
     align-items: center !important;
     gap: 8px !important;
+    flex: 1 !important;
+  }
+
+  .header button {
+    flex-shrink: 0 !important;
+    white-space: nowrap !important;
   }
 
   .header svg {
@@ -608,8 +618,12 @@
   .form-input,
   .form-select {
     font-size: 13px;
-    padding: 6px 6px;
+    padding: 6px 4px;
     width: 100%;
+    box-sizing: border-box;
+    height: 36px !important;
+    border: 1px solid #d1d5db;
+    border-radius: 4px;
   }
 
   .btn {
