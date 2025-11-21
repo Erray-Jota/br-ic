@@ -71,7 +71,7 @@ export const ProjectProvider = ({ children }) => {
 
   const currentProject = projects.find((p) => p.id === currentProjectId) || projects[0];
 
-  const [activeTab, setActiveTab] = useState(2); // Start with Project tab
+  const [activeTab, setActiveTab] = useState(1); // Start with Introduction tab
   const [activeSubtabs, setActiveSubtabs] = useState({
     design: 1,
     cost: 1,
