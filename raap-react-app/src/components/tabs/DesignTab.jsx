@@ -211,26 +211,24 @@ const DesignTab = () => {
             </div>
           </div>
 
-          {/* RaaP DfMA Benefits - Hide on mobile */}
-          {!isEffectivelyMobile && (
-            <div className="card" style={{ marginTop: '12px' }}>
-              <h2>💡 RaaP DfMA Benefits</h2>
-              <ul style={{ listStyle: 'none', paddingLeft: 0, margin: 0, fontSize: '16px', color: '#374151' }}>
-                <li style={{ marginBottom: '6px', display: 'flex', alignItems: 'flex-start' }}>
-                  <span style={{ color: '#16a34a', fontWeight: 'bold', marginRight: '8px', fontSize: '18px' }}>✓</span>
-                  <span>Reduced factory costs: RaaP's designs can increase factory throughput by as much as 2X ($$ millions in factory savings).</span>
-                </li>
-                <li style={{ marginBottom: '6px', display: 'flex', alignItems: 'flex-start' }}>
-                  <span style={{ color: '#16a34a', fontWeight: 'bold', marginRight: '8px', fontSize: '18px' }}>✓</span>
-                  <span>Reduce design & engineering fees: Our conceptual designs and factory permit sets can reduce AoR scope & effort by as much as 1/3.</span>
-                </li>
-                <li style={{ marginBottom: 0, display: 'flex', alignItems: 'flex-start' }}>
-                  <span style={{ color: '#16a34a', fontWeight: 'bold', marginRight: '8px', fontSize: '18px' }}>✓</span>
-                  <span>Productized designs increase the efficiency of coordination minimize RFIs & Submittals.</span>
-                </li>
-              </ul>
-            </div>
-          )}
+          {/* RaaP DfMA Benefits */}
+          <div className="card" style={{ marginTop: isEffectivelyMobile ? '8px' : '12px' }}>
+            <h2 style={{ fontSize: isEffectivelyMobile ? '14px' : '22px' }}>💡 RaaP DfMA Benefits</h2>
+            <ul style={{ listStyle: 'none', paddingLeft: 0, margin: 0, fontSize: isEffectivelyMobile ? '12px' : '16px', color: '#374151' }}>
+              <li style={{ marginBottom: '4px', display: 'flex', alignItems: 'flex-start', gap: '6px' }}>
+                <span style={{ color: '#16a34a', fontWeight: 'bold', fontSize: isEffectivelyMobile ? '14px' : '18px', flexShrink: 0 }}>✓</span>
+                <span>{isEffectivelyMobile ? '2X factory throughput.' : 'Reduced factory costs: RaaP's designs can increase factory throughput by as much as 2X ($$ millions in factory savings).'}</span>
+              </li>
+              <li style={{ marginBottom: '4px', display: 'flex', alignItems: 'flex-start', gap: '6px' }}>
+                <span style={{ color: '#16a34a', fontWeight: 'bold', fontSize: isEffectivelyMobile ? '14px' : '18px', flexShrink: 0 }}>✓</span>
+                <span>{isEffectivelyMobile ? '1/3 less design fees.' : 'Reduce design & engineering fees: Our conceptual designs and factory permit sets can reduce AoR scope & effort by as much as 1/3.'}</span>
+              </li>
+              <li style={{ marginBottom: 0, display: 'flex', alignItems: 'flex-start', gap: '6px' }}>
+                <span style={{ color: '#16a34a', fontWeight: 'bold', fontSize: isEffectivelyMobile ? '14px' : '18px', flexShrink: 0 }}>✓</span>
+                <span>{isEffectivelyMobile ? 'Fewer RFIs & Submittals.' : 'Productized designs increase the efficiency of coordination minimize RFIs & Submittals.'}</span>
+              </li>
+            </ul>
+          </div>
         </div>
       )}
 

@@ -2,7 +2,7 @@ import { useProject } from '../contexts/ProjectContext';
 import { useMobile } from '../hooks/useMobile';
 
 const ResponsiveTabNavigation = () => {
-  const { activeTab, switchTab } = useProject();
+  const { activeTab, switchTab, activeSubtabs, switchSubtab } = useProject();
   const { isEffectivelyMobile, mobilePreviewMode, setMobilePreviewMode } = useMobile();
 
   const tabs = [
@@ -68,6 +68,14 @@ const ResponsiveTabNavigation = () => {
   // Mobile bottom navigation - only show first 4 tabs on mobile
   const mobileVisibleTabs = tabs.slice(0, 4);
   
+  // Design sub-tabs for mobile
+  const designSubtabs = [
+    { id: 1, label: '📋 Summary' },
+    { id: 2, label: '🏠 Units' },
+    { id: 3, label: '🗺️ Floorplan' },
+    { id: 4, label: '🏗️ Building' },
+  ];
+  
   return (
     <div
       style={{
@@ -76,38 +84,83 @@ const ResponsiveTabNavigation = () => {
         left: 0,
         right: 0,
         background: 'white',
-        borderTop: '1px solid #e5e7eb',
         zIndex: 100,
-        display: 'grid',
-        gridTemplateColumns: 'repeat(4, 1fr)',
-        gap: 0,
         boxShadow: '0 -2px 8px rgba(0,0,0,0.1)',
       }}
     >
-      {mobileVisibleTabs.map((tab) => (
-        <button
-          key={tab.id}
-          onClick={() => switchTab(tab.id)}
+      {/* Design sub-tabs - show only when Design tab (3) is active */}
+      {activeTab === 3 && (
+        <div
           style={{
-            padding: '10px 8px',
-            background: activeTab === tab.id ? '#F5A623' : 'white',
-            color: activeTab === tab.id ? 'white' : '#6b7280',
-            border: 'none',
-            borderTop: activeTab === tab.id ? '3px solid #2D5A3D' : 'none',
-            cursor: 'pointer',
-            fontSize: '11px',
-            fontWeight: activeTab === tab.id ? 700 : 500,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            gap: '4px',
-            transition: 'all 0.2s',
+            display: 'grid',
+            gridTemplateColumns: 'repeat(4, 1fr)',
+            gap: 0,
+            borderBottom: '1px solid #e5e7eb',
           }}
         >
-          <span style={{ fontSize: '16px' }}>{tab.label.charAt(0)}</span>
-          <span>{tab.shortLabel}</span>
-        </button>
-      ))}
+          {designSubtabs.map((subtab) => (
+            <button
+              key={subtab.id}
+              onClick={() => switchSubtab('design', subtab.id)}
+              style={{
+                padding: '8px 6px',
+                background: activeSubtabs.design === subtab.id ? '#E8F5E9' : 'white',
+                color: activeSubtabs.design === subtab.id ? '#2D5A3D' : '#6b7280',
+                border: 'none',
+                borderBottom: activeSubtabs.design === subtab.id ? '3px solid #2D5A3D' : 'none',
+                cursor: 'pointer',
+                fontSize: '10px',
+                fontWeight: activeSubtabs.design === subtab.id ? 700 : 500,
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                gap: '2px',
+                transition: 'all 0.2s',
+              }}
+            >
+              <span style={{ fontSize: '14px' }}>{subtab.label.charAt(0)}</span>
+              <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', width: '100%' }}>
+                {subtab.label.split(' ')[1]?.substring(0, 5) || ''}
+              </span>
+            </button>
+          ))}
+        </div>
+      )}
+      
+      {/* Main tabs */}
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(4, 1fr)',
+          gap: 0,
+          borderTop: '1px solid #e5e7eb',
+        }}
+      >
+        {mobileVisibleTabs.map((tab) => (
+          <button
+            key={tab.id}
+            onClick={() => switchTab(tab.id)}
+            style={{
+              padding: '10px 8px',
+              background: activeTab === tab.id ? '#F5A623' : 'white',
+              color: activeTab === tab.id ? 'white' : '#6b7280',
+              border: 'none',
+              borderTop: activeTab === tab.id ? '3px solid #2D5A3D' : 'none',
+              cursor: 'pointer',
+              fontSize: '11px',
+              fontWeight: activeTab === tab.id ? 700 : 500,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: '4px',
+              transition: 'all 0.2s',
+            }}
+          >
+            <span style={{ fontSize: '16px' }}>{tab.label.charAt(0)}</span>
+            <span>{tab.shortLabel}</span>
+          </button>
+        ))}
+      </div>
     </div>
   );
 };
