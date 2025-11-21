@@ -630,6 +630,15 @@ const DesignTab = () => {
 
       {activeSubtabs.design === 4 && (
         <div>
+          {/* Transforming Prefab Video - Desktop only */}
+          {!isEffectivelyMobile && (
+            <div style={{ marginBottom: '20px', borderRadius: '12px', overflow: 'hidden', height: '300px', boxShadow: '0 4px 12px rgba(0,0,0,0.15)' }}>
+              <video controls loop muted autoPlay style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', background: '#e5e7eb' }}>
+                <source src={ASSET_PATHS.VIDEO_TRANSFORMING} type="video/mp4" />
+              </video>
+            </div>
+          )}
+
           {/* Building Visualization */}
           <div className="card" style={{ marginBottom: '12px' }}>
             <h2 style={{ fontSize: isEffectivelyMobile ? '16px' : '22px' }}>🏗️ Building Massing</h2>
@@ -696,7 +705,7 @@ const DesignTab = () => {
                       : ASSET_PATHS.LAYOUT_LONG
                   }
                   alt="Floor Layout"
-                  style={{ width: isEffectivelyMobile ? '500px' : '600px', height: 'auto', objectFit: 'contain', display: 'block' }}
+                  style={{ width: isEffectivelyMobile ? '500px' : '1000px', height: 'auto', objectFit: 'contain', display: 'block' }}
                 />
               </div>
             </div>
