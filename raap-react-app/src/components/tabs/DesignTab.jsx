@@ -266,16 +266,91 @@ const DesignTab = () => {
           </div>
 
           <div className="grid-2" style={{ gap: '20px' }}>
-            {Object.entries(calculations.optimized).map(([key, count]) => {
-              if (count === 0) return null;
-              const unitMap = {
-                studio: { name: 'Studio', link: ASSET_PATHS.UNIT_STUDIO, sqft: 450, icon: '📦' },
-                oneBed: { name: '1 Bedroom (Inline)', link: ASSET_PATHS.UNIT_1BR_INLINE, sqft: 750, icon: '🛏️' },
-                twoBed: { name: '2 Bedroom (Inline)', link: ASSET_PATHS.UNIT_2BR_INLINE, sqft: 950, icon: '🛏️🛏️' },
-                threeBed: { name: '3 Bedroom (Corner)', link: ASSET_PATHS.UNIT_3BR_CORNER, sqft: 1200, icon: '🛏️🛏️🛏️' },
-              };
-              const unit = unitMap[key];
-              const totalUnitsOfType = count * projectData.floors;
+            {(() => {
+              const skus = calculations.skus || {};
+              const unitsToDisplay = [];
+              
+              // Studio
+              if (skus.sku_studio > 0) {
+                unitsToDisplay.push({
+                  key: 'studio',
+                  name: 'Studio',
+                  link: ASSET_PATHS.UNIT_STUDIO,
+                  sqft: 450,
+                  icon: '📦',
+                  perFloor: skus.sku_studio,
+                  count: skus.sku_studio * projectData.floors,
+                });
+              }
+              
+              // 1-Bed Corner
+              if (skus.sku_1_corner > 0) {
+                unitsToDisplay.push({
+                  key: '1br_corner',
+                  name: '1 Bedroom (Corner)',
+                  link: ASSET_PATHS.UNIT_1BR_CORNER,
+                  sqft: 650,
+                  icon: '🛏️',
+                  perFloor: skus.sku_1_corner,
+                  count: skus.sku_1_corner * projectData.floors,
+                });
+              }
+              
+              // 1-Bed Inline
+              if (skus.sku_1_inline > 0) {
+                unitsToDisplay.push({
+                  key: '1br_inline',
+                  name: '1 Bedroom (Inline)',
+                  link: ASSET_PATHS.UNIT_1BR_INLINE,
+                  sqft: 650,
+                  icon: '🛏️',
+                  perFloor: skus.sku_1_inline,
+                  count: skus.sku_1_inline * projectData.floors,
+                });
+              }
+              
+              // 2-Bed Corner
+              if (skus.sku_2_corner > 0) {
+                unitsToDisplay.push({
+                  key: '2br_corner',
+                  name: '2 Bedroom (Corner)',
+                  link: ASSET_PATHS.UNIT_2BR_CORNER,
+                  sqft: 950,
+                  icon: '🛏️🛏️',
+                  perFloor: skus.sku_2_corner,
+                  count: skus.sku_2_corner * projectData.floors,
+                });
+              }
+              
+              // 2-Bed Inline
+              if (skus.sku_2_inline > 0) {
+                unitsToDisplay.push({
+                  key: '2br_inline',
+                  name: '2 Bedroom (Inline)',
+                  link: ASSET_PATHS.UNIT_2BR_INLINE,
+                  sqft: 950,
+                  icon: '🛏️🛏️',
+                  perFloor: skus.sku_2_inline,
+                  count: skus.sku_2_inline * projectData.floors,
+                });
+              }
+              
+              // 3-Bed Corner
+              if (skus.sku_3_corner > 0) {
+                unitsToDisplay.push({
+                  key: '3br_corner',
+                  name: '3 Bedroom (Corner)',
+                  link: ASSET_PATHS.UNIT_3BR_CORNER,
+                  sqft: 1200,
+                  icon: '🛏️🛏️🛏️',
+                  perFloor: skus.sku_3_corner,
+                  count: skus.sku_3_corner * projectData.floors,
+                });
+              }
+              
+              return unitsToDisplay.map((unit) => {
+                const totalUnitsOfType = unit.count;
+                const count = unit.perFloor;
 
               return (
                 <div
@@ -368,7 +443,8 @@ const DesignTab = () => {
                   </div>
                 </div>
               );
-            })}
+              });
+            })()}
           </div>
 
           {/* Summary Footer */}
@@ -635,55 +711,29 @@ const DesignTab = () => {
             </div>
           </div>
 
-          {/* Layout Options */}
+          {/* Floor Plan Image - Based on Units Per Floor */}
           <div className="card">
-            <h2>📐 Layout Options - Based on {calculations.totalOptimized * projectData.floors} Units</h2>
-            <p className="small-text" style={{ marginBottom: '16px' }}>Floor layout visualization for your building footprint</p>
+            <h2>📐 Floor Plan Layout - {calculations.totalOptimized} Units Per Floor</h2>
+            <p className="small-text" style={{ marginBottom: '16px' }}>Building footprint showing modular unit placement</p>
             
-            <div className="grid-3" style={{ gap: '16px' }}>
-              {/* Short Layout */}
-              <div style={{ background: 'white', border: '2px solid #e5e7eb', borderRadius: '8px', overflow: 'hidden', cursor: 'pointer', transition: 'all 0.3s' }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.borderColor = '#15803D';
-                  e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.1)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.borderColor = '#e5e7eb';
-                  e.currentTarget.style.boxShadow = 'none';
-                }}
-              >
-                <img src={ASSET_PATHS.LAYOUT_SHORT} alt="Short Layout" style={{ width: '100%', height: '150px', objectFit: 'cover' }} />
-                <div style={{ padding: '12px', textAlign: 'center', background: '#f9fafb' }}>
-                  <div style={{ fontWeight: 700, color: '#111827', fontSize: '14px' }}>Short Footprint</div>
-                  <div style={{ fontSize: '12px', color: '#6b7280', marginTop: '4px' }}>Compact site layout</div>
-                </div>
-              </div>
-
-              {/* Medium Layout */}
-              <div style={{ background: 'white', border: '2px solid #16a34a', borderRadius: '8px', overflow: 'hidden', cursor: 'pointer', transition: 'all 0.3s', boxShadow: '0 4px 12px rgba(22,163,74,0.15)' }}>
-                <img src={ASSET_PATHS.LAYOUT_MEDIUM} alt="Medium Layout" style={{ width: '100%', height: '150px', objectFit: 'cover' }} />
-                <div style={{ padding: '12px', textAlign: 'center', background: '#f0fdf4' }}>
-                  <div style={{ fontWeight: 700, color: '#15803D', fontSize: '14px' }}>Medium Footprint ✓</div>
-                  <div style={{ fontSize: '12px', color: '#15803D', marginTop: '4px', fontWeight: 600 }}>Recommended</div>
-                </div>
-              </div>
-
-              {/* Long Layout */}
-              <div style={{ background: 'white', border: '2px solid #e5e7eb', borderRadius: '8px', overflow: 'hidden', cursor: 'pointer', transition: 'all 0.3s' }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.borderColor = '#15803D';
-                  e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.1)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.borderColor = '#e5e7eb';
-                  e.currentTarget.style.boxShadow = 'none';
-                }}
-              >
-                <img src={ASSET_PATHS.LAYOUT_LONG} alt="Long Layout" style={{ width: '100%', height: '150px', objectFit: 'cover' }} />
-                <div style={{ padding: '12px', textAlign: 'center', background: '#f9fafb' }}>
-                  <div style={{ fontWeight: 700, color: '#111827', fontSize: '14px' }}>Long Footprint</div>
-                  <div style={{ fontSize: '12px', color: '#6b7280', marginTop: '4px' }}>Extended site layout</div>
-                </div>
+            <div style={{ display: 'flex', justifyContent: 'center', background: '#f9fafb', padding: '20px', borderRadius: '8px' }}>
+              <img
+                src={
+                  calculations.totalOptimized <= 12
+                    ? ASSET_PATHS.LAYOUT_SHORT
+                    : calculations.totalOptimized <= 25
+                    ? ASSET_PATHS.LAYOUT_MEDIUM
+                    : ASSET_PATHS.LAYOUT_LONG
+                }
+                alt="Floor Layout"
+                style={{ maxWidth: '100%', maxHeight: '300px', objectFit: 'contain', display: 'block' }}
+              />
+            </div>
+            
+            <div style={{ marginTop: '16px', padding: '12px', background: '#eff6ff', borderRadius: '6px', textAlign: 'center', border: '1px solid #0ea5e9' }}>
+              <div style={{ fontSize: '12px', fontWeight: 600, color: '#0e7490', marginBottom: '4px' }}>FLOORPLAN TYPE</div>
+              <div style={{ fontSize: '16px', fontWeight: 700, color: '#111827' }}>
+                {calculations.totalOptimized <= 12 ? 'Short Footprint (~10 units)' : calculations.totalOptimized <= 25 ? 'Medium Footprint (~20 units)' : 'Long Footprint (~30 units)'}
               </div>
             </div>
           </div>

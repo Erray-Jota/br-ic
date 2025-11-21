@@ -29,11 +29,19 @@ const ProjectTab = () => {
     (projectData.targets.twoBed || 0) +
     (projectData.targets.threeBed || 0);
 
+  const projectImageSrc = {
+    3: ASSET_PATHS.PROJECT_GRAPHIC_3_FLOORS,
+    4: ASSET_PATHS.PROJECT_GRAPHIC_4_FLOORS,
+    5: ASSET_PATHS.PROJECT_GRAPHIC_5_FLOORS,
+  }[projectData.floors] || ASSET_PATHS.PROJECT_GRAPHIC_URL;
+
   return (
     <div>
-      {/* Hero Image */}
+      {/* Hero Image - Changes based on number of floors */}
       <div style={{ marginBottom: '20px', borderRadius: '12px', overflow: 'hidden', height: '200px', boxShadow: '0 4px 8px rgba(0,0,0,0.1)' }}>
-        <img src={ASSET_PATHS.PROJECT_GRAPHIC_URL} alt="Project" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+        <video autoPlay muted loop style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}>
+          <source src={projectImageSrc} type="video/mp4" />
+        </video>
       </div>
 
       {/* Project Info Banner */}

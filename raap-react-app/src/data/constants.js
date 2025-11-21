@@ -65,6 +65,9 @@ export const DUMMY_PARTNERS = [
 export const ASSET_PATHS = {
   INTRO_GRAPHIC_URL: "/images/Introduction_hero.png",
   PROJECT_GRAPHIC_URL: "/images/Project_hero.png",
+  PROJECT_GRAPHIC_3_FLOORS: "/images/3 Story.mp4",
+  PROJECT_GRAPHIC_4_FLOORS: "/images/4 Story.mp4",
+  PROJECT_GRAPHIC_5_FLOORS: "/images/5 Story.mp4",
   VIDEO_3_FLOORS: "/images/3 Story.mp4",
   VIDEO_4_FLOORS: "/images/4 Story.mp4",
   VIDEO_5_FLOORS: "/images/5 Story.mp4",
