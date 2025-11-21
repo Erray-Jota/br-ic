@@ -18,12 +18,13 @@ const createDefaultProject = (name = 'New Project') => ({
   lobbyType: 2,
   podiumCount: 0,
   commonAreaPct: 5,
-  // User-entered locations (for display only)
+  // Unified location system with autocomplete support
   propertyLocation: 'Boise, ID',
-  factoryLocation: 'Boise, ID',
-  // Calculated cost factors (based on nearest RaaP city)
   propertyFactor: 0.87,
+  propertyCoordinates: { lat: 43.6150, lng: -116.2023 },
+  factoryLocation: 'Boise, ID',
   factoryFactor: 0.87,
+  factoryCoordinates: { lat: 43.6150, lng: -116.2023 },
   targets: { studio: 40, oneBed: 40, twoBed: 40, threeBed: 0 },
   optimized: { studio: 40, oneBed: 40, twoBed: 40, threeBed: 0 },
   length: 280.0,

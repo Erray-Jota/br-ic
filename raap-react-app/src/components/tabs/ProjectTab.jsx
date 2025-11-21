@@ -1,17 +1,31 @@
 import { useProject } from '../../contexts/ProjectContext';
 import { useCalculations, formatMega, formatCurrency, formatTime } from '../../hooks/useCalculations';
 import ProjectInfoBanner from '../ProjectInfoBanner';
-import { raapCities } from '../../data/raapCities';
 import { ASSET_PATHS } from '../../data/constants';
+import LocationInput from '../LocationInput';
 
 const ProjectTab = () => {
-  // Sort cities by cost factor (descending) for better UX
-  const sortedCities = [...raapCities].sort((a, b) => b.factor - a.factor);
   const { projectData, updateProjectData, switchTab } = useProject();
   const calculations = useCalculations(projectData);
 
   const handleInputChange = (field, value) => {
     updateProjectData({ [field]: value });
+  };
+
+  const handlePropertyLocationChange = (locationData) => {
+    updateProjectData({
+      propertyLocation: locationData.displayLocation,
+      propertyFactor: locationData.factor,
+      propertyCoordinates: { lat: locationData.coordinates.lat, lng: locationData.coordinates.lng }
+    });
+  };
+
+  const handleFactoryLocationChange = (locationData) => {
+    updateProjectData({
+      factoryLocation: locationData.displayLocation,
+      factoryFactor: locationData.factor,
+      factoryCoordinates: { lat: locationData.coordinates.lat, lng: locationData.coordinates.lng }
+    });
   };
 
   const handleTargetChange = (unitType, value) => {
@@ -54,18 +68,12 @@ const ProjectTab = () => {
           <h2>🏢 Building Configuration</h2>
           <div className="grid-2">
             <div className="form-group">
-              <label className="form-label">📍 Property Location</label>
-              <select
-                className="form-select"
-                value={projectData.propertyFactor}
-                onChange={(e) => handleInputChange('propertyFactor', parseFloat(e.target.value))}
-              >
-                {sortedCities.map((city, index) => (
-                  <option key={index} value={city.factor}>
-                    {city.city}, {city.state} ({city.factor})
-                  </option>
-                ))}
-              </select>
+              <LocationInput
+                label="📍 Property Location"
+                value={projectData.propertyLocation}
+                placeholder="Enter city or zip code"
+                onChange={handlePropertyLocationChange}
+              />
             </div>
             <div className="form-group">
               <label className="form-label">Number of Floors</label>
@@ -135,6 +143,19 @@ const ProjectTab = () => {
               />
             </div>
           </div>
+        </div>
+      </div>
+
+      {/* Factory Location */}
+      <div className="card" style={{ marginTop: '12px' }}>
+        <h2>🏭 Factory Location</h2>
+        <div className="grid-1">
+          <LocationInput
+            label="Factory Location"
+            value={projectData.factoryLocation}
+            placeholder="Enter city or zip code"
+            onChange={handleFactoryLocationChange}
+          />
         </div>
       </div>
 
