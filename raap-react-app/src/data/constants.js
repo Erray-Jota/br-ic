@@ -44,20 +44,38 @@ export const MASTER_DIVISIONS = [
 ];
 
 /**
- * Dummy partner data for marketplace
+ * Dummy partner data for marketplace with geo coordinates
  */
 export const DUMMY_PARTNERS = [
-  { name: "Atlas Modular Systems", region: "West Coast", type: "Wood Frame", category: "Fabricator", capacity: "1200 units/yr", established: 2015 },
-  { name: "SteelHaus Fab", region: "Midwest", type: "Steel Frame", category: "Fabricator", capacity: "800 units/yr", established: 2008 },
-  { name: "Pod Innovations", region: "Northeast", type: "Bathroom Pods", category: "Fabricator", capacity: "3000 pods/yr", established: 2020 },
-  { name: "Panels United", region: "Southeast", type: "Panelized", category: "Fabricator", capacity: "400 units/yr", established: 2012 },
-  { name: "SiteWorks General", region: "West Coast", type: "Multifamily", category: "GC", capacity: "Large Scale", established: 1998 },
-  { name: "Precision Build Group", region: "Midwest", type: "Modular Installation", category: "GC", capacity: "Medium Scale", established: 2005 },
-  { name: "East Coast Erectors", region: "Northeast", type: "Hospitality", category: "GC", capacity: "High Rise", established: 1985 },
-  { name: "Design Synergy AoR", region: "National", type: "DfMA Expert", category: "AoR", capacity: "15 Architects", established: 2010 },
-  { name: "Zeta Architecture", region: "West Coast", type: "Affordable Housing", category: "AoR", capacity: "8 Architects", established: 2018 },
-  { name: "Structural Solutions Inc.", region: "National", type: "Structural Engineer", category: "Consultant", capacity: "N/A", established: 1995 },
+  { name: "Atlas Modular Systems", region: "West Coast", type: "Wood Frame", category: "Fabricator", capacity: "1200 units/yr", established: 2015, lat: 37.7749, lng: -122.4194 },
+  { name: "SteelHaus Fab", region: "Midwest", type: "Steel Frame", category: "Fabricator", capacity: "800 units/yr", established: 2008, lat: 41.8781, lng: -87.6298 },
+  { name: "Pod Innovations", region: "Northeast", type: "Bathroom Pods", category: "Fabricator", capacity: "3000 pods/yr", established: 2020, lat: 42.3601, lng: -71.0589 },
+  { name: "Panels United", region: "Southeast", type: "Panelized", category: "Fabricator", capacity: "400 units/yr", established: 2012, lat: 33.7490, lng: -84.3880 },
+  { name: "SiteWorks General", region: "West Coast", type: "Multifamily", category: "GC", capacity: "Large Scale", established: 1998, lat: 37.3382, lng: -121.8863 },
+  { name: "Precision Build Group", region: "Midwest", type: "Modular Installation", category: "GC", capacity: "Medium Scale", established: 2005, lat: 39.7392, lng: -104.9903 },
+  { name: "East Coast Erectors", region: "Northeast", type: "Hospitality", category: "GC", capacity: "High Rise", established: 1985, lat: 40.7128, lng: -74.0060 },
+  { name: "Design Synergy AoR", region: "National", type: "DfMA Expert", category: "AoR", capacity: "15 Architects", established: 2010, lat: 38.9072, lng: -77.0369 },
+  { name: "Zeta Architecture", region: "West Coast", type: "Affordable Housing", category: "AoR", capacity: "8 Architects", established: 2018, lat: 34.0522, lng: -118.2437 },
+  { name: "Structural Solutions Inc.", region: "National", type: "Structural Engineer", category: "Consultant", capacity: "N/A", established: 1995, lat: 35.2271, lng: -80.8431 },
 ];
+
+/**
+ * Default site location (Fort Worth, TX from Project tab)
+ */
+export const DEFAULT_SITE_LOCATION = {
+  lat: 32.7555,
+  lng: -97.3308,
+  name: "Project Site - Fort Worth, TX"
+};
+
+/**
+ * Example factory locations for logistics
+ */
+export const FACTORY_LOCATIONS = {
+  "Atlas Modular Systems": { lat: 37.7749, lng: -122.4194, name: "Atlas Factory - Bay Area, CA" },
+  "SteelHaus Fab": { lat: 41.8781, lng: -87.6298, name: "SteelHaus Factory - Chicago, IL" },
+  "Pod Innovations": { lat: 42.3601, lng: -71.0589, name: "Pod Factory - Boston, MA" },
+};
 
 /**
  * Asset paths for graphics and media

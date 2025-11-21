@@ -1,11 +1,45 @@
 import { useState } from 'react';
+import { GoogleMap, LoadScript, MarkerF, DirectionsService, DirectionsRenderer } from '@react-google-maps/api';
 import { useProject } from '../../contexts/ProjectContext';
-import { DUMMY_PARTNERS } from '../../data/constants';
+import { DUMMY_PARTNERS, DEFAULT_SITE_LOCATION, FACTORY_LOCATIONS } from '../../data/constants';
 
 const OtherFactorsTab = () => {
-  const { switchTab, activeSubtabs, switchSubtab } = useProject();
+  const { switchTab, activeSubtabs, switchSubtab, projectData } = useProject();
   const [filterCategory, setFilterCategory] = useState('All');
   const [searchTerm, setSearchTerm] = useState('');
+  const [directions, setDirections] = useState(null);
+  
+  const apiKey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY || '';
+  
+  const getCategoryIcon = (category) => {
+    const icons = {
+      'Fabricator': '🏭',
+      'GC': '👷',
+      'AoR': '🏗️',
+      'Consultant': '📋'
+    };
+    return icons[category] || '📍';
+  };
+  
+  const handleDirections = (factoryLat, factoryLng) => {
+    if (!apiKey) {
+      console.log('Google Maps API key not configured');
+      return;
+    }
+    const directionsService = new window.google.maps.DirectionsService();
+    directionsService.route(
+      {
+        origin: { lat: factoryLat, lng: factoryLng },
+        destination: DEFAULT_SITE_LOCATION,
+        travelMode: window.google.maps.TravelMode.DRIVING,
+      },
+      (result, status) => {
+        if (status === window.google.maps.DirectionsStatus.OK) {
+          setDirections(result);
+        }
+      }
+    );
+  };
 
   const filteredPartners = DUMMY_PARTNERS.filter(partner => {
     const categoryMatch = filterCategory === 'All' || partner.category === filterCategory;
@@ -98,6 +132,57 @@ const OtherFactorsTab = () => {
             <p style={{ fontSize: '16px', color: '#4b5563', marginBottom: '15px' }}>
               A factory that can't deliver. A GC misaligned with modular logic. Scope creep that derails costs. We mitigate these risks through a rigorous 4-pillar evaluation framework ensuring long-term success.
             </p>
+            
+            {/* Google Maps - Partner Locations */}
+            {apiKey && (
+              <div style={{ marginBottom: '20px', borderRadius: '8px', overflow: 'hidden', height: '400px', border: '2px solid #e5e7eb' }}>
+                <LoadScript googleMapsApiKey={apiKey}>
+                  <GoogleMap
+                    mapContainerStyle={{ width: '100%', height: '100%' }}
+                    center={DEFAULT_SITE_LOCATION}
+                    zoom={4}
+                  >
+                    {/* Site Location */}
+                    <MarkerF
+                      position={DEFAULT_SITE_LOCATION}
+                      title="Project Site"
+                      icon={{
+                        path: window.google?.maps?.SymbolPath?.CIRCLE || 0,
+                        scale: 12,
+                        fillColor: '#2D5A3D',
+                        fillOpacity: 1,
+                        strokeColor: '#fff',
+                        strokeWeight: 2,
+                      }}
+                    />
+                    
+                    {/* Partner Markers */}
+                    {filteredPartners.map((partner, idx) => (
+                      <MarkerF
+                        key={idx}
+                        position={{ lat: partner.lat, lng: partner.lng }}
+                        title={`${partner.name} (${partner.category})`}
+                        icon={{
+                          path: window.google?.maps?.SymbolPath?.CIRCLE || 0,
+                          scale: 10,
+                          fillColor: partner.category === 'Fabricator' ? '#F59E0B' : partner.category === 'GC' ? '#3B82F6' : partner.category === 'AoR' ? '#8B5CF6' : '#EC4899',
+                          fillOpacity: 0.9,
+                          strokeColor: '#fff',
+                          strokeWeight: 2,
+                        }}
+                      />
+                    ))}
+                  </GoogleMap>
+                </LoadScript>
+              </div>
+            )}
+            {!apiKey && (
+              <div style={{ marginBottom: '20px', padding: '20px', background: '#FEF3C7', border: '2px solid #FCD34D', borderRadius: '8px', textAlign: 'center' }}>
+                <p style={{ fontSize: '14px', color: '#92400E', margin: 0 }}>
+                  📍 Google Maps will display partner locations once API key is configured
+                </p>
+              </div>
+            )}
 
             {/* Filters */}
             <div style={{ display: 'flex', gap: '10px', marginBottom: '15px' }}>
@@ -189,6 +274,61 @@ const OtherFactorsTab = () => {
             <p style={{ fontSize: '16px', color: '#4b5563', marginBottom: '15px' }}>
               Transportation clearance, crane staging, site access—we solve these upfront so your setting team executes flawlessly and on schedule.
             </p>
+            
+            {/* Factory Selection for Route */}
+            <div style={{ marginBottom: '15px' }}>
+              <label style={{ fontSize: '14px', fontWeight: 600, color: '#111827', marginBottom: '8px', display: 'block' }}>
+                Select Factory for Route Analysis:
+              </label>
+              <select
+                onChange={(e) => {
+                  const factory = FACTORY_LOCATIONS[e.target.value];
+                  if (factory && apiKey) {
+                    handleDirections(factory.lat, factory.lng);
+                  }
+                }}
+                style={{
+                  width: '100%',
+                  maxWidth: '300px',
+                  padding: '8px',
+                  border: '1px solid #d1d5db',
+                  borderRadius: '4px',
+                  fontSize: '14px'
+                }}
+              >
+                <option value="">-- Select Factory --</option>
+                {Object.keys(FACTORY_LOCATIONS).map((factoryName) => (
+                  <option key={factoryName} value={factoryName}>{factoryName}</option>
+                ))}
+              </select>
+            </div>
+            
+            {/* Google Maps - Route */}
+            {apiKey && (
+              <div style={{ marginBottom: '20px', borderRadius: '8px', overflow: 'hidden', height: '400px', border: '2px solid #e5e7eb' }}>
+                <LoadScript googleMapsApiKey={apiKey}>
+                  <GoogleMap
+                    mapContainerStyle={{ width: '100%', height: '100%' }}
+                    center={DEFAULT_SITE_LOCATION}
+                    zoom={6}
+                  >
+                    {directions && <DirectionsRenderer directions={directions} />}
+                    {!directions && (
+                      <>
+                        <MarkerF position={DEFAULT_SITE_LOCATION} title="Project Site" />
+                      </>
+                    )}
+                  </GoogleMap>
+                </LoadScript>
+              </div>
+            )}
+            {!apiKey && (
+              <div style={{ marginBottom: '20px', padding: '20px', background: '#FEF3C7', border: '2px solid #FCD34D', borderRadius: '8px', textAlign: 'center' }}>
+                <p style={{ fontSize: '14px', color: '#92400E', margin: 0 }}>
+                  🗺️ Route mapping will display once API key is configured
+                </p>
+              </div>
+            )}
 
             <div className="grid-2" style={{ gap: '20px' }}>
               <div>
