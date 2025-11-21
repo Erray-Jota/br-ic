@@ -432,10 +432,10 @@ const DesignTab = () => {
               TOTAL UNITS IN DESIGN
             </div>
             <div style={{ fontSize: '28px', fontWeight: 700, color: '#111827' }}>
-              {calculations.totalOptimized * projectData.floors} units
+              {calculations.totalOptimized} units
             </div>
             <div style={{ fontSize: '12px', color: '#15803D', marginTop: '4px' }}>
-              {calculations.totalOptimized} units/floor across {projectData.floors} floors
+              {(calculations.totalOptimized / projectData.floors).toFixed(0)} units/floor + {(calculations.bonusUnits || 0)} bonus
             </div>
           </div>
         </div>
@@ -463,11 +463,11 @@ const DesignTab = () => {
               </div>
               <div>
                 <div style={{ fontSize: '12px', fontWeight: 600, color: '#15803D', marginBottom: '4px' }}>Units Per Floor</div>
-                <div style={{ fontSize: '18px', fontWeight: 700, color: '#111827' }}>{calculations.totalOptimized}</div>
+                <div style={{ fontSize: '18px', fontWeight: 700, color: '#111827' }}>{(calculations.totalOptimized / projectData.floors).toFixed(0)}</div>
               </div>
               <div>
                 <div style={{ fontSize: '12px', fontWeight: 600, color: '#15803D', marginBottom: '4px' }}>Total Units</div>
-                <div style={{ fontSize: '18px', fontWeight: 700, color: '#111827' }}>{calculations.totalOptimized * projectData.floors}</div>
+                <div style={{ fontSize: '18px', fontWeight: 700, color: '#111827' }}>{calculations.totalOptimized}</div>
               </div>
             </div>
           </div>
@@ -633,7 +633,7 @@ const DesignTab = () => {
 
           {/* Building Visualization */}
           <div className="card" style={{ marginBottom: '20px' }}>
-            <h2>🏗️ Building Massing - {projectData.floors} Stories ({calculations.totalOptimized * projectData.floors} Units)</h2>
+            <h2>🏗️ Building Massing - {projectData.floors} Stories ({calculations.totalOptimized} Units)</h2>
             <p className="small-text" style={{ marginBottom: '16px' }}>3D visualization of your modular building design</p>
             
             <div style={{ display: 'flex', justifyContent: 'center', background: '#f9fafb', padding: '20px', borderRadius: '8px', marginBottom: '16px' }}>
@@ -670,7 +670,7 @@ const DesignTab = () => {
               </div>
               <div style={{ padding: '12px', background: '#eff6ff', borderRadius: '6px' }}>
                 <div style={{ fontSize: '12px', fontWeight: 600, color: '#1e40af', marginBottom: '4px' }}>TOTAL UNITS</div>
-                <div style={{ fontSize: '20px', fontWeight: 700, color: '#111827' }}>{calculations.totalOptimized * projectData.floors}</div>
+                <div style={{ fontSize: '20px', fontWeight: 700, color: '#111827' }}>{calculations.totalOptimized}</div>
               </div>
               <div style={{ padding: '12px', background: '#fef3c7', borderRadius: '6px' }}>
                 <div style={{ fontSize: '12px', fontWeight: 600, color: '#d97706', marginBottom: '4px' }}>LENGTH</div>
