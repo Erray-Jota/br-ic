@@ -173,7 +173,11 @@ const DesignTab = () => {
               <div className="grid-4" style={{ gap: '8px' }}>
                 {['Studio', '1 Bed', '2 Bed', '3 Bed'].map((label, index) => {
                   const key = ['studio', 'oneBed', 'twoBed', 'threeBed'][index];
-                  const count = calculations.optimized[key];
+                  let count = calculations.optimized[key];
+                  // Add bonus units to 1-bed count
+                  if (key === 'oneBed' && calculations.bonusUnits) {
+                    count += calculations.bonusUnits;
+                  }
                   return (
                     <div key={key} className="proposed-unit-mix-item">
                       <div className="small-text">{label}</div>

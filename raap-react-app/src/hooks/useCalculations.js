@@ -41,6 +41,7 @@ export const useCalculations = (projectData) => {
       availableWidth: optimization.availableWidth,
       utilizationPct: optimization.utilizationPct,
       skus: optimization.skus,  // SKU breakdown for floorplan generation
+      bonusUnits: optimization.bonusUnits,  // Bonus 1-bed inline units (5 per floor for 2-Bay)
 
       // Cost results
       siteCost: costs.siteBuildCost,
