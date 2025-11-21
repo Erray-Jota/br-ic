@@ -156,34 +156,34 @@ const CostAnalysisTab = () => {
       {activeSubtabs.cost === 1 && (
         <div>
           {/* COST SUMMARY BOX (3 Horizontal Boxes) */}
-          <div className="grid-3" style={{ gap: '12px', marginBottom: '12px', display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)' }}>
+          <div className="grid-3" style={{ gap: isEffectivelyMobile ? '8px' : '12px', marginBottom: '12px', display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)' }}>
             {/* Box 1: Site Build Costs */}
-            <div style={{ background: 'white', padding: '16px', borderRadius: '8px', boxShadow: '0 1px 3px rgba(0,0,0,0.05)', border: '1px solid #e5e7eb', textAlign: 'center' }}>
-              <div style={{ fontSize: '11px', fontWeight: 700, color: '#6b7280', marginBottom: '8px', textTransform: 'uppercase' }}>Site Build Cost</div>
-              <div style={{ fontSize: '28px', fontWeight: 700, color: '#DC2626', marginBottom: '12px' }}>{formatMega(divisionCosts.totals.siteCost)}</div>
-              <div style={{ display: 'flex', justifyContent: 'center', gap: '12px', fontSize: '18px', fontWeight: 600, color: '#6b7280' }}>
+            <div style={{ background: 'white', padding: isEffectivelyMobile ? '12px' : '16px', borderRadius: '8px', boxShadow: '0 1px 3px rgba(0,0,0,0.05)', border: '1px solid #e5e7eb', textAlign: 'center' }}>
+              <div style={{ fontSize: isEffectivelyMobile ? '9px' : '11px', fontWeight: 700, color: '#6b7280', marginBottom: '6px', textTransform: 'uppercase' }}>Site Build Cost</div>
+              <div style={{ fontSize: isEffectivelyMobile ? '18px' : '28px', fontWeight: 700, color: '#DC2626', marginBottom: '8px' }}>{formatMega(divisionCosts.totals.siteCost)}</div>
+              <div style={{ display: 'flex', justifyContent: 'center', gap: isEffectivelyMobile ? '4px' : '12px', fontSize: isEffectivelyMobile ? '11px' : '18px', fontWeight: 600, color: '#6b7280', flexWrap: 'wrap' }}>
                 <span>${(divisionCosts.totals.siteCost / calculations.totalGSF).toFixed(0)}/SF</span>
                 <span>${Math.round(divisionCosts.totals.siteCost / calculations.totalOptimized / 1000)}K/Unit</span>
               </div>
             </div>
 
             {/* Box 2: Modular Costs */}
-            <div style={{ background: 'white', padding: '16px', borderRadius: '8px', boxShadow: '0 1px 3px rgba(0,0,0,0.05)', border: '1px solid #e5e7eb', textAlign: 'center' }}>
-              <div style={{ fontSize: '11px', fontWeight: 700, color: '#6b7280', marginBottom: '8px', textTransform: 'uppercase' }}>Modular Cost (GC+Fab)</div>
-              <div style={{ fontSize: '28px', fontWeight: 700, color: '#16A34A', marginBottom: '12px' }}>{formatMega(divisionCosts.totals.modularTotal)}</div>
-              <div style={{ display: 'flex', justifyContent: 'center', gap: '12px', fontSize: '18px', fontWeight: 600, color: '#6b7280' }}>
+            <div style={{ background: 'white', padding: isEffectivelyMobile ? '12px' : '16px', borderRadius: '8px', boxShadow: '0 1px 3px rgba(0,0,0,0.05)', border: '1px solid #e5e7eb', textAlign: 'center' }}>
+              <div style={{ fontSize: isEffectivelyMobile ? '9px' : '11px', fontWeight: 700, color: '#6b7280', marginBottom: '6px', textTransform: 'uppercase' }}>Modular Cost (GC+Fab)</div>
+              <div style={{ fontSize: isEffectivelyMobile ? '18px' : '28px', fontWeight: 700, color: '#16A34A', marginBottom: '8px' }}>{formatMega(divisionCosts.totals.modularTotal)}</div>
+              <div style={{ display: 'flex', justifyContent: 'center', gap: isEffectivelyMobile ? '4px' : '12px', fontSize: isEffectivelyMobile ? '11px' : '18px', fontWeight: 600, color: '#6b7280', flexWrap: 'wrap' }}>
                 <span>${(divisionCosts.totals.modularTotal / calculations.totalGSF).toFixed(0)}/SF</span>
                 <span>${Math.round(divisionCosts.totals.modularTotal / calculations.totalOptimized / 1000)}K/Unit</span>
               </div>
             </div>
 
             {/* Box 3: Savings */}
-            <div style={{ background: 'white', padding: '16px', borderRadius: '8px', boxShadow: '0 1px 3px rgba(0,0,0,0.05)', border: '1px solid #e5e7eb', textAlign: 'center' }}>
-              <div style={{ fontSize: '11px', fontWeight: 700, color: '#6b7280', marginBottom: '8px', textTransform: 'uppercase' }}>Savings</div>
-              <div style={{ fontSize: '28px', fontWeight: 700, color: divisionCosts.totals.savings > 0 ? '#16A34A' : '#DC2626', marginBottom: '12px' }}>
+            <div style={{ background: 'white', padding: isEffectivelyMobile ? '12px' : '16px', borderRadius: '8px', boxShadow: '0 1px 3px rgba(0,0,0,0.05)', border: '1px solid #e5e7eb', textAlign: 'center' }}>
+              <div style={{ fontSize: isEffectivelyMobile ? '9px' : '11px', fontWeight: 700, color: '#6b7280', marginBottom: '6px', textTransform: 'uppercase' }}>Savings</div>
+              <div style={{ fontSize: isEffectivelyMobile ? '18px' : '28px', fontWeight: 700, color: divisionCosts.totals.savings > 0 ? '#16A34A' : '#DC2626', marginBottom: '8px' }}>
                 {divisionCosts.totals.savings > 0 ? '+' : ''}{formatMega(divisionCosts.totals.savings)}
               </div>
-              <div style={{ fontWeight: 600, color: divisionCosts.totals.savings > 0 ? '#16A34A' : '#DC2626', fontSize: '18px' }}>
+              <div style={{ fontWeight: 600, color: divisionCosts.totals.savings > 0 ? '#16A34A' : '#DC2626', fontSize: isEffectivelyMobile ? '14px' : '18px' }}>
                 {divisionCosts.totals.savingsPercent.toFixed(1)}%
               </div>
             </div>
