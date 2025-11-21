@@ -351,37 +351,127 @@ const OtherFactorsTab = () => {
         {/* Selection Tab */}
         {activeSubtabs.factors === 3 && (
           <div className="card" style={{ padding: '16px' }}>
-            <h2 style={{ fontSize: '24px', color: '#DC2626', fontWeight: 800, marginBottom: '8px' }}>
-              💰 COST: Real Numbers Before You Commit Capital
+            <h2 style={{ fontSize: '24px', color: '#16A34A', fontWeight: 800, marginBottom: '8px' }}>
+              🔒 SELECTION: FabAssure Eliminates Hidden Partner Risks
             </h2>
-            <p style={{ fontSize: '16px', color: '#4b5563', marginBottom: '15px' }}>
-              Know if your project pencils BEFORE entitlement. Firm bids from 3–5 fabricators eliminate speculative estimates and give you negotiation power to lock in your margin.
+            <p style={{ fontSize: '15px', color: '#4b5563', marginBottom: '15px', lineHeight: '1.6' }}>
+              Traditional projects pick a fabricator based on incomplete proposals. RaaP's FabAssure scores every fabricator across the four failure points that ruin modular projects—and surfaces the true best partner, not just the lowest bidder.
             </p>
 
-            {/* 4-Pillar Banner */}
-            <div className="grid-4" style={{ gap: '8px', marginBottom: '20px' }}>
-              <div style={{ textAlign: 'center', padding: '10px', borderRadius: '6px', background: '#E0F2FE', border: '1px solid #93C5FD' }}>
-                <div style={{ fontSize: '20px', fontWeight: 'bold', color: '#1E40AF' }}>Commercial Viability</div>
-                <div style={{ fontSize: '12px', color: '#4b5563' }}>25% Weight</div>
-              </div>
-              <div style={{ textAlign: 'center', padding: '10px', borderRadius: '6px', background: '#F0FDF4', border: '1px solid #86EFAC' }}>
-                <div style={{ fontSize: '20px', fontWeight: 'bold', color: '#065F46' }}>Cost</div>
-                <div style={{ fontSize: '12px', color: '#4b5563' }}>25% Weight</div>
-              </div>
-              <div style={{ textAlign: 'center', padding: '10px', borderRadius: '6px', background: '#FFFBEB', border: '1px solid #FDE68A' }}>
-                <div style={{ fontSize: '20px', fontWeight: 'bold', color: '#B45309' }}>Design Fit</div>
-                <div style={{ fontSize: '12px', color: '#4b5563' }}>25% Weight</div>
-              </div>
-              <div style={{ textAlign: 'center', padding: '10px', borderRadius: '6px', background: '#FEF2F2', border: '1px solid #FCA5A5' }}>
-                <div style={{ fontSize: '20px', fontWeight: 'bold', color: '#991B1B' }}>Quality</div>
-                <div style={{ fontSize: '12px', color: '#4b5563' }}>25% Weight</div>
+            {/* What RaaP Does */}
+            <div style={{ background: '#f0fdf4', padding: '16px', borderRadius: '8px', border: '1px solid #86EFAC', marginBottom: '20px' }}>
+              <p style={{ fontSize: '13px', fontWeight: 600, color: '#065F46', marginBottom: '10px' }}>How RaaP Protects Your Project:</p>
+              <ul style={{ listStyle: 'none', paddingLeft: 0, fontSize: '14px', color: '#047857', margin: 0, lineHeight: '1.8' }}>
+                <li style={{ marginBottom: '8px' }}>✓ Normalizes all bids so developers see real cost vs scope</li>
+                <li style={{ marginBottom: '8px' }}>✓ Verifies design fit to prevent late-stage redesign</li>
+                <li style={{ marginBottom: '8px' }}>✓ Evaluates factory quality systems to ensure repeatable performance</li>
+                <li>✓ Reviews contracts and financial stability so onboarding is safe</li>
+              </ul>
+            </div>
+
+            {/* Results */}
+            <div style={{ background: '#FEF3C7', padding: '14px', borderRadius: '8px', border: '2px solid #F59E0B', marginBottom: '20px' }}>
+              <p style={{ fontSize: '13px', fontWeight: 700, color: '#92400E', marginBottom: '10px', textAlign: 'center' }}>The FabAssure Result:</p>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', fontSize: '13px', fontWeight: 600, color: '#92400E' }}>
+                <div style={{ textAlign: 'center', padding: '8px', background: 'rgba(255,255,255,0.7)', borderRadius: '4px' }}>🚫 No Surprises</div>
+                <div style={{ textAlign: 'center', padding: '8px', background: 'rgba(255,255,255,0.7)', borderRadius: '4px' }}>🚫 No Missing Scope</div>
+                <div style={{ textAlign: 'center', padding: '8px', background: 'rgba(255,255,255,0.7)', borderRadius: '4px' }}>🚫 No Weak Partners</div>
+                <div style={{ textAlign: 'center', padding: '8px', background: 'rgba(255,255,255,0.7)', borderRadius: '4px', border: '2px solid #16A34A' }}>✅ A Fabricator Who Can Deliver</div>
               </div>
             </div>
 
-            <div style={{ background: '#FEF2F2', border: '1px solid #FCA5A5', color: '#991B1B', padding: '12px', borderRadius: '8px' }}>
-              <p style={{ fontSize: '14px', fontWeight: 600, marginBottom: 0 }}>
-                We don't just optimize cost; we guarantee partner reliability, preventing construction delays and financial fallout caused by poor partner selection.
-              </p>
+            {/* 4-Pillar Risk Reduction Table */}
+            <div style={{ background: '#f9fafb', padding: '16px', borderRadius: '8px', border: '1px solid #e5e7eb', marginBottom: '20px', overflowX: 'auto' }}>
+              <h3 style={{ fontSize: '14px', marginBottom: '12px', fontWeight: 700, color: '#111827' }}>FabAssure 4-Pillar Risk Reduction</h3>
+              <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '12px' }}>
+                <thead>
+                  <tr style={{ background: '#e5e7eb', borderBottom: '2px solid #d1d5db' }}>
+                    <th style={{ padding: '10px', textAlign: 'left', fontWeight: 700, color: '#111827' }}>Pillar</th>
+                    <th style={{ padding: '10px', textAlign: 'left', fontWeight: 700, color: '#7F1D1D' }}>What Goes Wrong</th>
+                    <th style={{ padding: '10px', textAlign: 'left', fontWeight: 700, color: '#065F46' }}>What FabAssure Catches</th>
+                    <th style={{ padding: '10px', textAlign: 'left', fontWeight: 700, color: '#1E40AF' }}>Impact Avoided</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr style={{ borderBottom: '1px solid #e5e7eb' }}>
+                    <td style={{ padding: '10px', fontWeight: 700, color: '#111827' }}>💼 Commercial Viability</td>
+                    <td style={{ padding: '10px', color: '#374151' }}>Weak balance sheet, bad contract terms, no bonding, no LDs</td>
+                    <td style={{ padding: '10px', color: '#065F46', fontWeight: 600 }}>Financial review, T&C normalization, bonding verification</td>
+                    <td style={{ padding: '10px', color: '#1E40AF', fontWeight: 600 }}>Prevents multi-month project shutdowns</td>
+                  </tr>
+                  <tr style={{ borderBottom: '1px solid #e5e7eb' }}>
+                    <td style={{ padding: '10px', fontWeight: 700, color: '#111827' }}>💰 Cost</td>
+                    <td style={{ padding: '10px', color: '#374151' }}>"Lowball" bids hiding exclusions</td>
+                    <td style={{ padding: '10px', color: '#065F46', fontWeight: 600 }}>Full bid normalization + scope crosswalk</td>
+                    <td style={{ padding: '10px', color: '#1E40AF', fontWeight: 600 }}>Prevents budget blowouts</td>
+                  </tr>
+                  <tr style={{ borderBottom: '1px solid #e5e7eb' }}>
+                    <td style={{ padding: '10px', fontWeight: 700, color: '#111827' }}>📐 Design Fit</td>
+                    <td style={{ padding: '10px', color: '#374151' }}>Factory cannot meet spans, units, assemblies</td>
+                    <td style={{ padding: '10px', color: '#065F46', fontWeight: 600 }}>Compatibility check with prototypes</td>
+                    <td style={{ padding: '10px', color: '#1E40AF', fontWeight: 600 }}>Prevents redesign + 3–6 month delays</td>
+                  </tr>
+                  <tr style={{ background: '#f0fdf4' }}>
+                    <td style={{ padding: '10px', fontWeight: 700, color: '#065F46' }}>✓ Quality</td>
+                    <td style={{ padding: '10px', color: '#374151' }}>Poor QA/QC, inconsistent inspections</td>
+                    <td style={{ padding: '10px', color: '#065F46', fontWeight: 600 }}>Factory audit + assembly comparison</td>
+                    <td style={{ padding: '10px', color: '#1E40AF', fontWeight: 600 }}>Prevents field rework and failed inspections</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            {/* 4-Quadrant Risk Wheel */}
+            <div style={{ background: 'linear-gradient(135deg, #f0fdf4 0%, #ffffff 100%)', padding: '20px', borderRadius: '12px', border: '2px solid #16A34A', marginBottom: '20px' }}>
+              <h3 style={{ fontSize: '14px', marginBottom: '16px', fontWeight: 700, color: '#065F46', textAlign: 'center' }}>RaaP FabAssure: Verified Partner Reliability</h3>
+              
+              {/* 4-Quadrant Grid */}
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+                {/* Top Left: Commercial Viability */}
+                <div style={{ background: '#E0F2FE', padding: '14px', borderRadius: '8px', border: '2px solid #0EA5E9', textAlign: 'center' }}>
+                  <div style={{ fontSize: '13px', fontWeight: 700, color: '#0369A1', marginBottom: '8px' }}>💼 Commercial Viability</div>
+                  <div style={{ fontSize: '11px', color: '#0c4a6e', lineHeight: '1.5' }}>
+                    <div>🏦 Balance Sheet Review</div>
+                    <div>📋 Contract Normalization</div>
+                    <div>🛡️ Bonding Verification</div>
+                  </div>
+                </div>
+
+                {/* Top Right: Cost */}
+                <div style={{ background: '#F0FDF4', padding: '14px', borderRadius: '8px', border: '2px solid #10B981', textAlign: 'center' }}>
+                  <div style={{ fontSize: '13px', fontWeight: 700, color: '#065F46', marginBottom: '8px' }}>💰 Cost</div>
+                  <div style={{ fontSize: '11px', color: '#064E3B', lineHeight: '1.5' }}>
+                    <div>📊 Bid Normalization</div>
+                    <div>📈 Scope Crosswalk</div>
+                    <div>✓ True Cost Visibility</div>
+                  </div>
+                </div>
+
+                {/* Bottom Left: Design Fit */}
+                <div style={{ background: '#FFFBEB', padding: '14px', borderRadius: '8px', border: '2px solid #FBBF24', textAlign: 'center' }}>
+                  <div style={{ fontSize: '13px', fontWeight: 700, color: '#92400E', marginBottom: '8px' }}>📐 Design Fit</div>
+                  <div style={{ fontSize: '11px', color: '#78350F', lineHeight: '1.5' }}>
+                    <div>🏗️ Prototype Compatibility</div>
+                    <div>📏 Span Verification</div>
+                    <div>🔧 Assembly Alignment</div>
+                  </div>
+                </div>
+
+                {/* Bottom Right: Quality */}
+                <div style={{ background: '#FEF2F2', padding: '14px', borderRadius: '8px', border: '2px solid #EF4444', textAlign: 'center' }}>
+                  <div style={{ fontSize: '13px', fontWeight: 700, color: '#991B1B', marginBottom: '8px' }}>✓ Quality</div>
+                  <div style={{ fontSize: '11px', color: '#7F1D1D', lineHeight: '1.5' }}>
+                    <div>🔍 Factory Audit</div>
+                    <div>📋 QA/QC Review</div>
+                    <div>✅ Performance Track Record</div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Closing Statement */}
+              <div style={{ marginTop: '14px', padding: '12px', background: '#F0FDF4', borderRadius: '6px', textAlign: 'center', fontSize: '12px', fontWeight: 600, color: '#065F46' }}>
+                Only partners who score green in all four areas advance to bidding.
+              </div>
             </div>
           </div>
         )}
