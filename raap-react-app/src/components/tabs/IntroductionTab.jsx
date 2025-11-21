@@ -1,8 +1,10 @@
 import { useProject } from '../../contexts/ProjectContext';
+import { useMobile } from '../../hooks/useMobile';
 import { ASSET_PATHS } from '../../data/constants';
 
 const IntroductionTab = () => {
   const { switchTab } = useProject();
+  const { isEffectivelyMobile } = useMobile();
 
   return (
     <div style={{ maxWidth: '56rem', margin: '0 auto' }}>
@@ -30,7 +32,7 @@ const IntroductionTab = () => {
 
       {/* Problems Section */}
       <div className="card" style={{ marginBottom: '12px' }}>
-        <h2 style={{ fontSize: '18px', fontWeight: 700, color: '#111827', marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '6px', justifyContent: 'flex-start' }}>
+        <h2 style={{ fontSize: isEffectivelyMobile ? '16px' : '18px', fontWeight: 700, color: '#111827', marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '6px', justifyContent: 'flex-start' }}>
           <span style={{ color: '#ea580c' }}>⚠️</span> Why modular hasn't worked (yet)
         </h2>
         <div className="grid-3" style={{ gap: '12px' }}>
@@ -39,24 +41,24 @@ const IntroductionTab = () => {
             "GCs can't scope modular correctly",
             'Coordination breaks down'
           ].map((problem, index) => (
-            <div key={index} style={{ padding: '12px', background: '#FEE2E2', borderRadius: '6px', border: '1px solid #FCA5A5', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '8px' }}>
+            <div key={index} style={{ padding: isEffectivelyMobile ? '10px' : '12px', background: '#FEE2E2', borderRadius: '6px', border: '1px solid #FCA5A5', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '6px', wordWrap: 'break-word', overflowWrap: 'break-word' }}>
               <div style={{ flexShrink: 0, width: '24px', height: '24px', background: '#DC2626', fontSize: '13px', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '50%', color: 'white', fontWeight: 'bold' }}>
                 {index + 1}
               </div>
-              <div style={{ fontSize: '14px', color: '#374151', fontWeight: 600 }}>{problem}</div>
+              <div style={{ fontSize: isEffectivelyMobile ? '13px' : '14px', color: '#374151', fontWeight: 600, wordWrap: 'break-word', overflowWrap: 'break-word' }}>{problem}</div>
             </div>
           ))}
         </div>
       </div>
 
       {/* Solution Section */}
-      <div className="card" style={{ background: 'linear-gradient(135deg, #F0FDF4 0%, #DBEAFE 100%)', border: '2px solid #2D5A3D', padding: '20px', borderRadius: '12px', boxShadow: '0 6px 20px rgba(45, 90, 61, 0.15)' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
-          <span style={{ fontSize: '28px' }}>🎯</span>
-          <h3 style={{ fontSize: '18px', fontWeight: 800, color: '#2D5A3D', margin: 0 }}>How RaaP Changes the Game</h3>
+      <div className="card" style={{ background: 'linear-gradient(135deg, #F0FDF4 0%, #DBEAFE 100%)', border: '2px solid #2D5A3D', padding: isEffectivelyMobile ? '14px' : '20px', borderRadius: '12px', boxShadow: '0 6px 20px rgba(45, 90, 61, 0.15)' }}>
+        <div style={{ display: 'flex', alignItems: isEffectivelyMobile ? 'flex-start' : 'center', gap: isEffectivelyMobile ? '8px' : '12px', marginBottom: '12px' }}>
+          <span style={{ fontSize: isEffectivelyMobile ? '24px' : '28px', flexShrink: 0 }}>🎯</span>
+          <h3 style={{ fontSize: isEffectivelyMobile ? '16px' : '18px', fontWeight: 800, color: '#2D5A3D', margin: 0, wordWrap: 'break-word', overflowWrap: 'break-word' }}>How RaaP Changes the Game</h3>
         </div>
-        <p style={{ fontSize: '15px', fontWeight: 600, marginBottom: 0, color: '#1F2937', lineHeight: '1.6' }}>
-          We start with a factory-optimized design and a detailed cost model — giving you feasibility, savings, and confidence before you commit capital to entitlement.
+        <p style={{ fontSize: isEffectivelyMobile ? '13px' : '15px', fontWeight: 600, marginBottom: 0, color: '#1F2937', lineHeight: '1.6', wordWrap: 'break-word', overflowWrap: 'break-word' }}>
+          {isEffectivelyMobile ? 'Factory-optimized design & cost model — feasibility, savings & confidence before entitlement.' : 'We start with a factory-optimized design and a detailed cost model — giving you feasibility, savings, and confidence before you commit capital to entitlement.'}
         </p>
       </div>
     </div>
