@@ -31,12 +31,27 @@ const OtherFactorsTab = () => {
   };
   
   const getLogisticsMapUrl = () => {
-    if (!selectedFactory || !FACTORY_LOCATIONS[selectedFactory]) {
+    // Check if factory coordinates exist in project data (set from Project tab)
+    let factoryLat, factoryLng;
+
+    if (projectData.factoryCoordinates && projectData.factoryCoordinates.lat && projectData.factoryCoordinates.lng) {
+      // Use factory coordinates from project data
+      factoryLat = projectData.factoryCoordinates.lat;
+      factoryLng = projectData.factoryCoordinates.lng;
+    } else if (selectedFactory && FACTORY_LOCATIONS[selectedFactory]) {
+      // Fall back to selected factory from dropdown
+      const factory = FACTORY_LOCATIONS[selectedFactory];
+      factoryLat = factory.lat;
+      factoryLng = factory.lng;
+    }
+
+    // If no factory location is available, show only the site
+    if (!factoryLat || !factoryLng) {
       return `https://maps.googleapis.com/maps/api/staticmap?center=${DEFAULT_SITE_LOCATION.lat},${DEFAULT_SITE_LOCATION.lng}&zoom=6&size=800x400&markers=color:0x2D5A3D|${DEFAULT_SITE_LOCATION.lat},${DEFAULT_SITE_LOCATION.lng}&key=${apiKey}`;
     }
-    
-    const factory = FACTORY_LOCATIONS[selectedFactory];
-    return `https://maps.googleapis.com/maps/api/staticmap?center=${DEFAULT_SITE_LOCATION.lat},${DEFAULT_SITE_LOCATION.lng}&zoom=6&size=800x400&markers=color:0xF59E0B|${factory.lat},${factory.lng}|label:F&markers=color:0x2D5A3D|${DEFAULT_SITE_LOCATION.lat},${DEFAULT_SITE_LOCATION.lng}|label:S&key=${apiKey}`;
+
+    // Show both factory and site locations
+    return `https://maps.googleapis.com/maps/api/staticmap?center=${DEFAULT_SITE_LOCATION.lat},${DEFAULT_SITE_LOCATION.lng}&zoom=6&size=800x400&markers=color:0xF59E0B|${factoryLat},${factoryLng}|label:F&markers=color:0x2D5A3D|${DEFAULT_SITE_LOCATION.lat},${DEFAULT_SITE_LOCATION.lng}|label:S&key=${apiKey}`;
   };
 
   const filteredPartners = DUMMY_PARTNERS.filter(partner => {
