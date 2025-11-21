@@ -255,28 +255,140 @@ const DesignTab = () => {
       )}
 
       {activeSubtabs.design === 2 && (
-        <div className="card">
-          <h2>🏠 RaaP Unit Modules Used in Design</h2>
-          <p className="small-text" style={{ marginBottom: '12px' }}>Click on any unit image to see the full floorplan.</p>
-          <div className="grid-3" style={{ gap: '15px' }}>
+        <div>
+          <div style={{ marginBottom: '24px' }}>
+            <h2 style={{ fontSize: '20px', fontWeight: 700, color: '#111827', marginBottom: '8px' }}>
+              🏠 Unit Types in Your Design
+            </h2>
+            <p className="small-text" style={{ color: '#6b7280' }}>
+              Hover over any unit for details. These are the modular room types that will be used in your {projectData.floors}-story building.
+            </p>
+          </div>
+
+          <div className="grid-2" style={{ gap: '20px' }}>
             {Object.entries(calculations.optimized).map(([key, count]) => {
               if (count === 0) return null;
               const unitMap = {
-                studio: { name: 'Studio', link: ASSET_PATHS.UNIT_STUDIO },
-                oneBed: { name: '1BR (Inline)', link: ASSET_PATHS.UNIT_1BR_INLINE },
-                twoBed: { name: '2BR (Inline)', link: ASSET_PATHS.UNIT_2BR_INLINE },
-                threeBed: { name: '3BR (Corner)', link: ASSET_PATHS.UNIT_3BR_CORNER },
+                studio: { name: 'Studio', link: ASSET_PATHS.UNIT_STUDIO, sqft: 450, icon: '📦' },
+                oneBed: { name: '1 Bedroom (Inline)', link: ASSET_PATHS.UNIT_1BR_INLINE, sqft: 750, icon: '🛏️' },
+                twoBed: { name: '2 Bedroom (Inline)', link: ASSET_PATHS.UNIT_2BR_INLINE, sqft: 950, icon: '🛏️🛏️' },
+                threeBed: { name: '3 Bedroom (Corner)', link: ASSET_PATHS.UNIT_3BR_CORNER, sqft: 1200, icon: '🛏️🛏️🛏️' },
               };
               const unit = unitMap[key];
+              const totalUnitsOfType = count * projectData.floors;
+
               return (
-                <div key={key} style={{ background: 'white', border: '1px solid #d1d5db', borderRadius: '6px', overflow: 'hidden', textAlign: 'center', boxShadow: '0 2px 4px rgba(0,0,0,0.05)' }}>
+                <div
+                  key={key}
+                  style={{
+                    background: 'white',
+                    border: '2px solid #e5e7eb',
+                    borderRadius: '12px',
+                    overflow: 'hidden',
+                    boxShadow: '0 4px 12px rgba(0,0,0,0.08)',
+                    transition: 'all 0.3s ease',
+                    cursor: 'pointer',
+                    hover: { transform: 'translateY(-4px)', boxShadow: '0 8px 20px rgba(0,0,0,0.12)' }
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = 'translateY(-4px)';
+                    e.currentTarget.style.boxShadow = '0 8px 20px rgba(0,0,0,0.12)';
+                    e.currentTarget.style.borderColor = '#15803D';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = 'translateY(0)';
+                    e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.08)';
+                    e.currentTarget.style.borderColor = '#e5e7eb';
+                  }}
+                >
+                  {/* Image Section */}
                   <a href={unit.link} target="_blank" rel="noopener noreferrer" style={{ display: 'block' }}>
-                    <img src={unit.link} alt={unit.name} style={{ width: '100%', height: '100px', objectFit: 'cover' }} />
-                    <div style={{ padding: '8px', fontWeight: 600, fontSize: '14px', color: '#15803D' }}>{unit.name}</div>
+                    <div style={{ position: 'relative', overflow: 'hidden', height: '220px', background: '#f3f4f6' }}>
+                      <img
+                        src={unit.link}
+                        alt={unit.name}
+                        style={{
+                          width: '100%',
+                          height: '100%',
+                          objectFit: 'cover',
+                          display: 'block',
+                          transition: 'transform 0.3s ease'
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.transform = 'scale(1.05)';
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.transform = 'scale(1)';
+                        }}
+                      />
+                    </div>
                   </a>
+
+                  {/* Content Section */}
+                  <div style={{ padding: '16px' }}>
+                    {/* Unit Name and Icon */}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
+                      <span style={{ fontSize: '20px' }}>{unit.icon}</span>
+                      <h3 style={{ fontSize: '18px', fontWeight: 700, color: '#111827', margin: 0 }}>
+                        {unit.name}
+                      </h3>
+                    </div>
+
+                    {/* Unit Stats */}
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '12px' }}>
+                      <div style={{ padding: '8px', background: '#f0fdf4', borderRadius: '6px', textAlign: 'center' }}>
+                        <div style={{ fontSize: '12px', fontWeight: 600, color: '#15803D', marginBottom: '2px' }}>
+                          Per Floor
+                        </div>
+                        <div style={{ fontSize: '20px', fontWeight: 700, color: '#15803D' }}>
+                          {count}
+                        </div>
+                      </div>
+                      <div style={{ padding: '8px', background: '#eff6ff', borderRadius: '6px', textAlign: 'center' }}>
+                        <div style={{ fontSize: '12px', fontWeight: 600, color: '#1e40af', marginBottom: '2px' }}>
+                          Total ({projectData.floors} Floors)
+                        </div>
+                        <div style={{ fontSize: '20px', fontWeight: 700, color: '#1e40af' }}>
+                          {totalUnitsOfType}
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Unit Details */}
+                    <div style={{ borderTop: '1px solid #e5e7eb', paddingTop: '8px' }}>
+                      <div style={{ fontSize: '12px', color: '#6b7280' }}>
+                        <div style={{ marginBottom: '2px' }}>
+                          <strong>Typical Size:</strong> ~{unit.sqft} SF
+                        </div>
+                        <div style={{ color: '#0ea5e9', cursor: 'pointer', marginTop: '4px', fontWeight: 600 }}>
+                          → View Full Floorplan
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               );
             })}
+          </div>
+
+          {/* Summary Footer */}
+          <div style={{
+            marginTop: '24px',
+            padding: '16px',
+            background: '#f0fdf4',
+            border: '2px solid #16a34a',
+            borderRadius: '8px',
+            textAlign: 'center'
+          }}>
+            <div style={{ fontSize: '13px', fontWeight: 600, color: '#15803D', marginBottom: '4px' }}>
+              TOTAL UNITS IN DESIGN
+            </div>
+            <div style={{ fontSize: '28px', fontWeight: 700, color: '#111827' }}>
+              {calculations.totalOptimized * projectData.floors} units
+            </div>
+            <div style={{ fontSize: '12px', color: '#15803D', marginTop: '4px' }}>
+              {calculations.totalOptimized} units/floor across {projectData.floors} floors
+            </div>
           </div>
         </div>
       )}
