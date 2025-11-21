@@ -1,5 +1,6 @@
 import { useProject } from '../contexts/ProjectContext';
 import { useMobile } from '../hooks/useMobile';
+import { COLORS, FONTS, SPACING } from '../styles/theme';
 
 const Header = () => {
   const { showProjectsPage } = useProject();
@@ -34,18 +35,32 @@ const Header = () => {
         </div>
         <button
           onClick={showProjectsPage}
-          className="btn btn-primary"
           style={{
-            padding: '10px 20px',
-            fontSize: '16px',
-            fontWeight: 600,
+            padding: '8px 16px',
+            fontSize: '14px',
+            fontWeight: FONTS.weight.bold,
             display: 'flex',
             alignItems: 'center',
-            gap: '8px',
-            flexShrink: 0
+            gap: '6px',
+            flexShrink: 0,
+            background: `linear-gradient(135deg, ${COLORS.gold.main} 0%, #f59e0b 100%)`,
+            color: COLORS.white,
+            border: 'none',
+            borderRadius: '8px',
+            cursor: 'pointer',
+            boxShadow: '0 4px 12px rgba(245, 158, 11, 0.3)',
+            transition: 'all 0.3s',
+          }}
+          onMouseEnter={(e) => {
+            e.target.style.boxShadow = '0 6px 20px rgba(245, 158, 11, 0.4)';
+            e.target.style.transform = 'translateY(-2px)';
+          }}
+          onMouseLeave={(e) => {
+            e.target.style.boxShadow = '0 4px 12px rgba(245, 158, 11, 0.3)';
+            e.target.style.transform = 'translateY(0)';
           }}
         >
-          📁 Projects
+          ✨ Projects
         </button>
       </div>
     );
@@ -79,17 +94,31 @@ const Header = () => {
       </div>
       <button
         onClick={showProjectsPage}
-        className="btn btn-primary"
         style={{
-          padding: '10px 20px',
+          padding: '10px 24px',
           fontSize: '16px',
-          fontWeight: 600,
+          fontWeight: FONTS.weight.bold,
           display: 'flex',
           alignItems: 'center',
-          gap: '8px'
+          gap: '8px',
+          background: `linear-gradient(135deg, ${COLORS.gold.main} 0%, #f59e0b 100%)`,
+          color: COLORS.white,
+          border: 'none',
+          borderRadius: '8px',
+          cursor: 'pointer',
+          boxShadow: '0 4px 12px rgba(245, 158, 11, 0.3)',
+          transition: 'all 0.3s',
+        }}
+        onMouseEnter={(e) => {
+          e.target.style.boxShadow = '0 6px 20px rgba(245, 158, 11, 0.4)';
+          e.target.style.transform = 'translateY(-2px)';
+        }}
+        onMouseLeave={(e) => {
+          e.target.style.boxShadow = '0 4px 12px rgba(245, 158, 11, 0.3)';
+          e.target.style.transform = 'translateY(0)';
         }}
       >
-        📁 Projects
+        ✨ Projects
       </button>
     </div>
   );

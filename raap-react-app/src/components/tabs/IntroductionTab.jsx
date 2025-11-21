@@ -36,17 +36,17 @@ const IntroductionTab = () => {
         <h2 style={{ fontSize: isEffectivelyMobile ? FONTS.sizes.md : FONTS.sizes.xl, fontWeight: FONTS.weight.black, color: COLORS.red.dark, marginBottom: SPACING.md, display: 'flex', alignItems: 'center', gap: SPACING.sm }}>
           <span>⚠️</span> Why modular hasn't worked (yet)
         </h2>
-        <div className="grid-3" style={{ gap: isEffectivelyMobile ? '8px' : '12px' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: isEffectivelyMobile ? '8px' : '12px' }}>
           {[
             'Designs not factory optimized',
             "GCs can't scope modular correctly",
             'Coordination breaks down'
           ].map((problem, index) => (
-            <div key={index} style={{ padding: isEffectivelyMobile ? '8px' : '12px', background: '#FEE2E2', borderRadius: '6px', border: '1px solid #FCA5A5', display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '8px', minHeight: 'auto' }}>
-              <div style={{ flexShrink: 0, width: '22px', height: '22px', background: '#DC2626', fontSize: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '50%', color: 'white', fontWeight: 'bold' }}>
+            <div key={index} style={{ padding: isEffectivelyMobile ? '8px 12px' : '12px 16px', background: '#FEE2E2', borderRadius: '6px', border: '1px solid #FCA5A5', display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '12px' }}>
+              <div style={{ flexShrink: 0, width: '28px', height: '28px', background: '#DC2626', fontSize: '14px', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '50%', color: 'white', fontWeight: 'bold' }}>
                 {index + 1}
               </div>
-              <div style={{ fontSize: isEffectivelyMobile ? '12px' : '14px', color: '#374151', fontWeight: 600, whiteSpace: 'nowrap' }}>{problem}</div>
+              <div style={{ fontSize: isEffectivelyMobile ? '13px' : '15px', color: '#374151', fontWeight: 600, lineHeight: '1.4', textAlign: 'left' }}>{problem}</div>
             </div>
           ))}
         </div>
