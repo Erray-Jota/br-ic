@@ -119,8 +119,8 @@ const ResponsiveTabNavigation = () => {
               }}
             >
               <span style={{ fontSize: '14px' }}>{subtab.label.charAt(0)}</span>
-              <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', width: '100%' }}>
-                {subtab.label.split(' ')[1]?.substring(0, 5) || ''}
+              <span style={{ fontSize: '9px', fontWeight: 500 }}>
+                {subtab.label.split(' ')[1] || ''}
               </span>
             </button>
           ))}
