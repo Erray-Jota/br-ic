@@ -1,10 +1,10 @@
 import { useState, useRef, useEffect } from 'react';
-import { searchCities } from '../data/usCities';
 import { findNearestRaapCity } from '../data/raapCities';
 
 /**
  * LocationInput Component
- * Provides autocomplete for US cities and zip codes
+ * Provides autocomplete for US cities and zip codes via Google Geocoding API
+ * Supports all 44,000+ US zip codes
  * Calculates nearest RaaP city for cost factors without displaying it to user
  */
 const LocationInput = ({ value, onChange, label, placeholder = 'Enter city or zip code' }) => {
@@ -13,6 +13,8 @@ const LocationInput = ({ value, onChange, label, placeholder = 'Enter city or zi
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const wrapperRef = useRef(null);
+  const apiKey = import.meta.env.VITE_GOOGLE_API_KEY || '';
+  const debounceTimer = useRef(null);
 
   // Close suggestions when clicking outside
   useEffect(() => {
@@ -33,35 +35,99 @@ const LocationInput = ({ value, onChange, label, placeholder = 'Enter city or zi
     }
   }, [value]);
 
+  // Search using Google Places/Geocoding API
+  const searchLocations = async (query) => {
+    if (!apiKey || query.length < 2) {
+      setSuggestions([]);
+      return;
+    }
+
+    try {
+      // Use Google Places API for better city/zip suggestions
+      const response = await fetch(
+        `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${encodeURIComponent(query)}&country=us&key=${apiKey}`
+      );
+      
+      if (!response.ok) throw new Error('API error');
+      
+      const data = await response.json();
+      
+      if (data.predictions && data.predictions.length > 0) {
+        // Convert predictions to location objects
+        const locationPromises = data.predictions.slice(0, 8).map(async (pred) => {
+          try {
+            // Get coordinates for each prediction
+            const geocodeResponse = await fetch(
+              `https://maps.googleapis.com/maps/api/geocode/json?place_id=${pred.place_id}&key=${apiKey}`
+            );
+            const geocodeData = await geocodeResponse.json();
+            
+            if (geocodeData.results && geocodeData.results[0]) {
+              const result = geocodeData.results[0];
+              const location = result.geometry.location;
+              const formatted = result.formatted_address;
+              
+              // Extract zip code and city info
+              const zipMatch = formatted.match(/(\d{5})/);
+              const zipCode = zipMatch ? zipMatch[1] : '';
+              
+              return {
+                display: formatted.split(',').slice(0, 2).join(',').trim(),
+                fullDisplay: formatted,
+                lat: location.lat,
+                lng: location.lng,
+                zip: zipCode
+              };
+            }
+          } catch (err) {
+            console.error('Geocode error:', err);
+            return null;
+          }
+        });
+        
+        const results = await Promise.all(locationPromises);
+        setSuggestions(results.filter(r => r !== null));
+        setShowSuggestions(true);
+      } else {
+        setSuggestions([]);
+      }
+    } catch (err) {
+      console.error('Location search error:', err);
+      setSuggestions([]);
+    }
+  };
+
   const handleInputChange = (e) => {
     const newValue = e.target.value;
     setInputValue(newValue);
+    setSelectedIndex(-1);
 
+    // Debounce API calls
+    clearTimeout(debounceTimer.current);
     if (newValue.length >= 2) {
-      const results = searchCities(newValue);
-      setSuggestions(results);
-      setShowSuggestions(results.length > 0);
-      setSelectedIndex(-1);
+      debounceTimer.current = setTimeout(() => {
+        searchLocations(newValue);
+      }, 300);
     } else {
       setSuggestions([]);
       setShowSuggestions(false);
     }
   };
 
-  const handleSelectSuggestion = (city) => {
-    const displayValue = city.display;
+  const handleSelectSuggestion = (location) => {
+    const displayValue = location.fullDisplay || location.display;
     setInputValue(displayValue);
     setShowSuggestions(false);
     setSuggestions([]);
 
     // Find nearest RaaP city to calculate cost factor
-    const nearestRaapCity = findNearestRaapCity(city.lat, city.lng);
+    const nearestRaapCity = findNearestRaapCity(location.lat, location.lng);
 
     // Call onChange with both display location and calculated factor
     onChange({
       displayLocation: displayValue,
       factor: nearestRaapCity.factor,
-      coordinates: { lat: city.lat, lng: city.lng },
+      coordinates: { lat: location.lat, lng: location.lng },
       nearestRaapCity: nearestRaapCity.name, // For internal use only, never displayed
     });
   };
@@ -158,24 +224,35 @@ const LocationInput = ({ value, onChange, label, placeholder = 'Enter city or zi
             zIndex: 1000,
           }}
         >
-          {suggestions.map((city, index) => (
-            <div
-              key={`${city.city}-${city.state}-${city.zip}`}
-              onClick={() => handleSelectSuggestion(city)}
-              onMouseEnter={() => setSelectedIndex(index)}
-              style={{
-                padding: '10px 12px',
-                cursor: 'pointer',
-                background: selectedIndex === index ? '#f3f4f6' : 'white',
-                borderBottom: index < suggestions.length - 1 ? '1px solid #e5e7eb' : 'none',
-                transition: 'background-color 0.15s',
-              }}
-            >
-              <div style={{ fontSize: '14px', fontWeight: 500, color: '#111827' }}>
-                {city.display}
+          {suggestions.length > 0 ? (
+            suggestions.map((location, index) => (
+              <div
+                key={`${location.lat}-${location.lng}`}
+                onClick={() => handleSelectSuggestion(location)}
+                onMouseEnter={() => setSelectedIndex(index)}
+                style={{
+                  padding: '10px 12px',
+                  cursor: 'pointer',
+                  background: selectedIndex === index ? '#f3f4f6' : 'white',
+                  borderBottom: index < suggestions.length - 1 ? '1px solid #e5e7eb' : 'none',
+                  transition: 'background-color 0.15s',
+                }}
+              >
+                <div style={{ fontSize: '14px', fontWeight: 500, color: '#111827' }}>
+                  {location.display}
+                </div>
+                {location.zip && (
+                  <div style={{ fontSize: '12px', color: '#6b7280', marginTop: '2px' }}>
+                    Zip: {location.zip}
+                  </div>
+                )}
               </div>
+            ))
+          ) : (
+            <div style={{ padding: '10px 12px', color: '#9ca3af', fontSize: '13px' }}>
+              No locations found
             </div>
-          ))}
+          )}
         </div>
       )}
     </div>
