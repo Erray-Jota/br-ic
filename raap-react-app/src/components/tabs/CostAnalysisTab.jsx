@@ -38,8 +38,8 @@ const CostAnalysisTab = () => {
   const [scenarioA, setScenarioA] = useState({
     name: 'Site Build - Current Location',
     entityType: 'siteBuild',
-    propertyLocation: 'Boise, ID',
-    factoryLocation: 'Boise, ID',
+    propertyLocation: projectData.propertyLocation || '',
+    factoryLocation: projectData.factoryLocation || '',
     floors: projectData.floors,
     unitMix: projectData.optimized,
   });
@@ -47,8 +47,8 @@ const CostAnalysisTab = () => {
   const [scenarioB, setScenarioB] = useState({
     name: 'Modular - Local Factory',
     entityType: 'totalModular',
-    propertyLocation: 'Boise, ID',
-    factoryLocation: 'Boise, ID',
+    propertyLocation: projectData.propertyLocation || '',
+    factoryLocation: projectData.factoryLocation || '',
     floors: projectData.floors,
     unitMix: projectData.optimized,
   });
@@ -365,7 +365,7 @@ const CostAnalysisTab = () => {
                 <div className="grid-2" style={{ gap: '8px', marginBottom: '12px' }}>
                   <LocationInput
                     label="Site Location"
-                    value={projectData.propertyLocation || 'Boise, ID'}
+                    value={projectData.propertyLocation || ''}
                     placeholder="Enter city or zip code"
                     onChange={(locationData) => {
                       updateProjectData({
@@ -376,7 +376,7 @@ const CostAnalysisTab = () => {
                   />
                   <LocationInput
                     label="Factory Location"
-                    value={projectData.factoryLocation || 'Boise, ID'}
+                    value={projectData.factoryLocation || ''}
                     placeholder="Enter city or zip code"
                     onChange={(locationData) => {
                       updateProjectData({

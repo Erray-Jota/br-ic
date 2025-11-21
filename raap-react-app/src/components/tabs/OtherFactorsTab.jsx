@@ -1,16 +1,15 @@
 import { useState } from 'react';
 import { useProject } from '../../contexts/ProjectContext';
-import { DUMMY_PARTNERS, DEFAULT_SITE_LOCATION, FACTORY_LOCATIONS } from '../../data/constants';
+import { DUMMY_PARTNERS } from '../../data/constants';
 import { COLORS, FONTS, SPACING, BORDERS } from '../../styles/theme';
 
 const OtherFactorsTab = () => {
   const { switchTab, activeSubtabs, switchSubtab, projectData } = useProject();
   const [filterCategory, setFilterCategory] = useState('All');
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedFactory, setSelectedFactory] = useState('');
-  
+
   const apiKey = import.meta.env.VITE_GOOGLE_API_KEY || '';
-  
+
   const getCategoryIcon = (category) => {
     const icons = {
       'Fabricator': '🏭',
@@ -20,24 +19,43 @@ const OtherFactorsTab = () => {
     };
     return icons[category] || '📍';
   };
-  
+
+  // Generate marketplace map URL using project site location
   const getMarketplaceMapUrl = () => {
-    const markers = filteredPartners.slice(0, 25).map((p, i) => {
-      const colors = { 'Fabricator': 'FFA500', 'GC': '4169E1', 'AoR': '9370DB', 'Consultant': 'FF69B4' };
-      const color = colors[p.category] || 'FF0000';
-      return `${p.lat},${p.lng}`;
-    }).join('|');
-    
-    return `https://maps.googleapis.com/maps/api/staticmap?center=${DEFAULT_SITE_LOCATION.lat},${DEFAULT_SITE_LOCATION.lng}&zoom=4&size=800x400&style=feature:all|element:labels|visibility:off&markers=color:0x2D5A3D|${DEFAULT_SITE_LOCATION.lat},${DEFAULT_SITE_LOCATION.lng}|label:S&markers=color:0xF59E0B|${markers.split('|').slice(0, 10).join('|')}&key=${apiKey}`;
-  };
-  
-  const getLogisticsMapUrl = () => {
-    if (!selectedFactory || !FACTORY_LOCATIONS[selectedFactory]) {
-      return `https://maps.googleapis.com/maps/api/staticmap?center=${DEFAULT_SITE_LOCATION.lat},${DEFAULT_SITE_LOCATION.lng}&zoom=6&size=800x400&markers=color:0x2D5A3D|${DEFAULT_SITE_LOCATION.lat},${DEFAULT_SITE_LOCATION.lng}&key=${apiKey}`;
+    if (!projectData.propertyCoordinates?.lat || !projectData.propertyCoordinates?.lng) {
+      return null;
     }
-    
-    const factory = FACTORY_LOCATIONS[selectedFactory];
-    return `https://maps.googleapis.com/maps/api/staticmap?center=${DEFAULT_SITE_LOCATION.lat},${DEFAULT_SITE_LOCATION.lng}&zoom=6&size=800x400&markers=color:0xF59E0B|${factory.lat},${factory.lng}|label:F&markers=color:0x2D5A3D|${DEFAULT_SITE_LOCATION.lat},${DEFAULT_SITE_LOCATION.lng}|label:S&key=${apiKey}`;
+
+    const siteLat = projectData.propertyCoordinates.lat;
+    const siteLng = projectData.propertyCoordinates.lng;
+
+    // Get partner markers (up to 10)
+    const partnerMarkers = filteredPartners.slice(0, 10).map((p) => {
+      return `color:0xF59E0B|${p.lat},${p.lng}`;
+    }).join('&markers=');
+
+    return `https://maps.googleapis.com/maps/api/staticmap?center=${siteLat},${siteLng}&zoom=4&size=800x400&markers=color:0x2D5A3D|label:S|${siteLat},${siteLng}${partnerMarkers ? '&markers=' + partnerMarkers : ''}&key=${apiKey}`;
+  };
+
+  // Generate logistics map URL using project site and factory locations
+  const getLogisticsMapUrl = () => {
+    const siteLat = projectData.propertyCoordinates?.lat;
+    const siteLng = projectData.propertyCoordinates?.lng;
+    const factoryLat = projectData.factoryCoordinates?.lat;
+    const factoryLng = projectData.factoryCoordinates?.lng;
+
+    // If no site location, can't show map
+    if (!siteLat || !siteLng) {
+      return null;
+    }
+
+    // If no factory location, show only site
+    if (!factoryLat || !factoryLng) {
+      return `https://maps.googleapis.com/maps/api/staticmap?center=${siteLat},${siteLng}&zoom=6&size=800x400&markers=color:0x2D5A3D|label:S|${siteLat},${siteLng}&key=${apiKey}`;
+    }
+
+    // Show both factory and site
+    return `https://maps.googleapis.com/maps/api/staticmap?center=${siteLat},${siteLng}&zoom=6&size=800x400&markers=color:0xF59E0B|label:F|${factoryLat},${factoryLng}&markers=color:0x2D5A3D|label:S|${siteLat},${siteLng}&key=${apiKey}`;
   };
 
   const filteredPartners = DUMMY_PARTNERS.filter(partner => {
@@ -288,6 +306,7 @@ const OtherFactorsTab = () => {
             <p style={{ fontSize: FONTS.sizes.md, color: '#4b5563', marginBottom: '15px' }}>
               A factory that can't deliver. A GC misaligned with modular logic. Scope creep that derails costs. We mitigate these risks through a rigorous 4-pillar evaluation framework ensuring long-term success.
             </p>
+<<<<<<< HEAD
             
             {/* Google Maps - Partner Locations */}
             {apiKey && (
@@ -295,15 +314,34 @@ const OtherFactorsTab = () => {
                 <img 
                   src={getMarketplaceMapUrl()} 
                   alt="Partner Locations Map" 
+=======
+
+            {/* Marketplace Map */}
+            {apiKey && getMarketplaceMapUrl() && (
+              <div style={{ marginBottom: '20px', borderRadius: '8px', overflow: 'hidden', border: '2px solid #e5e7eb' }}>
+                <img
+                  src={getMarketplaceMapUrl()}
+                  alt="Partner Locations Map"
+>>>>>>> claude/fix-factory-location-update-01Myn5PehSv8uSgmQcBsmw42
                   style={{ width: '100%', height: '400px', objectFit: 'cover' }}
-                  onError={() => console.log('Map failed to load')}
+                  onError={(e) => {
+                    console.log('Map failed to load');
+                    e.target.style.display = 'none';
+                  }}
                 />
               </div>
             )}
+<<<<<<< HEAD
             {!apiKey && (
               <div style={{ marginBottom: SPACING['2xl'], padding: '20px', background: COLORS.gold.bg, border: '2px solid #FCD34D', borderRadius: BORDERS.radius.md, textAlign: 'center' }}>
                 <p style={{ fontSize: FONTS.sizes.base, color: COLORS.gold.dark, margin: 0 }}>
                   📍 Google Maps will display partner locations once API key is configured
+=======
+            {(!apiKey || !getMarketplaceMapUrl()) && (
+              <div style={{ marginBottom: '20px', padding: '20px', background: '#FEF3C7', border: '2px solid #FCD34D', borderRadius: '8px', textAlign: 'center' }}>
+                <p style={{ fontSize: '14px', color: '#92400E', margin: 0 }}>
+                  {!apiKey ? '📍 Google Maps API key not configured' : '📍 Set project site location in Project tab to view map'}
+>>>>>>> claude/fix-factory-location-update-01Myn5PehSv8uSgmQcBsmw42
                 </p>
               </div>
             )}
@@ -491,6 +529,7 @@ const OtherFactorsTab = () => {
             <p style={{ fontSize: FONTS.sizes.md, color: '#4b5563', marginBottom: '15px' }}>
               Transportation clearance, crane staging, site access—we solve these upfront so your setting team executes flawlessly and on schedule.
             </p>
+<<<<<<< HEAD
             
             {/* Factory Selection for Route */}
             <div style={{ marginBottom: '15px' }}>
@@ -522,15 +561,55 @@ const OtherFactorsTab = () => {
                 <img 
                   src={getLogisticsMapUrl()} 
                   alt="Logistics Route Map" 
+=======
+
+            {/* Location Info */}
+            <div style={{ marginBottom: '20px', padding: '12px', background: '#F3F4F6', border: '1px solid #D1D5DB', borderRadius: '8px' }}>
+              <div style={{ marginBottom: '8px' }}>
+                <strong style={{ fontSize: '14px', color: '#111827' }}>Project Site:</strong>
+                <span style={{ fontSize: '14px', color: '#4B5563', marginLeft: '8px' }}>
+                  {projectData.propertyLocation || 'Not set'}
+                </span>
+              </div>
+              <div>
+                <strong style={{ fontSize: '14px', color: '#111827' }}>Factory Location:</strong>
+                <span style={{ fontSize: '14px', color: '#4B5563', marginLeft: '8px' }}>
+                  {projectData.factoryLocation || 'Not set'}
+                </span>
+              </div>
+              {!projectData.propertyLocation || !projectData.factoryLocation ? (
+                <div style={{ marginTop: '8px', fontSize: '12px', color: '#6B7280', fontStyle: 'italic' }}>
+                  Set both locations in Project tab to view route map
+                </div>
+              ) : null}
+            </div>
+
+            {/* Logistics Map */}
+            {apiKey && getLogisticsMapUrl() && (
+              <div style={{ marginBottom: '20px', borderRadius: '8px', overflow: 'hidden', border: '2px solid #e5e7eb' }}>
+                <img
+                  src={getLogisticsMapUrl()}
+                  alt="Factory to Site Route Map"
+>>>>>>> claude/fix-factory-location-update-01Myn5PehSv8uSgmQcBsmw42
                   style={{ width: '100%', height: '400px', objectFit: 'cover' }}
-                  onError={() => console.log('Map failed to load')}
+                  onError={(e) => {
+                    console.log('Map failed to load');
+                    e.target.style.display = 'none';
+                  }}
                 />
               </div>
             )}
+<<<<<<< HEAD
             {!apiKey && (
               <div style={{ marginBottom: SPACING['2xl'], padding: '20px', background: COLORS.gold.bg, border: '2px solid #FCD34D', borderRadius: BORDERS.radius.md, textAlign: 'center' }}>
                 <p style={{ fontSize: FONTS.sizes.base, color: COLORS.gold.dark, margin: 0 }}>
                   🗺️ Route mapping will display once API key is configured
+=======
+            {(!apiKey || !getLogisticsMapUrl()) && (
+              <div style={{ marginBottom: '20px', padding: '20px', background: '#FEF3C7', border: '2px solid #FCD34D', borderRadius: '8px', textAlign: 'center' }}>
+                <p style={{ fontSize: '14px', color: '#92400E', margin: 0 }}>
+                  {!apiKey ? '🗺️ Google Maps API key not configured' : '🗺️ Set project site and factory locations in Project tab to view map'}
+>>>>>>> claude/fix-factory-location-update-01Myn5PehSv8uSgmQcBsmw42
                 </p>
               </div>
             )}

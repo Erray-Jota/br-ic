@@ -27,7 +27,7 @@ export const useCalculations = (projectData) => {
     const floorMultiplier = calculateFloorMultiplier(floors);
 
     // Use Cost Engine
-    const costs = calculateBaseCosts(totalOptimized, floors, propertyFactor || 0.87, factoryFactor || 0.87);
+    const costs = calculateBaseCosts(totalOptimized, floors, propertyFactor || 1.0, factoryFactor || 1.0);
     const costMetrics = calculateCostMetrics(costs, totalOptimized, totalGSF);
     const timeMetrics = calculateTimeSavings(floors, totalOptimized);
 
