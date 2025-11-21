@@ -91,6 +91,7 @@ export const ASSET_PATHS = {
   VIDEO_4_FLOORS: "/images/4 Story.mp4",
   VIDEO_5_FLOORS: "/images/5 Story.mp4",
   VIDEO_TRANSFORMING: "/images/Transforming Prefab.mp4",
+  VIDEO_WALKTHROUGH: "/images/Walkthrough.mp4",
   UNIT_STUDIO: "/images/STUDIO.png",
   UNIT_1BR_CORNER: "/images/1BD Corner.png",
   UNIT_1BR_INLINE: "/images/1 Bed inline.png",

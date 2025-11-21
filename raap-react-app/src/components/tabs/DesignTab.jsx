@@ -93,8 +93,8 @@ const DesignTab = () => {
       {activeSubtabs.design === 2 && (
         <div>
           <div style={{ background: 'white', borderRadius: '8px', overflow: 'hidden', marginBottom: '12px', height: isEffectivelyMobile ? '200px' : '380px', boxShadow: '0 4px 8px rgba(0,0,0,0.15)' }}>
-            <video controls loop muted autoPlay style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', background: '#e5e7eb' }}>
-              <source src="/attached_assets/walkthrough_1763751501840.mp4" type="video/mp4" />
+            <video controls loop muted autoPlay playsInline style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', background: '#e5e7eb' }}>
+              <source src={ASSET_PATHS.VIDEO_WALKTHROUGH} type="video/mp4" />
             </video>
           </div>
 
