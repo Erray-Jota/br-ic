@@ -156,7 +156,7 @@ const CostAnalysisTab = () => {
       {activeSubtabs.cost === 1 && (
         <div>
           {/* COST SUMMARY BOX (3 Horizontal Boxes) */}
-          <div className="grid-3" style={{ gap: '12px', marginBottom: '12px', display: 'grid', gridTemplateColumns: isEffectivelyMobile ? '1fr' : 'repeat(3, 1fr)' }}>
+          <div className="grid-3" style={{ gap: '12px', marginBottom: '12px', display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)' }}>
             {/* Box 1: Site Build Costs */}
             <div style={{ background: 'white', padding: '16px', borderRadius: '8px', boxShadow: '0 1px 3px rgba(0,0,0,0.05)', border: '1px solid #e5e7eb', textAlign: 'center' }}>
               <div style={{ fontSize: '11px', fontWeight: 700, color: '#6b7280', marginBottom: '8px', textTransform: 'uppercase' }}>Site Build Cost</div>
@@ -429,6 +429,25 @@ const CostAnalysisTab = () => {
           </div>
           )}
 
+          {/* Unit Mix Display */}
+          <div style={{ background: 'white', padding: '12px', borderRadius: '8px', boxShadow: '0 1px 3px rgba(0,0,0,0.05)', marginBottom: '12px', border: '1px solid #e5e7eb' }}>
+            <h3 style={{ fontSize: '13px', fontWeight: 700, color: '#111827', marginBottom: '10px' }}>Unit Mix: Target vs Actual</h3>
+            <div className="grid-4" style={{ gap: '8px' }}>
+              {['Studio', '1BR', '2BR', '3BR'].map((label, i) => {
+                const key = ['studio', 'oneBed', 'twoBed', 'threeBed'][i];
+                const target = projectData.targets[key];
+                const actual = calculations.optimized[key];
+                return (
+                  <div key={key} style={{ padding: '10px', background: '#f9fafb', borderRadius: '6px', textAlign: 'center', border: '1px solid #e5e7eb' }}>
+                    <div style={{ fontSize: '11px', fontWeight: 600, color: '#6b7280', marginBottom: '6px' }}>{label}</div>
+                    <div style={{ fontSize: '14px', fontWeight: 700, color: '#111827', marginBottom: '3px' }}>Target: {target}</div>
+                    <div style={{ fontSize: '14px', fontWeight: 700, color: '#16a34a' }}>Actual: {actual}</div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
           {/* Entity Selection for Breakdown Table */}
           <div style={{ background: 'white', padding: '12px', borderRadius: '8px', boxShadow: '0 1px 3px rgba(0,0,0,0.05)', marginBottom: '12px', border: '1px solid #e5e7eb', display: 'grid', gridTemplateColumns: isEffectivelyMobile ? '1fr 1fr' : '1fr 1fr', gap: '12px' }}>
             <div>
@@ -460,71 +479,115 @@ const CostAnalysisTab = () => {
 
             {!outputsCollapsed && (
               <div style={{ marginTop: '12px', overflowX: 'auto' }}>
-                <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '14px' }}>
-                  <thead>
-                    <tr style={{ background: '#f3f4f6', borderBottom: '2px solid #d1d5db' }}>
-                      <th style={{ padding: '10px', textAlign: 'left', fontWeight: 700 }}>Division</th>
-                      <th style={{ padding: '10px', textAlign: 'right', fontWeight: 700 }}>{selectedEntity1 === 'siteBuild' ? 'Site Built' : selectedEntity1 === 'modularGC' ? 'Modular GC' : selectedEntity1 === 'fabricator' ? 'Fabricator' : 'Total Modular'}</th>
-                      <th style={{ padding: '10px', textAlign: 'right', fontWeight: 700, fontSize: '12px', color: '#6b7280' }}>%</th>
-                      <th style={{ padding: '10px', textAlign: 'right', fontWeight: 700 }}>{selectedEntity2 === 'siteBuild' ? 'Site Built' : selectedEntity2 === 'modularGC' ? 'Modular GC' : selectedEntity2 === 'fabricator' ? 'Fabricator' : 'Total Modular'}</th>
-                      <th style={{ padding: '10px', textAlign: 'right', fontWeight: 700, fontSize: '12px', color: '#6b7280' }}>%</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {Object.entries(groupedDivisions).map(([groupName, divisions]) => {
-                      const costKey1 = selectedEntity1 === 'siteBuild' ? 'siteCost' : selectedEntity1 === 'modularGC' ? 'gcCost' : selectedEntity1 === 'fabricator' ? 'fabCost' : 'modularTotal';
-                      const costKey2 = selectedEntity2 === 'siteBuild' ? 'siteCost' : selectedEntity2 === 'modularGC' ? 'gcCost' : selectedEntity2 === 'fabricator' ? 'fabCost' : 'modularTotal';
-                      const groupCost1 = divisions.reduce((sum, d) => sum + d[costKey1], 0);
-                      const groupCost2 = divisions.reduce((sum, d) => sum + d[costKey2], 0);
-                      const totalCost1 = divisionCosts.totals[costKey1];
-                      const totalCost2 = divisionCosts.totals[costKey2];
-                      const pct1 = (groupCost1 / totalCost1 * 100).toFixed(1);
-                      const pct2 = (groupCost2 / totalCost2 * 100).toFixed(1);
-                      const isCollapsed = collapsedGroups[groupName];
+                {isEffectivelyMobile ? (
+                  // Mobile: Only show $ amounts (no %)
+                  <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
+                    <thead>
+                      <tr style={{ background: '#f3f4f6', borderBottom: '2px solid #d1d5db' }}>
+                        <th style={{ padding: '8px', textAlign: 'left', fontWeight: 700, maxWidth: '120px', fontSize: '12px' }}>Division</th>
+                        <th style={{ padding: '8px', textAlign: 'right', fontWeight: 700, fontSize: '13px' }}>{selectedEntity1 === 'siteBuild' ? 'Site Built' : selectedEntity1 === 'modularGC' ? 'Modular GC' : selectedEntity1 === 'fabricator' ? 'Fabricator' : 'Total'}</th>
+                        <th style={{ padding: '8px', textAlign: 'right', fontWeight: 700, fontSize: '13px' }}>{selectedEntity2 === 'siteBuild' ? 'Site Built' : selectedEntity2 === 'modularGC' ? 'Modular GC' : selectedEntity2 === 'fabricator' ? 'Fabricator' : 'Total'}</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {Object.entries(groupedDivisions).map(([groupName, divisions]) => {
+                        const costKey1 = selectedEntity1 === 'siteBuild' ? 'siteCost' : selectedEntity1 === 'modularGC' ? 'gcCost' : selectedEntity1 === 'fabricator' ? 'fabCost' : 'modularTotal';
+                        const costKey2 = selectedEntity2 === 'siteBuild' ? 'siteCost' : selectedEntity2 === 'modularGC' ? 'gcCost' : selectedEntity2 === 'fabricator' ? 'fabCost' : 'modularTotal';
+                        const groupCost1 = divisions.reduce((sum, d) => sum + d[costKey1], 0);
+                        const groupCost2 = divisions.reduce((sum, d) => sum + d[costKey2], 0);
+                        const isCollapsed = collapsedGroups[groupName];
 
-                      return (
-                        <>
-                          {/* Group Header */}
-                          <tr key={`group-${groupName}`} style={{ background: '#e5e7eb', borderTop: '2px solid #9ca3af', cursor: 'pointer', userSelect: 'none' }} onClick={() => toggleGroup(groupName)}>
-                            <td style={{ padding: '10px', fontWeight: 700, fontSize: '14px', color: '#111827' }}>
-                              <span style={{ marginRight: '8px' }}>{isCollapsed ? '▶' : '▼'}</span>{groupName}
-                            </td>
-                            <td style={{ padding: '10px', textAlign: 'right', fontWeight: 700 }}>{formatCurrency(groupCost1)}</td>
-                            <td style={{ padding: '10px', textAlign: 'right', fontWeight: 600, color: '#6b7280', fontSize: '12px' }}>{pct1}%</td>
-                            <td style={{ padding: '10px', textAlign: 'right', fontWeight: 700 }}>{formatCurrency(groupCost2)}</td>
-                            <td style={{ padding: '10px', textAlign: 'right', fontWeight: 600, color: '#6b7280', fontSize: '12px' }}>{pct2}%</td>
-                          </tr>
-
-                          {/* Division Rows */}
-                          {!isCollapsed && divisions.map((div, i) => {
-                            const divPct1 = (div[costKey1] / totalCost1 * 100).toFixed(2);
-                            const divPct2 = (div[costKey2] / totalCost2 * 100).toFixed(2);
-                            return (
+                        return (
+                          <>
+                            <tr key={`group-${groupName}`} style={{ background: '#e5e7eb', borderTop: '1px solid #9ca3af', cursor: 'pointer', userSelect: 'none' }} onClick={() => toggleGroup(groupName)}>
+                              <td style={{ padding: '6px', fontWeight: 700, fontSize: '12px', color: '#111827', maxWidth: '120px', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                                <span style={{ marginRight: '4px' }}>{isCollapsed ? '▶' : '▼'}</span>{groupName}
+                              </td>
+                              <td style={{ padding: '6px', textAlign: 'right', fontWeight: 600, fontSize: '13px' }}>{formatCurrency(groupCost1)}</td>
+                              <td style={{ padding: '6px', textAlign: 'right', fontWeight: 600, fontSize: '13px' }}>{formatCurrency(groupCost2)}</td>
+                            </tr>
+                            {!isCollapsed && divisions.map((div, i) => (
                               <tr key={`${groupName}-${i}`} style={{ borderBottom: '1px solid #e5e7eb' }}>
-                                <td style={{ padding: '8px', paddingLeft: '32px', fontSize: '12px' }}>
-                                  <span style={{ fontWeight: 600, color: '#6b7280', marginRight: '6px' }}>{div.code}</span>{div.name}
+                                <td style={{ padding: '4px', paddingLeft: '20px', fontSize: '11px', maxWidth: '120px', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                                  <span style={{ fontWeight: 600, color: '#6b7280', marginRight: '4px' }}>{div.code}</span><span style={{ color: '#6b7280' }}>{div.name}</span>
                                 </td>
-                                <td style={{ padding: '8px', textAlign: 'right', fontSize: '12px' }}>{formatCurrency(div[costKey1])}</td>
-                                <td style={{ padding: '8px', textAlign: 'right', fontSize: '11px', color: '#6b7280' }}>{divPct1}%</td>
-                                <td style={{ padding: '8px', textAlign: 'right', fontSize: '12px' }}>{formatCurrency(div[costKey2])}</td>
-                                <td style={{ padding: '8px', textAlign: 'right', fontSize: '11px', color: '#6b7280' }}>{divPct2}%</td>
+                                <td style={{ padding: '4px', textAlign: 'right', fontSize: '12px' }}>{formatCurrency(div[costKey1])}</td>
+                                <td style={{ padding: '4px', textAlign: 'right', fontSize: '12px' }}>{formatCurrency(div[costKey2])}</td>
                               </tr>
-                            );
-                          })}
-                        </>
-                      );
-                    })}
+                            ))}
+                          </>
+                        );
+                      })}
+                      <tr style={{ background: '#374151', color: 'white', borderTop: '2px solid #111827' }}>
+                        <td style={{ padding: '8px', fontWeight: 700, fontSize: '12px' }}>TOTAL</td>
+                        <td style={{ padding: '8px', textAlign: 'right', fontWeight: 700, fontSize: '14px' }}>{formatMega(divisionCosts.totals[selectedEntity1 === 'siteBuild' ? 'siteCost' : selectedEntity1 === 'modularGC' ? 'gcCost' : selectedEntity1 === 'fabricator' ? 'fabCost' : 'modularTotal'])}</td>
+                        <td style={{ padding: '8px', textAlign: 'right', fontWeight: 700, fontSize: '14px' }}>{formatMega(divisionCosts.totals[selectedEntity2 === 'siteBuild' ? 'siteCost' : selectedEntity2 === 'modularGC' ? 'gcCost' : selectedEntity2 === 'fabricator' ? 'fabCost' : 'modularTotal'])}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                ) : (
+                  // Desktop: Show both $ and %
+                  <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '15px' }}>
+                    <thead>
+                      <tr style={{ background: '#f3f4f6', borderBottom: '2px solid #d1d5db' }}>
+                        <th style={{ padding: '10px', textAlign: 'left', fontWeight: 700, width: '25%' }}>Division</th>
+                        <th style={{ padding: '10px', textAlign: 'right', fontWeight: 700, flex: 1 }}>{selectedEntity1 === 'siteBuild' ? 'Site Built' : selectedEntity1 === 'modularGC' ? 'Modular GC' : selectedEntity1 === 'fabricator' ? 'Fabricator' : 'Total Modular'}</th>
+                        <th style={{ padding: '10px', textAlign: 'right', fontWeight: 700, fontSize: '12px', color: '#6b7280', width: '60px' }}>%</th>
+                        <th style={{ padding: '10px', textAlign: 'right', fontWeight: 700, flex: 1 }}>{selectedEntity2 === 'siteBuild' ? 'Site Built' : selectedEntity2 === 'modularGC' ? 'Modular GC' : selectedEntity2 === 'fabricator' ? 'Fabricator' : 'Total Modular'}</th>
+                        <th style={{ padding: '10px', textAlign: 'right', fontWeight: 700, fontSize: '12px', color: '#6b7280', width: '60px' }}>%</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {Object.entries(groupedDivisions).map(([groupName, divisions]) => {
+                        const costKey1 = selectedEntity1 === 'siteBuild' ? 'siteCost' : selectedEntity1 === 'modularGC' ? 'gcCost' : selectedEntity1 === 'fabricator' ? 'fabCost' : 'modularTotal';
+                        const costKey2 = selectedEntity2 === 'siteBuild' ? 'siteCost' : selectedEntity2 === 'modularGC' ? 'gcCost' : selectedEntity2 === 'fabricator' ? 'fabCost' : 'modularTotal';
+                        const groupCost1 = divisions.reduce((sum, d) => sum + d[costKey1], 0);
+                        const groupCost2 = divisions.reduce((sum, d) => sum + d[costKey2], 0);
+                        const totalCost1 = divisionCosts.totals[costKey1];
+                        const totalCost2 = divisionCosts.totals[costKey2];
+                        const pct1 = (groupCost1 / totalCost1 * 100).toFixed(1);
+                        const pct2 = (groupCost2 / totalCost2 * 100).toFixed(1);
+                        const isCollapsed = collapsedGroups[groupName];
 
-                    {/* TOTAL ROW */}
-                    <tr style={{ background: '#374151', color: 'white', borderTop: '3px solid #111827' }}>
-                      <td style={{ padding: '12px', fontWeight: 700 }}>TOTAL</td>
-                      <td style={{ padding: '12px', textAlign: 'right', fontWeight: 700 }}>{formatMega(divisionCosts.totals[selectedEntity1 === 'siteBuild' ? 'siteCost' : selectedEntity1 === 'modularGC' ? 'gcCost' : selectedEntity1 === 'fabricator' ? 'fabCost' : 'modularTotal'])}</td>
-                      <td style={{ padding: '12px', textAlign: 'right', fontWeight: 600, fontSize: '12px' }}>100%</td>
-                      <td style={{ padding: '12px', textAlign: 'right', fontWeight: 700 }}>{formatMega(divisionCosts.totals[selectedEntity2 === 'siteBuild' ? 'siteCost' : selectedEntity2 === 'modularGC' ? 'gcCost' : selectedEntity2 === 'fabricator' ? 'fabCost' : 'modularTotal'])}</td>
-                      <td style={{ padding: '12px', textAlign: 'right', fontWeight: 600, fontSize: '12px' }}>100%</td>
-                    </tr>
-                  </tbody>
-                </table>
+                        return (
+                          <>
+                            <tr key={`group-${groupName}`} style={{ background: '#e5e7eb', borderTop: '2px solid #9ca3af', cursor: 'pointer', userSelect: 'none' }} onClick={() => toggleGroup(groupName)}>
+                              <td style={{ padding: '10px', fontWeight: 700, fontSize: '15px', color: '#111827' }}>
+                                <span style={{ marginRight: '8px' }}>{isCollapsed ? '▶' : '▼'}</span>{groupName}
+                              </td>
+                              <td style={{ padding: '10px', textAlign: 'right', fontWeight: 700, fontSize: '15px' }}>{formatCurrency(groupCost1)}</td>
+                              <td style={{ padding: '10px', textAlign: 'right', fontWeight: 600, color: '#6b7280', fontSize: '13px' }}>{pct1}%</td>
+                              <td style={{ padding: '10px', textAlign: 'right', fontWeight: 700, fontSize: '15px' }}>{formatCurrency(groupCost2)}</td>
+                              <td style={{ padding: '10px', textAlign: 'right', fontWeight: 600, color: '#6b7280', fontSize: '13px' }}>{pct2}%</td>
+                            </tr>
+                            {!isCollapsed && divisions.map((div, i) => {
+                              const divPct1 = (div[costKey1] / totalCost1 * 100).toFixed(2);
+                              const divPct2 = (div[costKey2] / totalCost2 * 100).toFixed(2);
+                              return (
+                                <tr key={`${groupName}-${i}`} style={{ borderBottom: '1px solid #e5e7eb' }}>
+                                  <td style={{ padding: '8px', paddingLeft: '32px', fontSize: '13px' }}>
+                                    <span style={{ fontWeight: 600, color: '#6b7280', marginRight: '6px' }}>{div.code}</span>{div.name}
+                                  </td>
+                                  <td style={{ padding: '8px', textAlign: 'right', fontSize: '14px', fontWeight: 600 }}>{formatCurrency(div[costKey1])}</td>
+                                  <td style={{ padding: '8px', textAlign: 'right', fontSize: '12px', color: '#6b7280' }}>{divPct1}%</td>
+                                  <td style={{ padding: '8px', textAlign: 'right', fontSize: '14px', fontWeight: 600 }}>{formatCurrency(div[costKey2])}</td>
+                                  <td style={{ padding: '8px', textAlign: 'right', fontSize: '12px', color: '#6b7280' }}>{divPct2}%</td>
+                                </tr>
+                              );
+                            })}
+                          </>
+                        );
+                      })}
+                      <tr style={{ background: '#374151', color: 'white', borderTop: '3px solid #111827' }}>
+                        <td style={{ padding: '12px', fontWeight: 700, fontSize: '15px' }}>TOTAL</td>
+                        <td style={{ padding: '12px', textAlign: 'right', fontWeight: 700, fontSize: '16px' }}>{formatMega(divisionCosts.totals[selectedEntity1 === 'siteBuild' ? 'siteCost' : selectedEntity1 === 'modularGC' ? 'gcCost' : selectedEntity1 === 'fabricator' ? 'fabCost' : 'modularTotal'])}</td>
+                        <td style={{ padding: '12px', textAlign: 'right', fontWeight: 600, fontSize: '13px' }}>100%</td>
+                        <td style={{ padding: '12px', textAlign: 'right', fontWeight: 700, fontSize: '16px' }}>{formatMega(divisionCosts.totals[selectedEntity2 === 'siteBuild' ? 'siteCost' : selectedEntity2 === 'modularGC' ? 'gcCost' : selectedEntity2 === 'fabricator' ? 'fabCost' : 'modularTotal'])}</td>
+                        <td style={{ padding: '12px', textAlign: 'right', fontWeight: 600, fontSize: '13px' }}>100%</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                )}
               </div>
             )}
           </div>
