@@ -290,7 +290,7 @@ const CostAnalysisTab = () => {
                 {/* Target Unit Mix (4 Editable Boxes) */}
                 <div>
                   <label className="form-label">Target Unit Mix</label>
-                  <div className="grid-4" style={{ gap: '8px' }}>
+                  <div className="grid-4" style={{ gap: '8px', marginBottom: '12px' }}>
                     {['Studio', '1BR', '2BR', '3BR'].map((label, i) => {
                       const key = ['studio', 'oneBed', 'twoBed', 'threeBed'][i];
                       return (
@@ -306,6 +306,21 @@ const CostAnalysisTab = () => {
                             })}
                             style={{ padding: '6px', textAlign: 'center', fontWeight: 700 }}
                           />
+                        </div>
+                      );
+                    })}
+                  </div>
+
+                  {/* Actual Unit Mix (4 Display Boxes) */}
+                  <label className="form-label">Actual Unit Mix</label>
+                  <div className="grid-4" style={{ gap: '8px', marginBottom: '12px' }}>
+                    {['Studio', '1BR', '2BR', '3BR'].map((label, i) => {
+                      const key = ['studio', 'oneBed', 'twoBed', 'threeBed'][i];
+                      const actual = calculations.optimized[key];
+                      return (
+                        <div key={key} style={{ padding: '8px', background: '#f0fdf4', borderRadius: '6px', textAlign: 'center', border: '1px solid #86efac' }}>
+                          <div style={{ fontSize: '11px', fontWeight: 600, color: '#15803D', marginBottom: '4px' }}>{label}</div>
+                          <div style={{ fontSize: '16px', fontWeight: 700, color: '#111827' }}>{actual}</div>
                         </div>
                       );
                     })}
@@ -429,24 +444,24 @@ const CostAnalysisTab = () => {
           </div>
           )}
 
-          {/* Unit Mix Display */}
-          <div style={{ background: 'white', padding: '12px', borderRadius: '8px', boxShadow: '0 1px 3px rgba(0,0,0,0.05)', marginBottom: '12px', border: '1px solid #e5e7eb' }}>
-            <h3 style={{ fontSize: '13px', fontWeight: 700, color: '#111827', marginBottom: '10px' }}>Unit Mix: Target vs Actual</h3>
-            <div className="grid-4" style={{ gap: '8px' }}>
-              {['Studio', '1BR', '2BR', '3BR'].map((label, i) => {
-                const key = ['studio', 'oneBed', 'twoBed', 'threeBed'][i];
-                const target = projectData.targets[key];
-                const actual = calculations.optimized[key];
-                return (
-                  <div key={key} style={{ padding: '10px', background: '#f9fafb', borderRadius: '6px', textAlign: 'center', border: '1px solid #e5e7eb' }}>
-                    <div style={{ fontSize: '11px', fontWeight: 600, color: '#6b7280', marginBottom: '6px' }}>{label}</div>
-                    <div style={{ fontSize: '14px', fontWeight: 700, color: '#111827', marginBottom: '3px' }}>Target: {target}</div>
-                    <div style={{ fontSize: '14px', fontWeight: 700, color: '#16a34a' }}>Actual: {actual}</div>
-                  </div>
-                );
-              })}
+          {/* MOBILE ONLY: Actual Unit Mix (2 rows of 4 boxes above entity selection) */}
+          {isEffectivelyMobile && (
+            <div style={{ marginBottom: '12px' }}>
+              <div style={{ fontSize: '13px', fontWeight: 700, color: '#111827', marginBottom: '8px', paddingLeft: '4px' }}>Actual Unit Mix</div>
+              <div className="grid-4" style={{ gap: '8px' }}>
+                {['Studio', '1BR', '2BR', '3BR'].map((label, i) => {
+                  const key = ['studio', 'oneBed', 'twoBed', 'threeBed'][i];
+                  const actual = calculations.optimized[key];
+                  return (
+                    <div key={key} style={{ padding: '8px', background: '#f0fdf4', borderRadius: '6px', textAlign: 'center', border: '1px solid #86efac' }}>
+                      <div style={{ fontSize: '10px', fontWeight: 600, color: '#15803D', marginBottom: '4px' }}>{label}</div>
+                      <div style={{ fontSize: '16px', fontWeight: 700, color: '#111827' }}>{actual}</div>
+                    </div>
+                  );
+                })}
+              </div>
             </div>
-          </div>
+          )}
 
           {/* Entity Selection for Breakdown Table */}
           <div style={{ background: 'white', padding: '12px', borderRadius: '8px', boxShadow: '0 1px 3px rgba(0,0,0,0.05)', marginBottom: '12px', border: '1px solid #e5e7eb', display: 'grid', gridTemplateColumns: isEffectivelyMobile ? '1fr 1fr' : '1fr 1fr', gap: '12px' }}>
