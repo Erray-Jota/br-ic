@@ -457,7 +457,7 @@ export const calculateBuildingGSF = (optimized, floors, lobbyType = 2, skus = {}
     sku_3_corner = 0,
   } = skus;
 
-  // Calculate per-floor unit GSF using exact SKU dimensions
+  // Calculate per-floor unit GSF using exact SKU dimensions (per side)
   const perFloorUnitGSF =
     sku_studio * UNIT_SIZES_GSF.studio +
     sku_1_corner * UNIT_SIZES_GSF.oneCorner +
@@ -466,21 +466,36 @@ export const calculateBuildingGSF = (optimized, floors, lobbyType = 2, skus = {}
     sku_2_inline * UNIT_SIZES_GSF.twoInline +
     sku_3_corner * UNIT_SIZES_GSF.threeCorner;
 
-  const totalUnitGSF = perFloorUnitGSF * floors;
+  // Per-floor unit GSF for both sides combined
+  const perFloorBothSidesUnitGSF = perFloorUnitGSF * 2;
+  const totalUnitGSF = perFloorBothSidesUnitGSF * floors;
 
   // Calculate common area (lobby + stairs) per floor with exact dimensions
   const lobbyGSF = lobbyType === 1 ? COMMON_AREA_DIMS.lobby_1bay : 
                    lobbyType === 4 ? COMMON_AREA_DIMS.lobby_4bay : 
                    COMMON_AREA_DIMS.lobby_2bay;
-  const stairsGSF = COMMON_AREA_DIMS.stairs; // Per side, both sides
+  const stairsGSF = COMMON_AREA_DIMS.stairs; // One stair per floor
   const perFloorCommonGSF = lobbyGSF + stairsGSF;
   const totalCommonGSF = perFloorCommonGSF * floors;
 
   const residentialFloors = floors - podiumCount;
-  const podiumGSFPerFloor = perFloorUnitGSF * 1.2;
+  const podiumGSFPerFloor = perFloorBothSidesUnitGSF * 1.2;
   const totalPodiumGSF = podiumGSFPerFloor * podiumCount;
 
   const totalGSF = totalUnitGSF + totalCommonGSF + totalPodiumGSF;
+
+  // Debug: Log the calculation breakdown
+  if (floors === 5) {
+    console.log('=== GSF CALCULATION BREAKDOWN ===');
+    console.log('SKUs per side per floor:', { sku_studio, sku_1_corner, sku_1_inline, sku_2_corner, sku_2_inline, sku_3_corner });
+    console.log('Per-floor unit GSF (per side):', perFloorUnitGSF.toFixed(1), 'SF');
+    console.log('Per-floor unit GSF (both sides):', perFloorBothSidesUnitGSF.toFixed(1), 'SF');
+    console.log('Total unit GSF (all floors):', totalUnitGSF.toFixed(1), 'SF');
+    console.log('Per-floor common (lobby:', lobbyGSF.toFixed(1), '+ stairs:', stairsGSF.toFixed(1), '):', perFloorCommonGSF.toFixed(1), 'SF');
+    console.log('Total common GSF:', totalCommonGSF.toFixed(1), 'SF');
+    console.log('TOTAL GSF:', totalGSF.toFixed(1), 'SF');
+    console.log('================================');
+  }
 
   const totalUnits = optimized.studio + optimized.oneBed + optimized.twoBed + optimized.threeBed;
 
