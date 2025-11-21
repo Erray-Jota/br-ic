@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useProject } from '../../contexts/ProjectContext';
 import { useCalculations, formatCurrency, formatMega } from '../../hooks/useCalculations';
+import { useMobile } from '../../hooks/useMobile';
 import { MASTER_DIVISIONS } from '../../data/constants';
 import { calculateDivisionCosts, LOCATION_FACTORS as COST_LOCATION_FACTORS, compareScenarios } from '../../engines/costEngine';
 import LocationInput from '../LocationInput';
