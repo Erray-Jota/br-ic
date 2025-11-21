@@ -31,6 +31,10 @@ const OtherFactorsTab = () => {
   };
   
   const getLogisticsMapUrl = () => {
+    // Get site coordinates from project data (or fall back to default)
+    const siteLat = projectData.propertyCoordinates?.lat || DEFAULT_SITE_LOCATION.lat;
+    const siteLng = projectData.propertyCoordinates?.lng || DEFAULT_SITE_LOCATION.lng;
+
     // Check if factory coordinates exist in project data (set from Project tab)
     let factoryLat, factoryLng;
 
@@ -47,11 +51,11 @@ const OtherFactorsTab = () => {
 
     // If no factory location is available, show only the site
     if (!factoryLat || !factoryLng) {
-      return `https://maps.googleapis.com/maps/api/staticmap?center=${DEFAULT_SITE_LOCATION.lat},${DEFAULT_SITE_LOCATION.lng}&zoom=6&size=800x400&markers=color:0x2D5A3D|${DEFAULT_SITE_LOCATION.lat},${DEFAULT_SITE_LOCATION.lng}&key=${apiKey}`;
+      return `https://maps.googleapis.com/maps/api/staticmap?center=${siteLat},${siteLng}&zoom=6&size=800x400&markers=color:0x2D5A3D|${siteLat},${siteLng}|label:S&key=${apiKey}`;
     }
 
     // Show both factory and site locations
-    return `https://maps.googleapis.com/maps/api/staticmap?center=${DEFAULT_SITE_LOCATION.lat},${DEFAULT_SITE_LOCATION.lng}&zoom=6&size=800x400&markers=color:0xF59E0B|${factoryLat},${factoryLng}|label:F&markers=color:0x2D5A3D|${DEFAULT_SITE_LOCATION.lat},${DEFAULT_SITE_LOCATION.lng}|label:S&key=${apiKey}`;
+    return `https://maps.googleapis.com/maps/api/staticmap?center=${siteLat},${siteLng}&zoom=6&size=800x400&markers=color:0xF59E0B|${factoryLat},${factoryLng}|label:F&markers=color:0x2D5A3D|${siteLat},${siteLng}|label:S&key=${apiKey}`;
   };
 
   const filteredPartners = DUMMY_PARTNERS.filter(partner => {
@@ -255,7 +259,29 @@ const OtherFactorsTab = () => {
             <p style={{ fontSize: '16px', color: '#4b5563', marginBottom: '15px' }}>
               Transportation clearance, crane staging, site access—we solve these upfront so your setting team executes flawlessly and on schedule.
             </p>
-            
+
+            {/* Current Factory Location Info */}
+            {projectData.factoryLocation && projectData.factoryCoordinates && (
+              <div style={{ marginBottom: '15px', padding: '12px', background: '#D1FAE5', border: '1px solid #10B981', borderRadius: '8px' }}>
+                <div style={{ fontSize: '14px', color: '#065F46' }}>
+                  <strong>Factory Location:</strong> {projectData.factoryLocation}
+                </div>
+                <div style={{ fontSize: '12px', color: '#047857', marginTop: '4px' }}>
+                  Set in the Project tab • Showing route analysis on map below
+                </div>
+              </div>
+            )}
+            {(!projectData.factoryLocation || !projectData.factoryCoordinates) && (
+              <div style={{ marginBottom: '15px', padding: '12px', background: '#FEF3C7', border: '1px solid #FCD34D', borderRadius: '8px' }}>
+                <div style={{ fontSize: '14px', color: '#92400E' }}>
+                  <strong>Factory Location:</strong> Not set
+                </div>
+                <div style={{ fontSize: '12px', color: '#B45309', marginTop: '4px' }}>
+                  Set factory location in the Project tab to see route analysis
+                </div>
+              </div>
+            )}
+
             {/* Factory Selection for Route */}
             <div style={{ marginBottom: '15px' }}>
               <label style={{ fontSize: '14px', fontWeight: 600, color: '#111827', marginBottom: '8px', display: 'block' }}>
