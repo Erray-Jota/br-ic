@@ -138,32 +138,14 @@
 /* PROJECT INFO BANNER */
 .project-info-banner {
   background: white;
-  padding: 30px 40px;
+  padding: 20px;
   border-radius: 10px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   margin-bottom: 12px;
   border: 2px solid #2D5A3D;
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 40px;
-  align-items: center;
-  justify-items: center;
-  min-height: 100px;
-}
-
-.banner-highlight-column {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-}
-
-.banner-main-value {
-  font-size: 48px;
-  font-weight: 900;
-  line-height: 1;
-  text-align: center;
-  letter-spacing: -0.5px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
 }
 
 .cost-column {
