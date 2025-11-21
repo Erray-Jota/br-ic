@@ -513,134 +513,221 @@
 
 /* Mobile-first: Stack grids vertically on small screens */
 @media (max-width: 768px) {
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    overflow-x: hidden;
+  }
+
   .container {
-    max-width: 100%;
-    padding: 8px 12px 10px;
+    max-width: 100% !important;
+    width: 100% !important;
+    padding: 8px 10px 10px !important;
+    margin: 0 !important;
   }
 
   .header {
-    padding: 8px 6px;
+    padding: 6px 8px;
     margin-bottom: 6px;
+    flex-wrap: wrap;
+    gap: 8px !important;
   }
 
-  .header h1 {
-    font-size: 20px;
+  .header > div:first-child {
+    flex-wrap: wrap;
+    width: 100%;
   }
 
-  .header p {
-    font-size: 16px;
+  .header svg {
+    width: 50px;
+    height: 40px;
+  }
+
+  .header span {
+    font-size: 14px !important;
+    white-space: normal !important;
+    word-break: break-word;
+  }
+
+  .header button {
+    font-size: 11px !important;
+    padding: 6px 10px !important;
+    white-space: nowrap;
   }
 
   .card {
-    padding: 12px;
-    margin-bottom: 10px;
+    padding: 10px;
+    margin-bottom: 8px;
     border-left: 3px solid #2D5A3D;
   }
 
   .card h2 {
-    font-size: 16px;
-    margin-bottom: 8px;
+    font-size: 14px;
+    margin-bottom: 6px;
+    flex-wrap: wrap;
   }
 
   .grid-2 {
-    grid-template-columns: 1fr;
-    gap: 8px;
+    grid-template-columns: 1fr !important;
+    gap: 6px !important;
   }
 
   .grid-3 {
-    grid-template-columns: 1fr;
-    gap: 10px;
+    grid-template-columns: 1fr !important;
+    gap: 8px !important;
   }
 
   .grid-4 {
-    grid-template-columns: 1fr 1fr;
-    gap: 6px;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 6px !important;
   }
 
   .form-label {
-    font-size: 12px;
+    font-size: 11px;
     margin-bottom: 2px;
   }
 
   .form-input,
   .form-select {
-    font-size: 14px;
-    padding: 6px 8px;
+    font-size: 13px;
+    padding: 6px 6px;
+    width: 100%;
   }
 
   .btn {
-    padding: 10px 12px;
-    font-size: 13px;
+    padding: 8px 12px;
+    font-size: 12px;
     min-height: 44px;
-    border-radius: 6px;
+    border-radius: 4px;
   }
 
   .tab-btn {
-    font-size: 12px;
-    padding: 12px 10px;
+    font-size: 11px;
+    padding: 10px 8px;
     white-space: nowrap;
     flex: 1;
   }
 
   .project-info-banner {
-    flex-direction: column;
-    gap: 8px;
-    padding: 12px;
+    grid-template-columns: 1fr !important;
+    gap: 8px !important;
+    padding: 8px !important;
+    margin-bottom: 8px;
+  }
+
+  .design-metrics-banner {
+    grid-template-columns: repeat(2, 1fr) !important;
   }
 
   .cost-column {
-    padding: 8px;
+    padding: 6px !important;
   }
 
-  .small-text {
-    font-size: 12px;
+  .cost-details-inline {
+    gap: 8px !important;
   }
 
-  /* Ensure videos and images are responsive */
-  video, img {
-    max-width: 100% !important;
-    height: auto;
+  .cost-sub-label {
+    font-size: 10px !important;
   }
 
-  /* Reduce padding on subtabs */
-  .subtab-container {
-    margin-top: 8px;
+  .cost-sub-value {
+    font-size: 11px !important;
   }
 
-  .subtab-nav {
-    gap: 4px;
-  }
-
-  .subtab-btn {
-    font-size: 11px;
-    padding: 8px 10px;
-  }
-}
-
-/* Extra small devices (phones in portrait) */
-@media (max-width: 480px) {
-  .header h1 {
-    font-size: 18px;
-  }
-
-  .card h2 {
-    font-size: 14px;
-  }
-
-  .grid-4 {
-    grid-template-columns: 1fr;
-  }
-
-  .form-group {
-    margin-bottom: 3px;
+  .metric-label {
+    font-size: 10px !important;
+    line-height: 1.1 !important;
   }
 
   .metric-main-value {
     font-size: 24px !important;
   }
 
+  .small-text {
+    font-size: 11px;
+  }
+
+  /* Ensure videos and images are responsive */
+  video, img {
+    max-width: 100% !important;
+    width: 100% !important;
+    height: auto !important;
+  }
+
+  /* Reduce padding on subtabs */
+  .subtab-container {
+    margin-top: 6px;
+  }
+
+  .subtab-nav {
+    gap: 3px;
+    flex-wrap: wrap;
+  }
+
+  .subtab-btn {
+    font-size: 10px;
+    padding: 6px 8px;
+    flex: 1;
+    min-width: 60px;
+  }
+
+  .unit-input-container {
+    padding: 6px !important;
+  }
+
+  .proposed-unit-mix-item {
+    padding: 6px !important;
+  }
+
+  .time-metrics-row {
+    gap: 6px !important;
+  }
+
+  .time-metric-group {
+    padding: 6px !important;
+  }
+}
+
+/* Extra small devices (phones in portrait) */
+@media (max-width: 480px) {
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .header h1 {
+    font-size: 16px;
+  }
+
+  .card h2 {
+    font-size: 13px;
+  }
+
+  .grid-4 {
+    grid-template-columns: 1fr !important;
+  }
+
+  .design-metrics-banner {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  .form-group {
+    margin-bottom: 2px;
+  }
+
+  .metric-main-value {
+    font-size: 20px !important;
+  }
+
   .metric-label {
-    font-size: 10px !important;
+    font-size: 9px !important;
+  }
+
+  .container {
+    padding: 6px 8px !important;
   }
 }
 

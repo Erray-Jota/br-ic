@@ -17,9 +17,9 @@ const ProjectInfoBanner = ({ calculations }) => {
   const formatUnitsK = (amount) => formatCurrency(amount / 1000) + 'K';
 
   return (
-    <div className="project-info-banner">
+    <div className="project-info-banner" style={{ overflowX: 'hidden' }}>
       {/* Site Cost Column */}
-      <div className="cost-column">
+      <div className="cost-column" style={{ minWidth: 0 }}>
         <div className="metric-label">SITE COST (EST)</div>
         <div
           className="metric-main-value"
@@ -40,7 +40,7 @@ const ProjectInfoBanner = ({ calculations }) => {
       </div>
 
       {/* Modular Cost Column */}
-      <div className="cost-column">
+      <div className="cost-column" style={{ minWidth: 0 }}>
         <div className="metric-label">MODULAR COST (EST)</div>
         <div
           className="metric-main-value"
@@ -61,7 +61,7 @@ const ProjectInfoBanner = ({ calculations }) => {
       </div>
 
       {/* Time Column */}
-      <div className="time-column">
+      <div className="time-column" style={{ minWidth: 0 }}>
         <div className="time-metrics-row">
           <div className="time-metric-group">
             <div className="time-label">SITE BUILD TIME</div>
