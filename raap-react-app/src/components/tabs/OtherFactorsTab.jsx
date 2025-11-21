@@ -352,88 +352,88 @@ const OtherFactorsTab = () => {
         {activeSubtabs.factors === 3 && (
           <div style={{ padding: '0 8px' }}>
             {/* Main Hero Section */}
-            <div style={{ background: 'linear-gradient(135deg, #f0fdf4 0%, #e8f5e9 100%)', padding: '24px', borderRadius: '12px', border: '3px solid #16A34A', marginBottom: '24px', boxShadow: '0 6px 20px rgba(22, 163, 74, 0.15)' }}>
-              <h2 style={{ fontSize: '32px', color: '#065F46', fontWeight: 900, marginBottom: '12px', textAlign: 'center' }}>
+            <div style={{ background: 'linear-gradient(135deg, #f0fdf4 0%, #e8f5e9 100%)', padding: '28px', borderRadius: '12px', border: '4px solid #065F46', marginBottom: '28px', boxShadow: '0 8px 24px rgba(6, 95, 70, 0.2)' }}>
+              <h2 style={{ fontSize: '38px', color: '#065F46', fontWeight: 900, marginBottom: '16px', textAlign: 'center', lineHeight: '1.3', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>
                 🔒 FabAssure Eliminates Hidden Partner Risks
               </h2>
-              <p style={{ fontSize: '18px', color: '#047857', marginBottom: '0px', lineHeight: '1.7', textAlign: 'center', fontWeight: 600 }}>
-                Traditional projects pick a fabricator based on incomplete proposals. RaaP scores every fabricator across the four failure points that ruin modular projects—surfacing the true best partner, not just the lowest bidder.
+              <p style={{ fontSize: '20px', color: '#047857', marginBottom: '0px', lineHeight: '1.8', textAlign: 'center', fontWeight: 600, fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>
+                Traditional projects pick fabricators based on incomplete proposals. RaaP scores every fabricator across the four failure points that ruin modular projects—surfacing the true best partner.
               </p>
             </div>
 
             {/* What RaaP Does */}
-            <div style={{ background: 'linear-gradient(135deg, #f0fdf4 0%, #ffffff 100%)', padding: '20px', borderRadius: '12px', border: '2px solid #10B981', marginBottom: '24px', boxShadow: '0 4px 12px rgba(16, 185, 129, 0.1)' }}>
-              <p style={{ fontSize: '18px', fontWeight: 900, color: '#065F46', marginBottom: '14px', textAlign: 'center' }}>How RaaP Protects Your Project:</p>
-              <ul style={{ listStyle: 'none', paddingLeft: 0, fontSize: '16px', color: '#047857', margin: 0, lineHeight: '2' }}>
-                <li style={{ marginBottom: '10px', fontWeight: 700 }}>✓ Normalizes all bids so developers see real cost vs scope</li>
-                <li style={{ marginBottom: '10px', fontWeight: 700 }}>✓ Verifies design fit to prevent late-stage redesign</li>
-                <li style={{ marginBottom: '10px', fontWeight: 700 }}>✓ Evaluates factory quality systems to ensure repeatable performance</li>
+            <div style={{ background: 'linear-gradient(135deg, #f0fdf4 0%, #ffffff 100%)', padding: '24px', borderRadius: '12px', border: '3px solid #16A34A', marginBottom: '28px', boxShadow: '0 6px 18px rgba(22, 163, 74, 0.15)' }}>
+              <p style={{ fontSize: '22px', fontWeight: 900, color: '#065F46', marginBottom: '18px', textAlign: 'center', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>How RaaP Protects Your Project:</p>
+              <ul style={{ listStyle: 'none', paddingLeft: 0, fontSize: '18px', color: '#047857', margin: 0, lineHeight: '2.2', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>
+                <li style={{ marginBottom: '12px', fontWeight: 700 }}>✓ Normalizes all bids so developers see real cost vs scope</li>
+                <li style={{ marginBottom: '12px', fontWeight: 700 }}>✓ Verifies design fit to prevent late-stage redesign</li>
+                <li style={{ marginBottom: '12px', fontWeight: 700 }}>✓ Evaluates factory quality systems to ensure repeatable performance</li>
                 <li style={{ fontWeight: 700 }}>✓ Reviews contracts and financial stability so onboarding is safe</li>
               </ul>
             </div>
 
             {/* Results */}
-            <div style={{ background: 'linear-gradient(135deg, #FEF3C7 0%, #FFFBEB 100%)', padding: '18px', borderRadius: '12px', border: '3px solid #F59E0B', marginBottom: '24px', boxShadow: '0 4px 12px rgba(245, 158, 11, 0.2)' }}>
-              <p style={{ fontSize: '20px', fontWeight: 900, color: '#92400E', marginBottom: '14px', textAlign: 'center' }}>The FabAssure Result:</p>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px', fontSize: '15px', fontWeight: 700, color: '#92400E' }}>
-                <div style={{ textAlign: 'center', padding: '12px', background: 'rgba(255,255,255,0.9)', borderRadius: '8px', border: '2px solid #F59E0B' }}>🚫 No Surprises</div>
-                <div style={{ textAlign: 'center', padding: '12px', background: 'rgba(255,255,255,0.9)', borderRadius: '8px', border: '2px solid #F59E0B' }}>🚫 No Missing Scope</div>
-                <div style={{ textAlign: 'center', padding: '12px', background: 'rgba(255,255,255,0.9)', borderRadius: '8px', border: '2px solid #F59E0B' }}>🚫 No Weak Partners</div>
-                <div style={{ textAlign: 'center', padding: '12px', background: 'rgba(255,255,255,0.9)', borderRadius: '8px', border: '3px solid #16A34A', fontWeight: 900 }}>✅ A Fabricator Who Can Deliver</div>
+            <div style={{ background: 'linear-gradient(135deg, #FEF3C7 0%, #FFFBEB 100%)', padding: '22px', borderRadius: '12px', border: '4px solid #D97706', marginBottom: '28px', boxShadow: '0 6px 18px rgba(217, 119, 6, 0.15)' }}>
+              <p style={{ fontSize: '24px', fontWeight: 900, color: '#92400E', marginBottom: '18px', textAlign: 'center', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>The FabAssure Result:</p>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', fontSize: '16px', fontWeight: 700, color: '#92400E', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>
+                <div style={{ textAlign: 'center', padding: '16px', background: '#FFFFFF', borderRadius: '8px', border: '3px solid #D97706' }}>🚫 No Surprises</div>
+                <div style={{ textAlign: 'center', padding: '16px', background: '#FFFFFF', borderRadius: '8px', border: '3px solid #D97706' }}>🚫 No Missing Scope</div>
+                <div style={{ textAlign: 'center', padding: '16px', background: '#FFFFFF', borderRadius: '8px', border: '3px solid #D97706' }}>🚫 No Weak Partners</div>
+                <div style={{ textAlign: 'center', padding: '16px', background: '#FFFFFF', borderRadius: '8px', border: '4px solid #065F46', fontWeight: 900 }}>✅ A Fabricator Who Can Deliver</div>
               </div>
             </div>
 
             {/* 4-Pillar Risk Reduction Table */}
-            <div style={{ background: 'white', padding: '20px', borderRadius: '12px', border: '2px solid #e5e7eb', marginBottom: '24px', boxShadow: '0 4px 12px rgba(0,0,0,0.08)', overflowX: 'auto' }}>
-              <h3 style={{ fontSize: '20px', marginBottom: '16px', fontWeight: 900, color: '#065F46', textAlign: 'center' }}>FabAssure 4-Pillar Risk Reduction</h3>
-              <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '14px' }}>
+            <div style={{ background: '#FFFFFF', padding: '24px', borderRadius: '12px', border: '3px solid #065F46', marginBottom: '28px', boxShadow: '0 6px 18px rgba(0,0,0,0.1)', overflowX: 'auto' }}>
+              <h3 style={{ fontSize: '24px', marginBottom: '20px', fontWeight: 900, color: '#065F46', textAlign: 'center', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>FabAssure 4-Pillar Risk Reduction</h3>
+              <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '16px', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>
                 <thead>
-                  <tr style={{ background: 'linear-gradient(90deg, #f0fdf4 0%, #e8f5e9 100%)', borderBottom: '3px solid #16A34A' }}>
-                    <th style={{ padding: '14px', textAlign: 'left', fontWeight: 900, color: '#065F46', fontSize: '15px' }}>Pillar</th>
-                    <th style={{ padding: '14px', textAlign: 'left', fontWeight: 900, color: '#7F1D1D', fontSize: '15px' }}>What Goes Wrong</th>
-                    <th style={{ padding: '14px', textAlign: 'left', fontWeight: 900, color: '#065F46', fontSize: '15px' }}>What FabAssure Catches</th>
-                    <th style={{ padding: '14px', textAlign: 'left', fontWeight: 900, color: '#1E40AF', fontSize: '15px' }}>Impact Avoided</th>
+                  <tr style={{ background: '#065F46', borderBottom: '4px solid #047857' }}>
+                    <th style={{ padding: '16px', textAlign: 'left', fontWeight: 900, color: '#FFFFFF', fontSize: '16px' }}>Pillar</th>
+                    <th style={{ padding: '16px', textAlign: 'left', fontWeight: 900, color: '#FFFFFF', fontSize: '16px' }}>What Goes Wrong</th>
+                    <th style={{ padding: '16px', textAlign: 'left', fontWeight: 900, color: '#FFFFFF', fontSize: '16px' }}>What FabAssure Catches</th>
+                    <th style={{ padding: '16px', textAlign: 'left', fontWeight: 900, color: '#FFFFFF', fontSize: '16px' }}>Impact Avoided</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr style={{ borderBottom: '1px solid #e5e7eb' }}>
-                    <td style={{ padding: '14px', fontWeight: 800, color: '#111827', fontSize: '15px' }}>💼 Commercial</td>
-                    <td style={{ padding: '14px', color: '#374151', fontWeight: 600 }}>Weak balance sheet, bad contract terms, no bonding</td>
-                    <td style={{ padding: '14px', color: '#065F46', fontWeight: 700 }}>Financial review, T&C normalization, bonding verification</td>
-                    <td style={{ padding: '14px', color: '#1E40AF', fontWeight: 700 }}>Prevents project shutdowns</td>
+                  <tr style={{ borderBottom: '2px solid #e5e7eb' }}>
+                    <td style={{ padding: '16px', fontWeight: 800, color: '#065F46', fontSize: '16px' }}>💼 Commercial</td>
+                    <td style={{ padding: '16px', color: '#1F2937', fontWeight: 600, fontSize: '15px' }}>Weak balance sheet, bad contract terms, no bonding</td>
+                    <td style={{ padding: '16px', color: '#065F46', fontWeight: 700, fontSize: '15px' }}>Financial review, T&C normalization, bonding verification</td>
+                    <td style={{ padding: '16px', color: '#0c4a6e', fontWeight: 700, fontSize: '15px' }}>Prevents project shutdowns</td>
                   </tr>
-                  <tr style={{ borderBottom: '1px solid #e5e7eb', background: '#f9fafb' }}>
-                    <td style={{ padding: '14px', fontWeight: 800, color: '#111827', fontSize: '15px' }}>💰 Cost</td>
-                    <td style={{ padding: '14px', color: '#374151', fontWeight: 600 }}>"Lowball" bids hiding exclusions</td>
-                    <td style={{ padding: '14px', color: '#065F46', fontWeight: 700 }}>Full bid normalization + scope crosswalk</td>
-                    <td style={{ padding: '14px', color: '#1E40AF', fontWeight: 700 }}>Prevents budget blowouts</td>
+                  <tr style={{ borderBottom: '2px solid #e5e7eb', background: '#f9fafb' }}>
+                    <td style={{ padding: '16px', fontWeight: 800, color: '#065F46', fontSize: '16px' }}>💰 Cost</td>
+                    <td style={{ padding: '16px', color: '#1F2937', fontWeight: 600, fontSize: '15px' }}>"Lowball" bids hiding exclusions</td>
+                    <td style={{ padding: '16px', color: '#065F46', fontWeight: 700, fontSize: '15px' }}>Full bid normalization + scope crosswalk</td>
+                    <td style={{ padding: '16px', color: '#0c4a6e', fontWeight: 700, fontSize: '15px' }}>Prevents budget blowouts</td>
                   </tr>
-                  <tr style={{ borderBottom: '1px solid #e5e7eb' }}>
-                    <td style={{ padding: '14px', fontWeight: 800, color: '#111827', fontSize: '15px' }}>📐 Design Fit</td>
-                    <td style={{ padding: '14px', color: '#374151', fontWeight: 600 }}>Factory cannot meet spans, units, assemblies</td>
-                    <td style={{ padding: '14px', color: '#065F46', fontWeight: 700 }}>Compatibility check with prototypes</td>
-                    <td style={{ padding: '14px', color: '#1E40AF', fontWeight: 700 }}>Prevents redesign + delays</td>
+                  <tr style={{ borderBottom: '2px solid #e5e7eb' }}>
+                    <td style={{ padding: '16px', fontWeight: 800, color: '#065F46', fontSize: '16px' }}>📐 Design Fit</td>
+                    <td style={{ padding: '16px', color: '#1F2937', fontWeight: 600, fontSize: '15px' }}>Factory cannot meet spans, units, assemblies</td>
+                    <td style={{ padding: '16px', color: '#065F46', fontWeight: 700, fontSize: '15px' }}>Compatibility check with prototypes</td>
+                    <td style={{ padding: '16px', color: '#0c4a6e', fontWeight: 700, fontSize: '15px' }}>Prevents redesign + delays</td>
                   </tr>
                   <tr style={{ background: '#f0fdf4' }}>
-                    <td style={{ padding: '14px', fontWeight: 800, color: '#065F46', fontSize: '15px' }}>✓ Quality</td>
-                    <td style={{ padding: '14px', color: '#374151', fontWeight: 600 }}>Poor QA/QC, inconsistent inspections</td>
-                    <td style={{ padding: '14px', color: '#065F46', fontWeight: 700 }}>Factory audit + assembly comparison</td>
-                    <td style={{ padding: '14px', color: '#1E40AF', fontWeight: 700 }}>Prevents field rework</td>
+                    <td style={{ padding: '16px', fontWeight: 800, color: '#065F46', fontSize: '16px' }}>✓ Quality</td>
+                    <td style={{ padding: '16px', color: '#1F2937', fontWeight: 600, fontSize: '15px' }}>Poor QA/QC, inconsistent inspections</td>
+                    <td style={{ padding: '16px', color: '#065F46', fontWeight: 700, fontSize: '15px' }}>Factory audit + assembly comparison</td>
+                    <td style={{ padding: '16px', color: '#0c4a6e', fontWeight: 700, fontSize: '15px' }}>Prevents field rework</td>
                   </tr>
                 </tbody>
               </table>
             </div>
 
             {/* 4-Quadrant Risk Wheel */}
-            <div style={{ background: 'linear-gradient(135deg, #f0fdf4 0%, #ffffff 100%)', padding: '28px', borderRadius: '12px', border: '3px solid #16A34A', marginBottom: '24px', boxShadow: '0 6px 20px rgba(22, 163, 74, 0.15)' }}>
-              <h3 style={{ fontSize: '22px', marginBottom: '20px', fontWeight: 900, color: '#065F46', textAlign: 'center' }}>RaaP FabAssure: Verified Partner Reliability</h3>
+            <div style={{ background: 'linear-gradient(135deg, #f0fdf4 0%, #ffffff 100%)', padding: '32px', borderRadius: '12px', border: '4px solid #065F46', marginBottom: '24px', boxShadow: '0 8px 24px rgba(6, 95, 70, 0.2)' }}>
+              <h3 style={{ fontSize: '26px', marginBottom: '24px', fontWeight: 900, color: '#065F46', textAlign: 'center', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>RaaP FabAssure: Verified Partner Reliability</h3>
               
               {/* 4-Quadrant Grid */}
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '18px' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
                 {/* Top Left: Commercial Viability */}
-                <div style={{ background: 'linear-gradient(135deg, #E0F2FE 0%, #ffffff 100%)', padding: '18px', borderRadius: '10px', border: '3px solid #0EA5E9', textAlign: 'center', boxShadow: '0 4px 12px rgba(14, 165, 233, 0.1)' }}>
-                  <div style={{ fontSize: '18px', fontWeight: 900, color: '#0369A1', marginBottom: '12px' }}>💼 Commercial</div>
-                  <div style={{ fontSize: '14px', color: '#0c4a6e', lineHeight: '1.8', fontWeight: 700 }}>
+                <div style={{ background: '#E0F2FE', padding: '22px', borderRadius: '10px', border: '4px solid #0EA5E9', textAlign: 'center', boxShadow: '0 4px 12px rgba(14, 165, 233, 0.15)' }}>
+                  <div style={{ fontSize: '20px', fontWeight: 900, color: '#0369A1', marginBottom: '14px', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>💼 Commercial</div>
+                  <div style={{ fontSize: '16px', color: '#0c4a6e', lineHeight: '2', fontWeight: 700, fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>
                     <div>🏦 Balance Sheet Review</div>
                     <div>📋 Contract Terms</div>
                     <div>🛡️ Bonding Check</div>
@@ -441,9 +441,9 @@ const OtherFactorsTab = () => {
                 </div>
 
                 {/* Top Right: Cost */}
-                <div style={{ background: 'linear-gradient(135deg, #F0FDF4 0%, #ffffff 100%)', padding: '18px', borderRadius: '10px', border: '3px solid #10B981', textAlign: 'center', boxShadow: '0 4px 12px rgba(16, 185, 129, 0.1)' }}>
-                  <div style={{ fontSize: '18px', fontWeight: 900, color: '#065F46', marginBottom: '12px' }}>💰 Cost</div>
-                  <div style={{ fontSize: '14px', color: '#064E3B', lineHeight: '1.8', fontWeight: 700 }}>
+                <div style={{ background: '#F0FDF4', padding: '22px', borderRadius: '10px', border: '4px solid #16A34A', textAlign: 'center', boxShadow: '0 4px 12px rgba(22, 163, 74, 0.15)' }}>
+                  <div style={{ fontSize: '20px', fontWeight: 900, color: '#065F46', marginBottom: '14px', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>💰 Cost</div>
+                  <div style={{ fontSize: '16px', color: '#047857', lineHeight: '2', fontWeight: 700, fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>
                     <div>📊 Bid Normalization</div>
                     <div>📈 Scope Crosswalk</div>
                     <div>✓ Real Cost Visibility</div>
@@ -451,9 +451,9 @@ const OtherFactorsTab = () => {
                 </div>
 
                 {/* Bottom Left: Design Fit */}
-                <div style={{ background: 'linear-gradient(135deg, #FFFBEB 0%, #ffffff 100%)', padding: '18px', borderRadius: '10px', border: '3px solid #FBBF24', textAlign: 'center', boxShadow: '0 4px 12px rgba(251, 191, 36, 0.1)' }}>
-                  <div style={{ fontSize: '18px', fontWeight: 900, color: '#92400E', marginBottom: '12px' }}>📐 Design Fit</div>
-                  <div style={{ fontSize: '14px', color: '#78350F', lineHeight: '1.8', fontWeight: 700 }}>
+                <div style={{ background: '#FFFBEB', padding: '22px', borderRadius: '10px', border: '4px solid #D97706', textAlign: 'center', boxShadow: '0 4px 12px rgba(217, 119, 6, 0.15)' }}>
+                  <div style={{ fontSize: '20px', fontWeight: 900, color: '#92400E', marginBottom: '14px', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>📐 Design Fit</div>
+                  <div style={{ fontSize: '16px', color: '#78350F', lineHeight: '2', fontWeight: 700, fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>
                     <div>🏗️ Prototype Check</div>
                     <div>📏 Span Verification</div>
                     <div>🔧 Assembly Alignment</div>
@@ -461,9 +461,9 @@ const OtherFactorsTab = () => {
                 </div>
 
                 {/* Bottom Right: Quality */}
-                <div style={{ background: 'linear-gradient(135deg, #FEF2F2 0%, #ffffff 100%)', padding: '18px', borderRadius: '10px', border: '3px solid #EF4444', textAlign: 'center', boxShadow: '0 4px 12px rgba(239, 68, 68, 0.1)' }}>
-                  <div style={{ fontSize: '18px', fontWeight: 900, color: '#991B1B', marginBottom: '12px' }}>✓ Quality</div>
-                  <div style={{ fontSize: '14px', color: '#7F1D1D', lineHeight: '1.8', fontWeight: 700 }}>
+                <div style={{ background: '#FEF2F2', padding: '22px', borderRadius: '10px', border: '4px solid #DC2626', textAlign: 'center', boxShadow: '0 4px 12px rgba(220, 38, 38, 0.15)' }}>
+                  <div style={{ fontSize: '20px', fontWeight: 900, color: '#991B1B', marginBottom: '14px', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>✓ Quality</div>
+                  <div style={{ fontSize: '16px', color: '#7F1D1D', lineHeight: '2', fontWeight: 700, fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>
                     <div>🔍 Factory Audit</div>
                     <div>📋 QA/QC Systems</div>
                     <div>✅ Track Record</div>
@@ -472,7 +472,7 @@ const OtherFactorsTab = () => {
               </div>
 
               {/* Closing Statement */}
-              <div style={{ marginTop: '18px', padding: '14px', background: '#F0FDF4', borderRadius: '8px', textAlign: 'center', fontSize: '15px', fontWeight: 900, color: '#065F46', border: '2px solid #10B981' }}>
+              <div style={{ marginTop: '22px', padding: '16px', background: '#065F46', borderRadius: '8px', textAlign: 'center', fontSize: '16px', fontWeight: 900, color: '#FFFFFF', border: '2px solid #047857', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>
                 Only partners who score green in all four areas advance to bidding.
               </div>
             </div>
