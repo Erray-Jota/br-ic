@@ -196,10 +196,10 @@ const DesignTab = () => {
                   TOTAL GROSS SQUARE FEET
                 </div>
                 <div style={{ fontSize: '32px', fontWeight: 700, color: '#111827' }}>
-                  {(calculations.totalOptimized * projectData.floors * 900).toLocaleString()} SF
+                  {Math.round(calculations.totalGSF).toLocaleString()} SF
                 </div>
                 <div className="small-text" style={{ marginTop: '4px', color: '#15803D' }}>
-                  {calculations.totalOptimized} units/floor × {projectData.floors} floors × 900 SF/unit
+                  {(calculations.totalOptimized / projectData.floors).toFixed(0)} units/floor × {projectData.floors} floors (with {(5).toFixed(1)}% common area)
                 </div>
               </div>
             </div>
