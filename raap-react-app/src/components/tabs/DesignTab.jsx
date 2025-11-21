@@ -167,17 +167,13 @@ const DesignTab = () => {
 
             {/* Right Side: Proposed Unit Mix and Total GSF */}
             <div className="card">
-              <h2>📊 Proposed Unit Mix ({calculations.totalOptimized + (calculations.bonusUnits || 0)} Total)</h2>
+              <h2>📊 Proposed Unit Mix ({calculations.totalOptimized} Total)</h2>
               <p className="small-text" style={{ marginBottom: '8px' }}>Optimized mix based on your target inputs and building length.</p>
 
               <div className="grid-4" style={{ gap: '8px' }}>
                 {['Studio', '1 Bed', '2 Bed', '3 Bed'].map((label, index) => {
                   const key = ['studio', 'oneBed', 'twoBed', 'threeBed'][index];
-                  let count = calculations.optimized[key];
-                  // Add bonus units to the appropriate unit type
-                  if (calculations.bonusUnits && calculations.bonusUnitType === key) {
-                    count += calculations.bonusUnits;
-                  }
+                  const count = calculations.optimized[key];
                   return (
                     <div key={key} className="proposed-unit-mix-item">
                       <div className="small-text">{label}</div>

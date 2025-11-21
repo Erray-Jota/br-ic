@@ -340,12 +340,17 @@ export const optimizeUnits = (targets, buildingLength, lobbyType, floors = 5) =>
   }
   // 4-Bay: no bonus units
 
-  const optimizedTotals = {
+  let optimizedTotals = {
     studio: finalTypeCountsSide.studios * 2 * floors,
     oneBed: finalTypeCountsSide.oneBeds * 2 * floors,
     twoBed: finalTypeCountsSide.twoBeds * 2 * floors,
     threeBed: finalTypeCountsSide.threeBeds * 2 * floors,
   };
+
+  // Add bonus units to appropriate unit type
+  if (bonusUnits > 0 && bonusUnitType) {
+    optimizedTotals[bonusUnitType] += bonusUnits;
+  }
 
   const totalOptimized = optimizedTotals.studio + optimizedTotals.oneBed + optimizedTotals.twoBed + optimizedTotals.threeBed;
 

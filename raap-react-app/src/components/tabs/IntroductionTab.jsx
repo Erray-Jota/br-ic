@@ -15,9 +15,12 @@ const IntroductionTab = () => {
         </p>
       </div>
 
-      {/* Hero Image Card */}
+      {/* Hero Video Card */}
       <div className="card" style={{ padding: '0', marginBottom: '12px', borderRadius: '8px', overflow: 'hidden' }}>
-        <img src={ASSET_PATHS.INTRO_GRAPHIC_URL} alt="RaaP Modular Building Design" style={{ width: '100%', height: '14rem', objectFit: 'cover', display: 'block', imageRendering: 'crisp-edges' }} />
+        <video autoPlay muted loop style={{ width: '100%', height: '14rem', objectFit: 'cover', display: 'block' }}>
+          <source src={ASSET_PATHS.INTRO_VIDEO_URL} type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
         <div style={{ background: '#15803D', color: 'white', padding: '6px', textAlign: 'center' }}>
           <p style={{ fontWeight: 600, fontSize: '12px', margin: 0 }}>
             Your project, factory-ready — before you spend months on design.
