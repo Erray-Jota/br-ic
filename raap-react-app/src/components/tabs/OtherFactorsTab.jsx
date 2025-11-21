@@ -306,23 +306,13 @@ const OtherFactorsTab = () => {
             <p style={{ fontSize: FONTS.sizes.md, color: '#4b5563', marginBottom: '15px' }}>
               A factory that can't deliver. A GC misaligned with modular logic. Scope creep that derails costs. We mitigate these risks through a rigorous 4-pillar evaluation framework ensuring long-term success.
             </p>
-<<<<<<< HEAD
-            
-            {/* Google Maps - Partner Locations */}
-            {apiKey && (
-              <div style={{ marginBottom: SPACING['2xl'], borderRadius: BORDERS.radius.md, overflow: 'hidden', border: '2px solid #e5e7eb' }}>
-                <img 
-                  src={getMarketplaceMapUrl()} 
-                  alt="Partner Locations Map" 
-=======
 
-            {/* Marketplace Map */}
+            {/* Google Maps - Partner Locations */}
             {apiKey && getMarketplaceMapUrl() && (
-              <div style={{ marginBottom: '20px', borderRadius: '8px', overflow: 'hidden', border: '2px solid #e5e7eb' }}>
+              <div style={{ marginBottom: SPACING['2xl'], borderRadius: BORDERS.radius.md, overflow: 'hidden', border: '2px solid #e5e7eb' }}>
                 <img
                   src={getMarketplaceMapUrl()}
                   alt="Partner Locations Map"
->>>>>>> claude/fix-factory-location-update-01Myn5PehSv8uSgmQcBsmw42
                   style={{ width: '100%', height: '400px', objectFit: 'cover' }}
                   onError={(e) => {
                     console.log('Map failed to load');
@@ -331,17 +321,10 @@ const OtherFactorsTab = () => {
                 />
               </div>
             )}
-<<<<<<< HEAD
-            {!apiKey && (
+            {(!apiKey || !getMarketplaceMapUrl()) && (
               <div style={{ marginBottom: SPACING['2xl'], padding: '20px', background: COLORS.gold.bg, border: '2px solid #FCD34D', borderRadius: BORDERS.radius.md, textAlign: 'center' }}>
                 <p style={{ fontSize: FONTS.sizes.base, color: COLORS.gold.dark, margin: 0 }}>
-                  📍 Google Maps will display partner locations once API key is configured
-=======
-            {(!apiKey || !getMarketplaceMapUrl()) && (
-              <div style={{ marginBottom: '20px', padding: '20px', background: '#FEF3C7', border: '2px solid #FCD34D', borderRadius: '8px', textAlign: 'center' }}>
-                <p style={{ fontSize: '14px', color: '#92400E', margin: 0 }}>
                   {!apiKey ? '📍 Google Maps API key not configured' : '📍 Set project site location in Project tab to view map'}
->>>>>>> claude/fix-factory-location-update-01Myn5PehSv8uSgmQcBsmw42
                 </p>
               </div>
             )}
@@ -529,56 +512,23 @@ const OtherFactorsTab = () => {
             <p style={{ fontSize: FONTS.sizes.md, color: '#4b5563', marginBottom: '15px' }}>
               Transportation clearance, crane staging, site access—we solve these upfront so your setting team executes flawlessly and on schedule.
             </p>
-<<<<<<< HEAD
-            
-            {/* Factory Selection for Route */}
-            <div style={{ marginBottom: '15px' }}>
-              <label style={{ fontSize: FONTS.sizes.base, fontWeight: 600, color: COLORS.gray.dark, marginBottom: SPACING.sm, display: 'block' }}>
-                Select Factory for Route Analysis:
-              </label>
-              <select
-                value={selectedFactory}
-                onChange={(e) => setSelectedFactory(e.target.value)}
-                style={{
-                  width: '100%',
-                  maxWidth: '300px',
-                  padding: '8px',
-                  border: '1px solid #d1d5db',
-                  borderRadius: '4px',
-                  fontSize: FONTS.sizes.base
-                }}
-              >
-                <option value="">-- Select Factory --</option>
-                {Object.keys(FACTORY_LOCATIONS).map((factoryName) => (
-                  <option key={factoryName} value={factoryName}>{factoryName}</option>
-                ))}
-              </select>
-            </div>
-            
-            {/* Google Maps - Route */}
-            {apiKey && (
-              <div style={{ marginBottom: SPACING['2xl'], borderRadius: BORDERS.radius.md, overflow: 'hidden', border: '2px solid #e5e7eb' }}>
-                <img 
-                  src={getLogisticsMapUrl()} 
-                  alt="Logistics Route Map" 
-=======
 
             {/* Location Info */}
-            <div style={{ marginBottom: '20px', padding: '12px', background: '#F3F4F6', border: '1px solid #D1D5DB', borderRadius: '8px' }}>
-              <div style={{ marginBottom: '8px' }}>
-                <strong style={{ fontSize: '14px', color: '#111827' }}>Project Site:</strong>
-                <span style={{ fontSize: '14px', color: '#4B5563', marginLeft: '8px' }}>
+            <div style={{ marginBottom: SPACING.lg, padding: '12px', background: '#F3F4F6', border: '1px solid #D1D5DB', borderRadius: BORDERS.radius.md }}>
+              <div style={{ marginBottom: SPACING.sm }}>
+                <strong style={{ fontSize: FONTS.sizes.base, color: COLORS.gray.darker }}>Project Site:</strong>
+                <span style={{ fontSize: FONTS.sizes.base, color: COLORS.gray.dark, marginLeft: SPACING.sm }}>
                   {projectData.propertyLocation || 'Not set'}
                 </span>
               </div>
               <div>
-                <strong style={{ fontSize: '14px', color: '#111827' }}>Factory Location:</strong>
-                <span style={{ fontSize: '14px', color: '#4B5563', marginLeft: '8px' }}>
+                <strong style={{ fontSize: FONTS.sizes.base, color: COLORS.gray.darker }}>Factory Location:</strong>
+                <span style={{ fontSize: FONTS.sizes.base, color: COLORS.gray.dark, marginLeft: SPACING.sm }}>
                   {projectData.factoryLocation || 'Not set'}
                 </span>
               </div>
               {!projectData.propertyLocation || !projectData.factoryLocation ? (
-                <div style={{ marginTop: '8px', fontSize: '12px', color: '#6B7280', fontStyle: 'italic' }}>
+                <div style={{ marginTop: SPACING.sm, fontSize: FONTS.sizes.sm, color: COLORS.gray.base, fontStyle: 'italic' }}>
                   Set both locations in Project tab to view route map
                 </div>
               ) : null}
@@ -586,11 +536,10 @@ const OtherFactorsTab = () => {
 
             {/* Logistics Map */}
             {apiKey && getLogisticsMapUrl() && (
-              <div style={{ marginBottom: '20px', borderRadius: '8px', overflow: 'hidden', border: '2px solid #e5e7eb' }}>
+              <div style={{ marginBottom: SPACING['2xl'], borderRadius: BORDERS.radius.md, overflow: 'hidden', border: '2px solid #e5e7eb' }}>
                 <img
                   src={getLogisticsMapUrl()}
                   alt="Factory to Site Route Map"
->>>>>>> claude/fix-factory-location-update-01Myn5PehSv8uSgmQcBsmw42
                   style={{ width: '100%', height: '400px', objectFit: 'cover' }}
                   onError={(e) => {
                     console.log('Map failed to load');
@@ -599,17 +548,10 @@ const OtherFactorsTab = () => {
                 />
               </div>
             )}
-<<<<<<< HEAD
-            {!apiKey && (
+            {(!apiKey || !getLogisticsMapUrl()) && (
               <div style={{ marginBottom: SPACING['2xl'], padding: '20px', background: COLORS.gold.bg, border: '2px solid #FCD34D', borderRadius: BORDERS.radius.md, textAlign: 'center' }}>
                 <p style={{ fontSize: FONTS.sizes.base, color: COLORS.gold.dark, margin: 0 }}>
-                  🗺️ Route mapping will display once API key is configured
-=======
-            {(!apiKey || !getLogisticsMapUrl()) && (
-              <div style={{ marginBottom: '20px', padding: '20px', background: '#FEF3C7', border: '2px solid #FCD34D', borderRadius: '8px', textAlign: 'center' }}>
-                <p style={{ fontSize: '14px', color: '#92400E', margin: 0 }}>
                   {!apiKey ? '🗺️ Google Maps API key not configured' : '🗺️ Set project site and factory locations in Project tab to view map'}
->>>>>>> claude/fix-factory-location-update-01Myn5PehSv8uSgmQcBsmw42
                 </p>
               </div>
             )}
