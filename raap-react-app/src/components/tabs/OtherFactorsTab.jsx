@@ -592,19 +592,30 @@ const OtherFactorsTab = () => {
 
 
             {/* Interactive Map */}
-            {apiKey && (projectData.factoryCoordinates || projectData.propertyCoordinates) && (
-              <div style={{ marginBottom: SPACING['2xl'], borderRadius: BORDERS.radius.md, overflow: 'hidden', border: '2px solid #e5e7eb' }}>
-                <MapComponent
-                  height="600px"
-                  showRoute={true}
-                  onRouteCalculated={setRouteMetadata}
-                  markers={[
-                    ...(projectData.factoryCoordinates ? [{ position: projectData.factoryCoordinates, title: 'Factory' }] : []),
-                    ...(projectData.propertyCoordinates ? [{ position: projectData.propertyCoordinates, title: 'Site' }] : [])
-                  ]}
-                />
-              </div>
-            )}
+            {apiKey && (projectData.factoryCoordinates || projectData.propertyCoordinates) && (() => {
+              // Calculate center point between factory and site
+              const factory = projectData.factoryCoordinates;
+              const site = projectData.propertyCoordinates;
+              const center = factory && site
+                ? { lat: (factory.lat + site.lat) / 2, lng: (factory.lng + site.lng) / 2 }
+                : (site || factory);
+
+              return (
+                <div style={{ marginBottom: SPACING['2xl'], borderRadius: BORDERS.radius.md, overflow: 'hidden', border: '2px solid #e5e7eb' }}>
+                  <MapComponent
+                    height="600px"
+                    center={center}
+                    zoom={5}
+                    showRoute={factory && site}
+                    onRouteCalculated={setRouteMetadata}
+                    markers={[
+                      ...(factory ? [{ position: factory, title: 'Factory' }] : []),
+                      ...(site ? [{ position: site, title: 'Site' }] : [])
+                    ]}
+                  />
+                </div>
+              );
+            })()}
             {(!apiKey || (!projectData.factoryCoordinates && !projectData.propertyCoordinates)) && (
               <div style={{ marginBottom: SPACING['2xl'], padding: '20px', background: COLORS.gold.bg, border: '2px solid #FCD34D', borderRadius: BORDERS.radius.md, textAlign: 'center' }}>
                 <p style={{ fontSize: FONTS.sizes.base, color: COLORS.gold.dark, margin: 0 }}>
