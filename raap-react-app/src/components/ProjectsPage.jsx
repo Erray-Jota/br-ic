@@ -3,6 +3,7 @@ import { useProject } from '../contexts/ProjectContext';
 import { useCalculations, formatMega } from '../hooks/useCalculations';
 import { ASSET_PATHS } from '../data/constants';
 import { COLORS, FONTS, SPACING, STYLE_PRESETS } from '../styles/theme';
+import { ConfirmModal, AlertModal } from './Modal';
 
 const ProjectCard = ({ project, onOpen, onEdit, onDuplicate, onDelete }) => {
   const [isHovered, setIsHovered] = useState(false);
@@ -219,6 +220,25 @@ const ProjectCard = ({ project, onOpen, onEdit, onDuplicate, onDelete }) => {
 const ProjectsPage = () => {
   const { projects, openProject, createNewProject, duplicateProject, deleteProject, hideProjectsPage } = useProject();
 
+  const [deleteConfirm, setDeleteConfirm] = useState({ show: false, project: null });
+  const [errorAlert, setErrorAlert] = useState({ show: false, message: '' });
+
+  const handleDeleteClick = (project) => {
+    setDeleteConfirm({ show: true, project });
+  };
+
+  const handleConfirmDelete = () => {
+    if (deleteConfirm.project) {
+      try {
+        deleteProject(deleteConfirm.project.id);
+        setDeleteConfirm({ show: false, project: null });
+      } catch (error) {
+        setDeleteConfirm({ show: false, project: null });
+        setErrorAlert({ show: true, message: error.message });
+      }
+    }
+  };
+
   return (
     <div style={{ padding: SPACING['4xl'], minHeight: 'calc(100vh - 140px)', background: COLORS.gray.bg }}>
       <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
@@ -275,11 +295,7 @@ const ProjectsPage = () => {
               onOpen={() => openProject(project.id)}
               onEdit={() => openProject(project.id)}
               onDuplicate={() => duplicateProject(project.id)}
-              onDelete={() => {
-                if (window.confirm(`Are you sure you want to delete "${project.projectName}"?`)) {
-                  deleteProject(project.id);
-                }
-              }}
+              onDelete={() => handleDeleteClick(project)}
             />
           ))}
         </div>
@@ -321,6 +337,26 @@ const ProjectsPage = () => {
             </button>
           </div>
         )}
+
+        {/* Modals */}
+        <ConfirmModal
+          isOpen={deleteConfirm.show}
+          onClose={() => setDeleteConfirm({ show: false, project: null })}
+          onConfirm={handleConfirmDelete}
+          title="Confirm Delete"
+          message={`Are you sure you want to delete "${deleteConfirm.project?.projectName}"? This action cannot be undone.`}
+          confirmText="Delete"
+          cancelText="Cancel"
+          type="danger"
+        />
+
+        <AlertModal
+          isOpen={errorAlert.show}
+          onClose={() => setErrorAlert({ show: false, message: '' })}
+          title="Cannot Delete Project"
+          message={errorAlert.message}
+          type="warning"
+        />
       </div>
     </div>
   );

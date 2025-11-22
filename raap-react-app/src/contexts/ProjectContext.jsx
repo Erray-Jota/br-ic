@@ -136,8 +136,7 @@ export const ProjectProvider = ({ children }) => {
 
   const deleteProject = useCallback((projectId) => {
     if (projects.length === 1) {
-      alert('Cannot delete the last project. At least one project must exist.');
-      return;
+      throw new Error('Cannot delete the last project. At least one project must exist.');
     }
     setProjects((prev) => prev.filter((p) => p.id !== projectId));
     if (currentProjectId === projectId) {

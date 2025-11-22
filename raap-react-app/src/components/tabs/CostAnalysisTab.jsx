@@ -6,6 +6,7 @@ import { MASTER_DIVISIONS } from '../../data/constants';
 import { calculateDivisionCosts, LOCATION_FACTORS as COST_LOCATION_FACTORS, compareScenarios } from '../../engines/costEngine';
 import LocationInput from '../LocationInput';
 import { COLORS, FONTS, SPACING, STYLE_PRESETS } from '../../styles/theme';
+import { AlertModal } from '../Modal';
 
 const CostAnalysisTab = () => {
   const { projectData, updateProjectData, switchTab, activeSubtabs, switchSubtab } = useProject();
@@ -18,6 +19,7 @@ const CostAnalysisTab = () => {
   const [inputsCollapsed, setInputsCollapsed] = useState(false);
   const [outputsCollapsed, setOutputsCollapsed] = useState(false);
   const [collapsedGroups, setCollapsedGroups] = useState({});
+  const [showSaveSuccess, setShowSaveSuccess] = useState(false);
 
   // Entity selection for breakdown table
   const [selectedEntity1, setSelectedEntity1] = useState('siteBuild');
@@ -352,7 +354,7 @@ const CostAnalysisTab = () => {
                     <button
                       className="btn btn-success"
                       style={{ width: '100%', marginTop: '12px', padding: '10px', fontSize: '14px', fontWeight: 700 }}
-                      onClick={() => alert('Project saved successfully!')}
+                      onClick={() => setShowSaveSuccess(true)}
                     >
                       💾 Save Project
                     </button>
@@ -1071,6 +1073,15 @@ const CostAnalysisTab = () => {
           </div>
         </div>
       )}
+
+      {/* Success Modal */}
+      <AlertModal
+        isOpen={showSaveSuccess}
+        onClose={() => setShowSaveSuccess(false)}
+        title="Success"
+        message="Project saved successfully!"
+        type="success"
+      />
     </div>
   );
 };
