@@ -11,6 +11,7 @@ import CostAnalysisTab from './components/tabs/CostAnalysisTab';
 import OtherFactorsTab from './components/tabs/OtherFactorsTab';
 import PortfolioTab from './components/tabs/PortfolioTab';
 import SmartStartTab from './components/tabs/SmartStartTab';
+import ErrorBoundary from './components/ErrorBoundary';
 import './App.css';
 
 function AppContent() {
@@ -63,11 +64,13 @@ function AppContent() {
 
 function App() {
   return (
-    <ProjectProvider>
-      <GoogleMapsLoader>
-        <AppContent />
-      </GoogleMapsLoader>
-    </ProjectProvider>
+    <ErrorBoundary>
+      <ProjectProvider>
+        <GoogleMapsLoader>
+          <AppContent />
+        </GoogleMapsLoader>
+      </ProjectProvider>
+    </ErrorBoundary>
   );
 }
 

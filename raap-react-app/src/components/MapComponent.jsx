@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect, useRef } from 'react';
+import React, { useContext, useState, useEffect, useRef, memo } from 'react';
 import { GoogleMap, Marker, DirectionsRenderer } from '@react-google-maps/api';
 import { GoogleMapsContext } from './GoogleMapsLoader';
 
@@ -12,7 +12,7 @@ const defaultCenter = {
     lng: -122.4194
 };
 
-export const MapComponent = ({
+const MapComponent = ({
     center = defaultCenter,
     zoom = 10,
     markers = [],
@@ -164,3 +164,25 @@ export const MapComponent = ({
         </GoogleMap>
     );
 };
+
+// Memoize component to prevent unnecessary re-renders
+const MemoizedMapComponent = memo(MapComponent, (prevProps, nextProps) => {
+    // Custom comparison for optimal performance
+    const markersEqual = prevProps.markers.length === nextProps.markers.length &&
+        prevProps.markers.every((marker, i) => {
+            const nextMarker = nextProps.markers[i];
+            return marker.position.lat === nextMarker.position.lat &&
+                marker.position.lng === nextMarker.position.lng;
+        });
+
+    return prevProps.center.lat === nextProps.center.lat &&
+        prevProps.center.lng === nextProps.center.lng &&
+        prevProps.zoom === nextProps.zoom &&
+        prevProps.showRoute === nextProps.showRoute &&
+        prevProps.height === nextProps.height &&
+        markersEqual;
+});
+
+// Export both named and default
+export { MemoizedMapComponent as MapComponent };
+export default MemoizedMapComponent;
