@@ -32,6 +32,16 @@ const OtherFactorsTab = () => {
     return icons[category] || '📍';
   };
 
+  const getCategoryShape = (category) => {
+    const shapes = {
+      'Fabricator': '●',  // Circle
+      'GC': '■',          // Square
+      'AoR': '▲',         // Triangle
+      'Consultant': '◆'   // Diamond
+    };
+    return shapes[category] || '●';
+  };
+
   // Generate marketplace map URL using project site location
   const getMarketplaceMapUrl = () => {
     if (!projectData.propertyCoordinates?.lat || !projectData.propertyCoordinates?.lng) {
@@ -356,19 +366,40 @@ const OtherFactorsTab = () => {
               </div>
             )}
 
+            {/* Legend */}
+            <div style={{ display: 'flex', gap: '20px', marginBottom: '15px', padding: '12px', background: '#F9FAFB', borderRadius: '8px', border: '1px solid #E5E7EB', flexWrap: 'wrap' }}>
+              <div style={{ fontSize: FONTS.sizes.sm, fontWeight: FONTS.weight.bold, color: COLORS.gray.darker }}>Legend:</div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <span style={{ fontSize: '18px', color: '#F59E0B' }}>●</span>
+                <span style={{ fontSize: FONTS.sizes.sm, color: COLORS.gray.dark }}>Fabricator</span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <span style={{ fontSize: '18px', color: '#3B82F6' }}>■</span>
+                <span style={{ fontSize: FONTS.sizes.sm, color: COLORS.gray.dark }}>GC</span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <span style={{ fontSize: '18px', color: '#8B5CF6' }}>▲</span>
+                <span style={{ fontSize: FONTS.sizes.sm, color: COLORS.gray.dark }}>AoR</span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <span style={{ fontSize: '18px', color: '#10B981' }}>◆</span>
+                <span style={{ fontSize: FONTS.sizes.sm, color: COLORS.gray.dark }}>Consultant</span>
+              </div>
+            </div>
+
             {/* Filters */}
             <div style={{ display: 'flex', gap: '10px', marginBottom: '15px' }}>
               <select
                 className="form-select"
                 value={filterCategory}
                 onChange={(e) => setFilterCategory(e.target.value)}
-                style={{ maxWidth: '200px' }}
+                style={{ maxWidth: '220px' }}
               >
-                <option value="All">Filter by All Categories</option>
-                <option value="Fabricator">Fabricators</option>
-                <option value="GC">General Contractors</option>
-                <option value="AoR">Architects of Record</option>
-                <option value="Consultant">Consultants</option>
+                <option value="All">All Categories</option>
+                <option value="Fabricator">● Fabricators</option>
+                <option value="GC">■ General Contractors</option>
+                <option value="AoR">▲ Architects of Record</option>
+                <option value="Consultant">◆ Consultants</option>
               </select>
               <input
                 type="text"
@@ -382,10 +413,28 @@ const OtherFactorsTab = () => {
             {/* Partner Cards */}
             <div className="grid-3" style={{ gap: '15px' }}>
               {filteredPartners.map((partner, index) => (
-                <div key={index} className="partner-card">
-                  <div className="partner-name">{partner.name}</div>
+                <div key={index} className="partner-card" style={{ position: 'relative' }}>
+                  {/* Category Shape Indicator */}
+                  <div style={{
+                    position: 'absolute',
+                    top: '12px',
+                    right: '12px',
+                    fontSize: '24px',
+                    color: getCategoryColor(partner.category),
+                    lineHeight: 1
+                  }}>
+                    {getCategoryShape(partner.category)}
+                  </div>
+
+                  <div className="partner-name" style={{ paddingRight: '35px' }}>{partner.name}</div>
                   <div style={{ marginBottom: SPACING.sm }}>
-                    <span className="partner-tag">{partner.category}</span>
+                    <span className="partner-tag" style={{
+                      background: `${getCategoryColor(partner.category)}15`,
+                      color: getCategoryColor(partner.category),
+                      border: `1px solid ${getCategoryColor(partner.category)}40`
+                    }}>
+                      {getCategoryShape(partner.category)} {partner.category}
+                    </span>
                     <span className="partner-tag">{partner.type}</span>
                   </div>
                   <div className="partner-detail">
