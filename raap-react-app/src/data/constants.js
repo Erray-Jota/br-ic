@@ -60,24 +60,6 @@ export const DUMMY_PARTNERS = [
 ];
 
 /**
- * Default site location (Fort Worth, TX from Project tab)
- */
-export const DEFAULT_SITE_LOCATION = {
-  lat: 32.7555,
-  lng: -97.3308,
-  name: "Project Site - Fort Worth, TX"
-};
-
-/**
- * Example factory locations for logistics
- */
-export const FACTORY_LOCATIONS = {
-  "Atlas Modular Systems": { lat: 37.7749, lng: -122.4194, name: "Atlas Factory - Bay Area, CA" },
-  "SteelHaus Fab": { lat: 41.8781, lng: -87.6298, name: "SteelHaus Factory - Chicago, IL" },
-  "Pod Innovations": { lat: 42.3601, lng: -71.0589, name: "Pod Factory - Boston, MA" },
-};
-
-/**
  * Asset paths for graphics and media
  */
 export const ASSET_PATHS = {

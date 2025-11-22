@@ -19,11 +19,12 @@ const createDefaultProject = (name = 'New Project') => ({
   podiumCount: 0,
   commonAreaPct: 5,
   // Unified location system with autocomplete support
+  // Unified location system with autocomplete support
   propertyLocation: 'San Francisco, CA',
-  propertyFactor: 1.15,
+  propertyFactor: 1.35,
   propertyCoordinates: { lat: 37.7749, lng: -122.4194 },
   factoryLocation: 'Boise, ID',
-  factoryFactor: 0.87,
+  factoryFactor: 0.95,
   factoryCoordinates: { lat: 43.6150, lng: -116.2023 },
   targets: { studio: 40, oneBed: 40, twoBed: 40, threeBed: 0 },
   optimized: { studio: 40, oneBed: 40, twoBed: 40, threeBed: 0 },
@@ -135,8 +136,7 @@ export const ProjectProvider = ({ children }) => {
 
   const deleteProject = useCallback((projectId) => {
     if (projects.length === 1) {
-      alert('Cannot delete the last project. At least one project must exist.');
-      return;
+      throw new Error('Cannot delete the last project. At least one project must exist.');
     }
     setProjects((prev) => prev.filter((p) => p.id !== projectId));
     if (currentProjectId === projectId) {

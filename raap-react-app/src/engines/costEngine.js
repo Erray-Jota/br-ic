@@ -27,7 +27,7 @@ import { raapCities } from '../data/raapCities';
 
 /**
  * Base project costs (calibrated from actual project)
- * These represent a 5-story, 120-unit building in Boise, ID (location factor 0.87)
+ * These represent a 5-story, 120-unit building at national average cost (location factor 1.0)
  */
 export const BASE_COSTS = {
   // Site-built total cost (traditional stick-built construction)
@@ -42,9 +42,9 @@ export const BASE_COSTS = {
   baseFloors: 5,
   baseGSF: 78336,
 
-  // Location factors for base project
-  basePropertyFactor: 0.87,  // Boise property location factor
-  baseFactoryFactor: 0.87,   // Boise factory location factor
+  // Location factors for base project (national average)
+  basePropertyFactor: 1.0,  // National average property location factor
+  baseFactoryFactor: 1.0,   // National average factory location factor
 };
 
 /**

@@ -6,6 +6,7 @@ import { MASTER_DIVISIONS } from '../../data/constants';
 import { calculateDivisionCosts, LOCATION_FACTORS as COST_LOCATION_FACTORS, compareScenarios } from '../../engines/costEngine';
 import LocationInput from '../LocationInput';
 import { COLORS, FONTS, SPACING, STYLE_PRESETS } from '../../styles/theme';
+import { AlertModal } from '../Modal';
 
 const CostAnalysisTab = () => {
   const { projectData, updateProjectData, switchTab, activeSubtabs, switchSubtab } = useProject();
@@ -18,7 +19,8 @@ const CostAnalysisTab = () => {
   const [inputsCollapsed, setInputsCollapsed] = useState(false);
   const [outputsCollapsed, setOutputsCollapsed] = useState(false);
   const [collapsedGroups, setCollapsedGroups] = useState({});
-  
+  const [showSaveSuccess, setShowSaveSuccess] = useState(false);
+
   // Entity selection for breakdown table
   const [selectedEntity1, setSelectedEntity1] = useState('siteBuild');
   const [selectedEntity2, setSelectedEntity2] = useState('totalModular');
@@ -38,8 +40,8 @@ const CostAnalysisTab = () => {
   const [scenarioA, setScenarioA] = useState({
     name: 'Site Build - Current Location',
     entityType: 'siteBuild',
-    propertyLocation: 'Boise, ID',
-    factoryLocation: 'Boise, ID',
+    propertyLocation: projectData.propertyLocation || '',
+    factoryLocation: projectData.factoryLocation || '',
     floors: projectData.floors,
     unitMix: projectData.optimized,
   });
@@ -47,8 +49,8 @@ const CostAnalysisTab = () => {
   const [scenarioB, setScenarioB] = useState({
     name: 'Modular - Local Factory',
     entityType: 'totalModular',
-    propertyLocation: 'Boise, ID',
-    factoryLocation: 'Boise, ID',
+    propertyLocation: projectData.propertyLocation || '',
+    factoryLocation: projectData.factoryLocation || '',
     floors: projectData.floors,
     unitMix: projectData.optimized,
   });
@@ -140,36 +142,36 @@ const CostAnalysisTab = () => {
 
       {/* Sub-tabs - Show on Mobile, Hide on Desktop */}
       {isEffectivelyMobile && (
-      <div className="subtab-container" style={{ marginBottom: '12px' }}>
-        <div className="subtab-nav" style={{ display: 'flex', gap: '4px', justifyContent: 'center', flexWrap: 'wrap' }}>
-          <button onClick={() => switchSubtab('cost', 1)} className={`subtab-btn ${activeSubtabs.cost === 1 ? 'active-subtab' : ''}`} style={{ fontSize: '12px', padding: '6px 12px' }}>
-            📊 Summary
-          </button>
-          <button onClick={() => switchSubtab('cost', 2)} className={`subtab-btn ${activeSubtabs.cost === 2 ? 'active-subtab' : ''}`} style={{ fontSize: '12px', padding: '6px 12px' }}>
-            🔀 Scenarios
-          </button>
-          <button onClick={() => switchSubtab('cost', 3)} className={`subtab-btn ${activeSubtabs.cost === 3 ? 'active-subtab' : ''}`} style={{ fontSize: '12px', padding: '6px 12px' }}>
-            🔍 Assemblies
-          </button>
+        <div className="subtab-container" style={{ marginBottom: '12px' }}>
+          <div className="subtab-nav" style={{ display: 'flex', gap: '4px', justifyContent: 'center', flexWrap: 'wrap' }}>
+            <button onClick={() => switchSubtab('cost', 1)} className={`subtab-btn ${activeSubtabs.cost === 1 ? 'active-subtab' : ''}`} style={{ fontSize: '12px', padding: '6px 12px' }}>
+              📊 Summary
+            </button>
+            <button onClick={() => switchSubtab('cost', 2)} className={`subtab-btn ${activeSubtabs.cost === 2 ? 'active-subtab' : ''}`} style={{ fontSize: '12px', padding: '6px 12px' }}>
+              🔀 Scenarios
+            </button>
+            <button onClick={() => switchSubtab('cost', 3)} className={`subtab-btn ${activeSubtabs.cost === 3 ? 'active-subtab' : ''}`} style={{ fontSize: '12px', padding: '6px 12px' }}>
+              🔍 Assemblies
+            </button>
+          </div>
         </div>
-      </div>
       )}
-      
+
       {/* Sub-tabs - Hide on Mobile, Show on Desktop */}
       {!isEffectivelyMobile && (
-      <div className="subtab-container">
-        <div className="subtab-nav">
-          <button onClick={() => switchSubtab('cost', 1)} className={`subtab-btn ${activeSubtabs.cost === 1 ? 'active-subtab' : ''}`}>
-            📊 Summary
-          </button>
-          <button onClick={() => switchSubtab('cost', 2)} className={`subtab-btn ${activeSubtabs.cost === 2 ? 'active-subtab' : ''}`}>
-            🔀 Scenarios
-          </button>
-          <button onClick={() => switchSubtab('cost', 3)} className={`subtab-btn ${activeSubtabs.cost === 3 ? 'active-subtab' : ''}`}>
-            🔍 Assemblies
-          </button>
+        <div className="subtab-container">
+          <div className="subtab-nav">
+            <button onClick={() => switchSubtab('cost', 1)} className={`subtab-btn ${activeSubtabs.cost === 1 ? 'active-subtab' : ''}`}>
+              📊 Summary
+            </button>
+            <button onClick={() => switchSubtab('cost', 2)} className={`subtab-btn ${activeSubtabs.cost === 2 ? 'active-subtab' : ''}`}>
+              🔀 Scenarios
+            </button>
+            <button onClick={() => switchSubtab('cost', 3)} className={`subtab-btn ${activeSubtabs.cost === 3 ? 'active-subtab' : ''}`}>
+              🔍 Assemblies
+            </button>
+          </div>
         </div>
-      </div>
       )}
 
       {/* SUMMARY SUB TAB */}
@@ -229,241 +231,243 @@ const CostAnalysisTab = () => {
 
           {/* COST INPUTS (Hidden on mobile) */}
           {!isEffectivelyMobile && (
-          <div className="card">
-            <h2>⚙️ Cost Inputs</h2>
+            <div className="card">
+              <h2>⚙️ Cost Inputs</h2>
 
-            <div className="grid-2" style={{ gap: '20px', marginTop: '12px' }}>
-              {/* LEFT SIDE */}
-              <div>
-                {/* Project Name */}
-                <div className="form-group">
-                  <label className="form-label">Project Name</label>
-                  <input
-                    type="text"
-                    className="form-input"
-                    value={projectData.projectName}
-                    onChange={(e) => updateProjectData({ projectName: e.target.value })}
-                    placeholder="Enter project name..."
-                  />
-                </div>
-
-                {/* Building Length Slider */}
-                <div className="form-group">
-                  <label className="form-label">
-                    Building Length: {projectData.targetLength} ft
-                    <span style={{
-                      marginLeft: '8px',
-                      fontSize: '11px',
-                      color: projectData.targetLength >= calculations.requiredLength ? '#16a34a' : '#dc2626',
-                      fontWeight: 600
-                    }}>
-                      {projectData.targetLength >= calculations.requiredLength ? '✓ Adequate' : '⚠ Too Short'}
-                    </span>
-                  </label>
-                  <input
-                    type="range"
-                    min="100"
-                    max="500"
-                    step="10"
-                    value={projectData.targetLength}
-                    onChange={(e) => updateProjectData({ targetLength: parseInt(e.target.value) })}
-                    style={{
-                      width: '100%',
-                      accentColor: projectData.targetLength >= calculations.requiredLength ? '#16a34a' : '#dc2626'
-                    }}
-                  />
-                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px', color: '#6b7280', marginTop: '4px' }}>
-                    <span>100 ft</span>
-                    <span>Required: {calculations.requiredLength.toFixed(1)} ft</span>
-                    <span>500 ft</span>
-                  </div>
-                </div>
-
-                {/* 4 Horizontal Boxes: Floors, Lobby, Podium, Common Area % */}
-                <div className="grid-4" style={{ gap: '8px', marginBottom: '12px' }}>
-                  <div className="form-group" style={{ marginBottom: 0 }}>
-                    <label className="form-label" style={{ fontSize: '11px' }}>Floors</label>
-                    <select className="form-select" value={projectData.floors} onChange={(e) => updateProjectData({ floors: parseInt(e.target.value) })} style={{ padding: '6px' }}>
-                      {[1,2,3,4,5,6,7,8,9,10,12,15,20].map(n => <option key={n} value={n}>{n}</option>)}
-                    </select>
-                  </div>
-                  <div className="form-group" style={{ marginBottom: 0 }}>
-                    <label className="form-label" style={{ fontSize: '11px' }}>Lobby</label>
-                    <select className="form-select" value={projectData.lobbyType} onChange={(e) => updateProjectData({ lobbyType: parseInt(e.target.value) })} style={{ padding: '6px' }}>
-                      <option value={1}>1-Bay</option>
-                      <option value={2}>2-Bay</option>
-                      <option value={4}>4-Bay</option>
-                    </select>
-                  </div>
-                  <div className="form-group" style={{ marginBottom: 0 }}>
-                    <label className="form-label" style={{ fontSize: '11px' }}>Podium</label>
-                    <select className="form-select" value={projectData.podiumCount} onChange={(e) => updateProjectData({ podiumCount: parseInt(e.target.value) })} style={{ padding: '6px' }}>
-                      {[0,1,2,3].map(n => <option key={n} value={n}>{n}</option>)}
-                    </select>
-                  </div>
-                  <div className="form-group" style={{ marginBottom: 0 }}>
-                    <label className="form-label" style={{ fontSize: '11px' }}>% Common</label>
-                    <input type="number" className="form-input" value={projectData.commonAreaPct} min="0" max="20" onChange={(e) => updateProjectData({ commonAreaPct: parseInt(e.target.value) })} style={{ padding: '6px' }} />
-                  </div>
-                </div>
-
-                {/* Target Unit Mix (4 Editable Boxes) */}
+              <div className="grid-2" style={{ gap: '20px', marginTop: '12px' }}>
+                {/* LEFT SIDE */}
                 <div>
-                  <label className="form-label">Target Unit Mix</label>
-                  <div className="grid-4" style={{ gap: '8px', marginBottom: '12px' }}>
-                    {['Studio', '1BR', '2BR', '3BR'].map((label, i) => {
-                      const key = ['studio', 'oneBed', 'twoBed', 'threeBed'][i];
-                      return (
-                        <div key={key} className="form-group" style={{ marginBottom: 0 }}>
-                          <label className="form-label" style={{ fontSize: '11px' }}>{label}</label>
-                          <input
-                            type="number"
-                            className="form-input"
-                            value={projectData.targets[key]}
-                            min="0"
-                            onChange={(e) => updateProjectData({
-                              targets: { ...projectData.targets, [key]: parseInt(e.target.value) || 0 }
-                            })}
-                            style={{ padding: '6px', textAlign: 'center', fontWeight: 700 }}
-                          />
-                        </div>
-                      );
-                    })}
+                  {/* Project Name */}
+                  <div className="form-group">
+                    <label className="form-label">Project Name</label>
+                    <input
+                      type="text"
+                      className="form-input"
+                      value={projectData.projectName}
+                      onChange={(e) => updateProjectData({ projectName: e.target.value })}
+                      placeholder="Enter project name..."
+                    />
                   </div>
 
-                  {/* Actual Unit Mix (4 Display Boxes) */}
-                  <div style={{ marginBottom: 0 }}>
-                    <label className="form-label" style={{ marginBottom: '6px' }}>Actual Unit Mix</label>
-                    <div className="grid-4" style={{ gap: '6px', marginBottom: 0 }}>
+                  {/* Building Length Slider */}
+                  <div className="form-group">
+                    <label className="form-label">
+                      Building Length: {projectData.targetLength} ft
+                      <span style={{
+                        marginLeft: '8px',
+                        fontSize: '11px',
+                        color: projectData.targetLength >= calculations.requiredLength ? '#16a34a' : '#dc2626',
+                        fontWeight: 600
+                      }}>
+                        {projectData.targetLength >= calculations.requiredLength ? '✓ Adequate' : '⚠ Too Short'}
+                      </span>
+                    </label>
+                    <input
+                      type="range"
+                      min="100"
+                      max="500"
+                      step="10"
+                      value={projectData.targetLength}
+                      onChange={(e) => updateProjectData({ targetLength: parseInt(e.target.value) })}
+                      style={{
+                        width: '100%',
+                        accentColor: projectData.targetLength >= calculations.requiredLength ? '#16a34a' : '#dc2626'
+                      }}
+                    />
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px', color: '#6b7280', marginTop: '4px' }}>
+                      <span>100 ft</span>
+                      <span>Required: {calculations.requiredLength.toFixed(1)} ft</span>
+                      <span>500 ft</span>
+                    </div>
+                  </div>
+
+                  {/* 4 Horizontal Boxes: Floors, Lobby, Podium, Common Area % */}
+                  <div className="grid-4" style={{ gap: '8px', marginBottom: '12px' }}>
+                    <div className="form-group" style={{ marginBottom: 0 }}>
+                      <label className="form-label" style={{ fontSize: '11px' }}>Floors</label>
+                      <select className="form-select" value={projectData.floors} onChange={(e) => updateProjectData({ floors: parseInt(e.target.value) })} style={{ padding: '6px' }}>
+                        {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 15, 20].map(n => <option key={n} value={n}>{n}</option>)}
+                      </select>
+                    </div>
+                    <div className="form-group" style={{ marginBottom: 0 }}>
+                      <label className="form-label" style={{ fontSize: '11px' }}>Lobby</label>
+                      <select className="form-select" value={projectData.lobbyType} onChange={(e) => updateProjectData({ lobbyType: parseInt(e.target.value) })} style={{ padding: '6px' }}>
+                        <option value={1}>1-Bay</option>
+                        <option value={2}>2-Bay</option>
+                        <option value={4}>4-Bay</option>
+                      </select>
+                    </div>
+                    <div className="form-group" style={{ marginBottom: 0 }}>
+                      <label className="form-label" style={{ fontSize: '11px' }}>Podium</label>
+                      <select className="form-select" value={projectData.podiumCount} onChange={(e) => updateProjectData({ podiumCount: parseInt(e.target.value) })} style={{ padding: '6px' }}>
+                        {[0, 1, 2, 3].map(n => <option key={n} value={n}>{n}</option>)}
+                      </select>
+                    </div>
+                    <div className="form-group" style={{ marginBottom: 0 }}>
+                      <label className="form-label" style={{ fontSize: '11px' }}>% Common</label>
+                      <input type="number" className="form-input" value={projectData.commonAreaPct} min="0" max="20" onChange={(e) => updateProjectData({ commonAreaPct: parseInt(e.target.value) })} style={{ padding: '6px' }} />
+                    </div>
+                  </div>
+
+                  {/* Target Unit Mix (4 Editable Boxes) */}
+                  <div>
+                    <label className="form-label">Target Unit Mix</label>
+                    <div className="grid-4" style={{ gap: '8px', marginBottom: '12px' }}>
                       {['Studio', '1BR', '2BR', '3BR'].map((label, i) => {
                         const key = ['studio', 'oneBed', 'twoBed', 'threeBed'][i];
-                        const actual = calculations.optimized[key];
                         return (
-                          <div key={key} style={{ padding: '4px 6px', background: '#f0fdf4', borderRadius: '4px', textAlign: 'center', border: '1px solid #86efac' }}>
-                            <div style={{ fontSize: '9px', fontWeight: 600, color: '#15803D', marginBottom: '2px' }}>{label}</div>
-                            <div style={{ fontSize: '14px', fontWeight: 700, color: '#111827' }}>{actual}</div>
+                          <div key={key} className="form-group" style={{ marginBottom: 0 }}>
+                            <label className="form-label" style={{ fontSize: '11px' }}>{label}</label>
+                            <input
+                              type="number"
+                              className="form-input"
+                              value={projectData.targets[key]}
+                              min="0"
+                              onChange={(e) => updateProjectData({
+                                targets: { ...projectData.targets, [key]: parseInt(e.target.value) || 0 }
+                              })}
+                              style={{ padding: '6px', textAlign: 'center', fontWeight: 700 }}
+                            />
                           </div>
                         );
                       })}
                     </div>
-                  </div>
 
-                  {/* Save Project Button */}
-                  <button
-                    className="btn btn-success"
-                    style={{ width: '100%', marginTop: '12px', padding: '10px', fontSize: '14px', fontWeight: 700 }}
-                    onClick={() => alert('Project saved successfully!')}
-                  >
-                    💾 Save Project
-                  </button>
-                </div>
-              </div>
+                    {/* Actual Unit Mix (4 Display Boxes) */}
+                    <div style={{ marginBottom: 0 }}>
+                      <label className="form-label" style={{ marginBottom: '6px' }}>Actual Unit Mix</label>
+                      <div className="grid-4" style={{ gap: '6px', marginBottom: 0 }}>
+                        {['Studio', '1BR', '2BR', '3BR'].map((label, i) => {
+                          const key = ['studio', 'oneBed', 'twoBed', 'threeBed'][i];
+                          const actual = calculations.optimized[key];
+                          return (
+                            <div key={key} style={{ padding: '4px 6px', background: '#f0fdf4', borderRadius: '4px', textAlign: 'center', border: '1px solid #86efac' }}>
+                              <div style={{ fontSize: '9px', fontWeight: 600, color: '#15803D', marginBottom: '2px' }}>{label}</div>
+                              <div style={{ fontSize: '14px', fontWeight: 700, color: '#111827' }}>{actual}</div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
 
-              {/* RIGHT SIDE */}
-              <div>
-                {/* Site & Factory Location (side by side, NO location factors displayed) */}
-                <div className="grid-2" style={{ gap: '8px', marginBottom: '12px' }}>
-                  <LocationInput
-                    label="Site Location"
-                    value={projectData.propertyLocation || 'Boise, ID'}
-                    placeholder="Enter city or zip code"
-                    onChange={(locationData) => {
-                      updateProjectData({
-                        propertyLocation: locationData.displayLocation,
-                        propertyFactor: locationData.factor
-                      });
-                    }}
-                  />
-                  <LocationInput
-                    label="Factory Location"
-                    value={projectData.factoryLocation || 'Boise, ID'}
-                    placeholder="Enter city or zip code"
-                    onChange={(locationData) => {
-                      updateProjectData({
-                        factoryLocation: locationData.displayLocation,
-                        factoryFactor: locationData.factor
-                      });
-                    }}
-                  />
-                </div>
-
-                {/* Prevailing Wages & ADA Compliance (side by side) */}
-                <div className="grid-2" style={{ gap: '8px', marginBottom: '12px' }}>
-                  <div className="form-group">
-                    <label className="form-label">Prevailing Wages</label>
-                    <select className="form-select">
-                      <option>Yes (Union rates)</option>
-                      <option>No (Open shop)</option>
-                    </select>
-                  </div>
-                  <div className="form-group">
-                    <label className="form-label">ADA Compliance %</label>
-                    <input type="number" className="form-input" value={costAdjustments.adaPct} min="0" max="100" onChange={(e) => setCostAdjustments({...costAdjustments, adaPct: parseInt(e.target.value)})} />
+                    {/* Save Project Button */}
+                    <button
+                      className="btn btn-success"
+                      style={{ width: '100%', marginTop: '12px', padding: '10px', fontSize: '14px', fontWeight: 700 }}
+                      onClick={() => setShowSaveSuccess(true)}
+                    >
+                      💾 Save Project
+                    </button>
                   </div>
                 </div>
 
-                {/* Site Conditions (4 boxes in 2x2 grid) */}
+                {/* RIGHT SIDE */}
                 <div>
-                  <label className="form-label">Site Conditions</label>
+                  {/* Site & Factory Location (side by side, NO location factors displayed) */}
                   <div className="grid-2" style={{ gap: '8px', marginBottom: '12px' }}>
-                    <div className="form-group" style={{ marginBottom: 0 }}>
-                      <label className="form-label" style={{ fontSize: '11px' }}>Soil</label>
-                      <select className="form-select" value={costAdjustments.soil} onChange={(e) => setCostAdjustments({...costAdjustments, soil: e.target.value})} style={{ padding: '6px' }}>
-                        <option value="good">Good</option>
-                        <option value="poor">Poor</option>
-                        <option value="expansive">Expansive</option>
+                    <LocationInput
+                      label="Site Location"
+                      value={projectData.propertyLocation || ''}
+                      placeholder="Enter city or zip code"
+                      onChange={(locationData) => {
+                        updateProjectData({
+                          propertyLocation: locationData.displayLocation,
+                          propertyFactor: locationData.factor,
+                          propertyCoordinates: { lat: locationData.coordinates.lat, lng: locationData.coordinates.lng }
+                        });
+                      }}
+                    />
+                    <LocationInput
+                      label="Factory Location"
+                      value={projectData.factoryLocation || ''}
+                      placeholder="Enter city or zip code"
+                      onChange={(locationData) => {
+                        updateProjectData({
+                          factoryLocation: locationData.displayLocation,
+                          factoryFactor: locationData.factor,
+                          factoryCoordinates: { lat: locationData.coordinates.lat, lng: locationData.coordinates.lng }
+                        });
+                      }}
+                    />
+                  </div>
+
+                  {/* Prevailing Wages & ADA Compliance (side by side) */}
+                  <div className="grid-2" style={{ gap: '8px', marginBottom: '12px' }}>
+                    <div className="form-group">
+                      <label className="form-label">Prevailing Wages</label>
+                      <select className="form-select">
+                        <option>Yes (Union rates)</option>
+                        <option>No (Open shop)</option>
                       </select>
                     </div>
-                    <div className="form-group" style={{ marginBottom: 0 }}>
-                      <label className="form-label" style={{ fontSize: '11px' }}>Seismic</label>
-                      <select className="form-select" value={costAdjustments.seismic} onChange={(e) => setCostAdjustments({...costAdjustments, seismic: e.target.value})} style={{ padding: '6px' }}>
-                        <option value="low">Low (A/B)</option>
-                        <option value="moderate">Moderate (C)</option>
-                        <option value="high">High (D/E)</option>
-                      </select>
-                    </div>
-                    <div className="form-group" style={{ marginBottom: 0 }}>
-                      <label className="form-label" style={{ fontSize: '11px' }}>Snow Load</label>
-                      <select className="form-select" value={costAdjustments.snow} onChange={(e) => setCostAdjustments({...costAdjustments, snow: e.target.value})} style={{ padding: '6px' }}>
-                        <option value="no">No</option>
-                        <option value="yes">Yes (High)</option>
-                      </select>
-                    </div>
-                    <div className="form-group" style={{ marginBottom: 0 }}>
-                      <label className="form-label" style={{ fontSize: '11px' }}>High Wind</label>
-                      <select className="form-select" value={costAdjustments.wind} onChange={(e) => setCostAdjustments({...costAdjustments, wind: e.target.value})} style={{ padding: '6px' }}>
-                        <option value="no">No</option>
-                        <option value="yes">Yes</option>
-                      </select>
+                    <div className="form-group">
+                      <label className="form-label">ADA Compliance %</label>
+                      <input type="number" className="form-input" value={costAdjustments.adaPct} min="0" max="100" onChange={(e) => setCostAdjustments({ ...costAdjustments, adaPct: parseInt(e.target.value) })} />
                     </div>
                   </div>
-                </div>
 
-                {/* Amenities (under Site Conditions) */}
-                <div>
-                  <label className="form-label">Amenities</label>
-                  <div className="grid-2" style={{ gap: '8px' }}>
-                    <div className="form-group" style={{ marginBottom: 0 }}>
-                      <label className="form-label" style={{ fontSize: '11px' }}>Finish Level</label>
-                      <select className="form-select" value={costAdjustments.finishLevel} onChange={(e) => setCostAdjustments({...costAdjustments, finishLevel: e.target.value})} style={{ padding: '6px' }}>
-                        <option value="basic">Basic</option>
-                        <option value="standard">Standard</option>
-                        <option value="premium">Premium</option>
-                      </select>
+                  {/* Site Conditions (4 boxes in 2x2 grid) */}
+                  <div>
+                    <label className="form-label">Site Conditions</label>
+                    <div className="grid-2" style={{ gap: '8px', marginBottom: '12px' }}>
+                      <div className="form-group" style={{ marginBottom: 0 }}>
+                        <label className="form-label" style={{ fontSize: '11px' }}>Soil</label>
+                        <select className="form-select" value={costAdjustments.soil} onChange={(e) => setCostAdjustments({ ...costAdjustments, soil: e.target.value })} style={{ padding: '6px' }}>
+                          <option value="good">Good</option>
+                          <option value="poor">Poor</option>
+                          <option value="expansive">Expansive</option>
+                        </select>
+                      </div>
+                      <div className="form-group" style={{ marginBottom: 0 }}>
+                        <label className="form-label" style={{ fontSize: '11px' }}>Seismic</label>
+                        <select className="form-select" value={costAdjustments.seismic} onChange={(e) => setCostAdjustments({ ...costAdjustments, seismic: e.target.value })} style={{ padding: '6px' }}>
+                          <option value="low">Low (A/B)</option>
+                          <option value="moderate">Moderate (C)</option>
+                          <option value="high">High (D/E)</option>
+                        </select>
+                      </div>
+                      <div className="form-group" style={{ marginBottom: 0 }}>
+                        <label className="form-label" style={{ fontSize: '11px' }}>Snow Load</label>
+                        <select className="form-select" value={costAdjustments.snow} onChange={(e) => setCostAdjustments({ ...costAdjustments, snow: e.target.value })} style={{ padding: '6px' }}>
+                          <option value="no">No</option>
+                          <option value="yes">Yes (High)</option>
+                        </select>
+                      </div>
+                      <div className="form-group" style={{ marginBottom: 0 }}>
+                        <label className="form-label" style={{ fontSize: '11px' }}>High Wind</label>
+                        <select className="form-select" value={costAdjustments.wind} onChange={(e) => setCostAdjustments({ ...costAdjustments, wind: e.target.value })} style={{ padding: '6px' }}>
+                          <option value="no">No</option>
+                          <option value="yes">Yes</option>
+                        </select>
+                      </div>
                     </div>
-                    <div className="form-group" style={{ marginBottom: 0 }}>
-                      <label className="form-label" style={{ fontSize: '11px' }}>Appliances</label>
-                      <select className="form-select" value={costAdjustments.appliances} onChange={(e) => setCostAdjustments({...costAdjustments, appliances: e.target.value})} style={{ padding: '6px' }}>
-                        <option value="none">None</option>
-                        <option value="basic">Basic</option>
-                        <option value="premium">Premium</option>
-                      </select>
+                  </div>
+
+                  {/* Amenities (under Site Conditions) */}
+                  <div>
+                    <label className="form-label">Amenities</label>
+                    <div className="grid-2" style={{ gap: '8px' }}>
+                      <div className="form-group" style={{ marginBottom: 0 }}>
+                        <label className="form-label" style={{ fontSize: '11px' }}>Finish Level</label>
+                        <select className="form-select" value={costAdjustments.finishLevel} onChange={(e) => setCostAdjustments({ ...costAdjustments, finishLevel: e.target.value })} style={{ padding: '6px' }}>
+                          <option value="basic">Basic</option>
+                          <option value="standard">Standard</option>
+                          <option value="premium">Premium</option>
+                        </select>
+                      </div>
+                      <div className="form-group" style={{ marginBottom: 0 }}>
+                        <label className="form-label" style={{ fontSize: '11px' }}>Appliances</label>
+                        <select className="form-select" value={costAdjustments.appliances} onChange={(e) => setCostAdjustments({ ...costAdjustments, appliances: e.target.value })} style={{ padding: '6px' }}>
+                          <option value="none">None</option>
+                          <option value="basic">Basic</option>
+                          <option value="premium">Premium</option>
+                        </select>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
           )}
 
           {/* MOBILE ONLY: Actual Unit Mix (2 rows of 4 boxes above entity selection) */}
@@ -647,7 +651,7 @@ const CostAnalysisTab = () => {
 
                 <div className="form-group">
                   <label className="form-label">Entity Type</label>
-                  <select className="form-select" value={scenarioA.entityType} onChange={(e) => setScenarioA({...scenarioA, entityType: e.target.value})}>
+                  <select className="form-select" value={scenarioA.entityType} onChange={(e) => setScenarioA({ ...scenarioA, entityType: e.target.value })}>
                     <option value="siteBuild">Site GC</option>
                     <option value="modularGC">Modular GC</option>
                     <option value="fabricator">Fabricator</option>
@@ -671,8 +675,8 @@ const CostAnalysisTab = () => {
 
                 <div className="form-group">
                   <label className="form-label">Floors</label>
-                  <select className="form-select" value={scenarioA.floors} onChange={(e) => setScenarioA({...scenarioA, floors: parseInt(e.target.value)})}>
-                    {[2,3,4,5].map(n => <option key={n} value={n}>{n}</option>)}
+                  <select className="form-select" value={scenarioA.floors} onChange={(e) => setScenarioA({ ...scenarioA, floors: parseInt(e.target.value) })}>
+                    {[2, 3, 4, 5].map(n => <option key={n} value={n}>{n}</option>)}
                   </select>
                 </div>
 
@@ -706,7 +710,7 @@ const CostAnalysisTab = () => {
 
                 <div className="form-group">
                   <label className="form-label">Entity Type</label>
-                  <select className="form-select" value={scenarioB.entityType} onChange={(e) => setScenarioB({...scenarioB, entityType: e.target.value})}>
+                  <select className="form-select" value={scenarioB.entityType} onChange={(e) => setScenarioB({ ...scenarioB, entityType: e.target.value })}>
                     <option value="siteBuild">Site GC</option>
                     <option value="modularGC">Modular GC</option>
                     <option value="fabricator">Fabricator</option>
@@ -730,8 +734,8 @@ const CostAnalysisTab = () => {
 
                 <div className="form-group">
                   <label className="form-label">Floors</label>
-                  <select className="form-select" value={scenarioB.floors} onChange={(e) => setScenarioB({...scenarioB, floors: parseInt(e.target.value)})}>
-                    {[2,3,4,5].map(n => <option key={n} value={n}>{n}</option>)}
+                  <select className="form-select" value={scenarioB.floors} onChange={(e) => setScenarioB({ ...scenarioB, floors: parseInt(e.target.value) })}>
+                    {[2, 3, 4, 5].map(n => <option key={n} value={n}>{n}</option>)}
                   </select>
                 </div>
 
@@ -1069,6 +1073,15 @@ const CostAnalysisTab = () => {
           </div>
         </div>
       )}
+
+      {/* Success Modal */}
+      <AlertModal
+        isOpen={showSaveSuccess}
+        onClose={() => setShowSaveSuccess(false)}
+        title="Success"
+        message="Project saved successfully!"
+        type="success"
+      />
     </div>
   );
 };

@@ -501,18 +501,6 @@ export const calculateBuildingGSF = (optimized, floors, lobbyType = 2, skus = {}
 
   const totalGSF = totalUnitGSF + totalCommonGSF + totalPodiumGSF;
 
-  // Debug: Log the calculation breakdown
-  if (floors === 5) {
-    console.log('=== GSF CALCULATION (MATHEMATICAL) ===');
-    console.log('Target units:', optimized);
-    console.log('Per-floor per-side breakdown:', { sku_studio: sku_studio.toFixed(1), sku_1_corner: sku_1_corner.toFixed(1), sku_1_inline: sku_1_inline.toFixed(1), sku_2_corner: sku_2_corner.toFixed(1), sku_2_inline: sku_2_inline.toFixed(1), sku_3_corner: sku_3_corner.toFixed(1) });
-    console.log('Per-side unit GSF:', perFloorUnitGSF.toFixed(1), 'SF');
-    console.log('Both sides per floor × floors:', perFloorBothSidesUnitGSF.toFixed(1), '× 5 =', totalUnitGSF.toFixed(1), 'SF');
-    console.log('Common area per floor × floors:', perFloorCommonGSF.toFixed(1), '× 5 =', totalCommonGSF.toFixed(1), 'SF');
-    console.log('TOTAL GSF:', totalGSF.toFixed(1), 'SF');
-    console.log('=====================================');
-  }
-
   const totalUnits = optimized.studio + optimized.oneBed + optimized.twoBed + optimized.threeBed;
 
   return {
