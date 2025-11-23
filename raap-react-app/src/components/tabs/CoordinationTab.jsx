@@ -557,16 +557,16 @@ const CoordinationTab = () => {
                   }}
                 />
 
-                {/* Clickable Text Label Areas */}
+                {/* Clickable Text Label Areas - Clock Position Layout */}
                 {[
-                  { id: 'roof', label: 'Roof', top: '3%', left: '31%', width: '60px', image: '/images/roof.png', pain: 'Membranes, drains, curbs, and venting require hybrid coordination.', fix: 'RaaP\'s roof interface templates define who does what at every step.' },
-                  { id: 'mechanical', label: 'Mechanical', top: '3%', left: '52%', width: '110px', image: '/images/hvac.png', pain: 'Ducts, HRVs, and exhausts crossing mate-lines require millimeter accuracy.', fix: 'RaaP creates factory-ready HVAC diagrams with set-day instructions.' },
-                  { id: 'fire', label: 'Fire', top: '17%', left: '86%', width: '40px', image: '/images/Fire.png', pain: 'The greatest risk for leaks, delays, and inspection failures.', fix: 'Standardized zone boundaries for sprinklers.' },
-                  { id: 'electrical', label: 'Electrical', top: '20%', left: '1%', width: '90px', image: '/images/electrical.png', pain: 'Multi-company wiring pathways create chaos.', fix: 'Panel strategies, branch circuits, and mate-line pathways standardized.' },
-                  { id: 'exterior', label: 'Exterior Walls', top: '40%', left: '1%', width: '110px', image: '/images/Outside_walls.png', pain: 'Water and fire continuity fail when factory + GC don\'t align.', fix: 'Pre-validated WRB overlaps, close-up sequencing, and fire stop details.' },
-                  { id: 'plumbing', label: 'Plumbing', top: '40%', left: '84%', width: '90px', image: '/images/plumbing.png', pain: 'The greatest risk for leaks, delays, and inspection failures.', fix: 'Pod-based plumbing kits.' },
-                  { id: 'structural', label: 'Structural', top: '83%', left: '1%', width: '90px', image: '/images/Structural.png', pain: 'Two engineering teams, one load path — and no owner of continuity.', fix: 'Standard bearing plates, diaphragm details, and mate-line structural kits.' },
-                  { id: 'corridors', label: 'Corridors', top: '83%', left: '79%', width: '90px', image: '/images/corridor.png', pain: 'Alignment issues cause inspection delays and rework.', fix: 'Standard corridor modules with predictable clearances, J-box layouts, and rated panels.' }
+                  { id: 'exterior', label: 'Exterior Walls', top: '50%', left: '1%', width: '110px', image: '/images/Outside_walls.png', pain: 'Water and fire continuity fail when factory + GC don\'t align.', fix: 'Pre-validated WRB overlaps, close-up sequencing, and fire stop details.' },
+                  { id: 'electrical', label: 'Electrical', top: '15%', left: '20%', width: '90px', image: '/images/electrical.png', pain: 'Multi-company wiring pathways create chaos.', fix: 'Panel strategies, branch circuits, and mate-line pathways standardized.' },
+                  { id: 'roof', label: 'Roof', top: '3%', left: '45%', width: '60px', image: '/images/roof.png', pain: 'Membranes, drains, curbs, and venting require hybrid coordination.', fix: 'RaaP\'s roof interface templates define who does what at every step.' },
+                  { id: 'mechanical', label: 'Mechanical', top: '15%', left: '70%', width: '110px', image: '/images/hvac.png', pain: 'Ducts, HRVs, and exhausts crossing mate-lines require millimeter accuracy.', fix: 'RaaP creates factory-ready HVAC diagrams with set-day instructions.' },
+                  { id: 'fire', label: 'Fire', top: '50%', left: '86%', width: '40px', image: '/images/Fire.png', pain: 'The greatest risk for leaks, delays, and inspection failures.', fix: 'Standardized zone boundaries for sprinklers.' },
+                  { id: 'plumbing', label: 'Plumbing', top: '75%', left: '70%', width: '90px', image: '/images/plumbing.png', pain: 'The greatest risk for leaks, delays, and inspection failures.', fix: 'Pod-based plumbing kits.' },
+                  { id: 'corridors', label: 'Corridors', top: '85%', left: '45%', width: '90px', image: '/images/corridor.png', pain: 'Alignment issues cause inspection delays and rework.', fix: 'Standard corridor modules with predictable clearances, J-box layouts, and rated panels.' },
+                  { id: 'structural', label: 'Structural', top: '83%', left: '1%', width: '90px', image: '/images/Structural.png', pain: 'Two engineering teams, one load path — and no owner of continuity.', fix: 'Standard bearing plates, diaphragm details, and mate-line structural kits.' }
                 ].map(system => (
                   <div
                     key={system.id}
