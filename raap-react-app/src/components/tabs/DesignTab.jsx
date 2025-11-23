@@ -123,15 +123,6 @@ const DesignTab = () => {
             </div>
           )}
 
-          {/* Building Story Video - Desktop only */}
-          {!isEffectivelyMobile && (
-            <div style={{ background: 'white', borderRadius: '8px', overflow: 'hidden', marginBottom: '12px', boxShadow: '0 4px 8px rgba(0,0,0,0.15)' }}>
-              <video autoPlay muted loop style={{ width: '100%', height: 'auto', display: 'block', background: '#e5e7eb' }}>
-                <source src={videoSrc} type="video/mp4" />
-              </video>
-            </div>
-          )}
-
           <div className="grid-2" style={{ gap: isEffectivelyMobile ? '8px' : '12px' }}>
             {/* Design Configuration */}
             <div className="card">
@@ -716,7 +707,7 @@ const DesignTab = () => {
           <div className="card">
             <h2 style={{ fontSize: isEffectivelyMobile ? '14px' : '18px' }}>📐 Floor Plan Layout</h2>
 
-            <div style={{ overflowX: 'auto', background: '#f9fafb', padding: '2px', borderRadius: '8px', marginBottom: '0', height: isEffectivelyMobile ? '500px' : '900px', display: 'flex', alignItems: 'flex-start', justifyContent: 'flex-start' }}>
+            <div style={{ overflowX: 'auto', overflowY: 'auto', background: '#f9fafb', padding: '2px', borderRadius: '8px', marginBottom: '0', height: isEffectivelyMobile ? '250px' : '450px', display: 'flex', alignItems: 'flex-start', justifyContent: 'flex-start' }}>
               <img
                 src={
                   calculations.totalOptimized <= 12
@@ -726,7 +717,7 @@ const DesignTab = () => {
                     : ASSET_PATHS.LAYOUT_LONG
                 }
                 alt="Floor Layout"
-                style={{ height: '100%', width: 'auto', display: 'block' }}
+                style={{ height: '300%', width: 'auto', display: 'block' }}
               />
             </div>
           </div>
