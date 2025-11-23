@@ -306,7 +306,8 @@
   border-bottom: 3px solid transparent;
   font-weight: 600;
   color: #6b7280;
-  font-size: 15px;
+  font-size: 18px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   transition: all 0.2s ease;
 }
 
@@ -344,7 +345,7 @@
   display: flex;
   gap: 0;
   padding: 0 10px;
-  font-size: 14px;
+  font-size: 18px;
   border-bottom: 1px solid #e5e7eb;
 }
 
@@ -356,7 +357,8 @@
   border-bottom: 2px solid transparent;
   font-weight: 600;
   color: #6b7280;
-  font-size: 14px;
+  font-size: 18px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   transition: all 0.2s ease;
   border-radius: 4px 4px 0 0;
 }
@@ -640,7 +642,7 @@
   }
 
   .tab-btn {
-    font-size: 11px;
+    font-size: 14px;
     padding: 10px 8px;
     white-space: nowrap;
     flex: 1;
@@ -722,7 +724,7 @@
   }
 
   .subtab-btn {
-    font-size: 10px;
+    font-size: 14px;
     padding: 6px 8px;
     flex: 1;
     min-width: 60px;

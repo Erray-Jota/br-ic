@@ -46,11 +46,11 @@ export const COLORS = {
 export const FONTS = {
   system: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
   sizes: {
-    xs: '13px',
-    sm: '14px',
-    base: '15px',
-    md: '16px',
-    lg: '18px',
+    xs: '14px',      // Increased from 13px
+    sm: '16px',      // Increased from 14px
+    base: '18px',    // Increased from 15px - now matches lg
+    md: '18px',      // Increased from 16px
+    lg: '18px',      // Standard body text
     xl: '20px',
     '2xl': '22px',
     '3xl': '24px',

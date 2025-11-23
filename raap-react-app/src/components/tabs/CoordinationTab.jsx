@@ -759,14 +759,14 @@ const CoordinationTab = () => {
                       </h3>
 
                       {/* Pain/Fix Text - Compact */}
-                      <div style={{ marginBottom: '12px', fontSize: FONTS.sizes.sm }}>
+                      <div style={{ marginBottom: '12px', fontSize: FONTS.sizes.base, fontFamily: FONTS.system }}>
                         <div style={{ marginBottom: '8px' }}>
                           <span style={{ fontWeight: FONTS.weight.black, color: '#DC2626' }}>Pain: </span>
-                          <span style={{ color: '#991B1B', fontWeight: FONTS.weight.semibold }}>{system.pain}</span>
+                          <span style={{ color: '#991B1B', fontWeight: FONTS.weight.normal }}>{system.pain}</span>
                         </div>
                         <div>
                           <span style={{ fontWeight: FONTS.weight.black, color: '#16A34A' }}>RaaP Fix: </span>
-                          <span style={{ color: '#065F46', fontWeight: FONTS.weight.semibold }}>{system.fix}</span>
+                          <span style={{ color: '#065F46', fontWeight: FONTS.weight.normal }}>{system.fix}</span>
                         </div>
                       </div>
 
