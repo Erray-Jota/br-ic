@@ -548,51 +548,57 @@ const CoordinationTab = () => {
 
             {/* Hero Visual with Clickable Systems */}
             <div style={{ background: '#FFFFFF', padding: '24px', borderRadius: '12px', border: '3px solid #065F46', marginBottom: '28px', boxShadow: '0 6px 18px rgba(0,0,0,0.1)' }}>
-              {/* Construction Hero Image */}
-              <div style={{ position: 'relative', textAlign: 'center', marginBottom: SPACING.lg }}>
+              {/* Construction Hero Image with Overlaid Icons */}
+              <div style={{ position: 'relative', textAlign: 'center', marginBottom: SPACING.lg, maxWidth: '1200px', margin: '0 auto' }}>
                 <img
                   src="/images/construction_hero.png"
                   alt="Modular Construction Coordination"
                   style={{
                     width: '100%',
-                    maxWidth: '1200px',
                     borderRadius: '8px',
                     opacity: selectedSystem ? 0.3 : 1,
-                    transition: 'opacity 0.4s ease'
+                    transition: 'opacity 0.4s ease',
+                    display: 'block'
                   }}
                 />
-              </div>
 
-              {/* Clickable System Icons Grid */}
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '16px', marginBottom: SPACING.xl }}>
+                {/* Overlaid Clickable System Icons */}
                 {[
-                  { id: 'structural', icon: '🏗️', label: 'Structural', image: '/images/Structural.png', pain: 'Two engineering teams, one load path — and no owner of continuity.', fix: 'Standard bearing plates, diaphragm details, and mate-line structural kits.' },
-                  { id: 'exterior', icon: '🧱', label: 'Exterior Walls', image: '/images/Outside_walls.png', pain: 'Water and fire continuity fail when factory + GC don\'t align.', fix: 'Pre-validated WRB overlaps, close-up sequencing, and fire stop details.' },
-                  { id: 'roof', icon: '🏠', label: 'Roof', image: '/images/roof.png', pain: 'Membranes, drains, curbs, and venting require hybrid coordination.', fix: 'RaaP\'s roof interface templates define who does what at every step.' },
-                  { id: 'corridors', icon: '🚪', label: 'Corridors', image: '/images/corridor.png', pain: 'Alignment issues cause inspection delays and rework.', fix: 'Standard corridor modules with predictable clearances, J-box layouts, and rated panels.' },
-                  { id: 'mechanical', icon: '❄️', label: 'Mechanical', image: '/images/hvac.png', pain: 'Ducts, HRVs, and exhausts crossing mate-lines require millimeter accuracy.', fix: 'RaaP creates factory-ready HVAC diagrams with set-day instructions.' },
-                  { id: 'electrical', icon: '⚡', label: 'Electrical', image: '/images/electrical.png', pain: 'Multi-company wiring pathways create chaos.', fix: 'Panel strategies, branch circuits, and mate-line pathways standardized.' },
-                  { id: 'plumbing', icon: '🚰', label: 'Plumbing', image: '/images/plumbing.png', pain: 'The greatest risk for leaks, delays, and inspection failures.', fix: 'Pod-based plumbing kits.' },
-                  { id: 'fire', icon: '🔥', label: 'Fire Protection', image: '/images/Fire.png', pain: 'The greatest risk for leaks, delays, and inspection failures.', fix: 'Standardized zone boundaries for sprinklers.' }
+                  { id: 'roof', icon: '🏠', label: 'Roof', top: '8%', left: '28%', image: '/images/roof.png', pain: 'Membranes, drains, curbs, and venting require hybrid coordination.', fix: 'RaaP\'s roof interface templates define who does what at every step.' },
+                  { id: 'mechanical', icon: '❄️', label: 'Mechanical', top: '8%', left: '60%', image: '/images/hvac.png', pain: 'Ducts, HRVs, and exhausts crossing mate-lines require millimeter accuracy.', fix: 'RaaP creates factory-ready HVAC diagrams with set-day instructions.' },
+                  { id: 'fire', icon: '🔥', label: 'Fire Protection', top: '20%', right: '8%', image: '/images/Fire.png', pain: 'The greatest risk for leaks, delays, and inspection failures.', fix: 'Standardized zone boundaries for sprinklers.' },
+                  { id: 'electrical', icon: '⚡', label: 'Electrical', top: '22%', left: '2%', image: '/images/electrical.png', pain: 'Multi-company wiring pathways create chaos.', fix: 'Panel strategies, branch circuits, and mate-line pathways standardized.' },
+                  { id: 'exterior', icon: '🧱', label: 'Exterior Walls', top: '42%', left: '2%', image: '/images/Outside_walls.png', pain: 'Water and fire continuity fail when factory + GC don\'t align.', fix: 'Pre-validated WRB overlaps, close-up sequencing, and fire stop details.' },
+                  { id: 'plumbing', icon: '🚰', label: 'Plumbing', top: '42%', right: '8%', image: '/images/plumbing.png', pain: 'The greatest risk for leaks, delays, and inspection failures.', fix: 'Pod-based plumbing kits.' },
+                  { id: 'structural', icon: '🏗️', label: 'Structural', bottom: '8%', left: '8%', image: '/images/Structural.png', pain: 'Two engineering teams, one load path — and no owner of continuity.', fix: 'Standard bearing plates, diaphragm details, and mate-line structural kits.' },
+                  { id: 'corridors', icon: '🚪', label: 'Corridors', bottom: '8%', right: '8%', image: '/images/corridor.png', pain: 'Alignment issues cause inspection delays and rework.', fix: 'Standard corridor modules with predictable clearances, J-box layouts, and rated panels.' }
                 ].map(system => (
                   <div
                     key={system.id}
                     onClick={() => setSelectedSystem(selectedSystem === system.id ? null : system.id)}
                     className="system-icon"
                     style={{
-                      background: selectedSystem === system.id ? '#16A34A' : 'linear-gradient(135deg, #f0fdf4 0%, #e8f5e9 100%)',
-                      padding: SPACING.md,
-                      borderRadius: BORDERS.radius.md,
-                      border: `3px solid ${selectedSystem === system.id ? '#065F46' : '#16A34A'}`,
-                      textAlign: 'center',
-                      cursor: 'pointer'
+                      position: 'absolute',
+                      top: system.top,
+                      bottom: system.bottom,
+                      left: system.left,
+                      right: system.right,
+                      width: '40px',
+                      height: '40px',
+                      borderRadius: '50%',
+                      background: selectedSystem === system.id ? '#16A34A' : 'rgba(22, 163, 74, 0.9)',
+                      border: `3px solid ${selectedSystem === system.id ? '#FFFFFF' : '#065F46'}`,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      cursor: 'pointer',
+                      boxShadow: '0 2px 8px rgba(0,0,0,0.3)',
+                      zIndex: 10
                     }}
+                    title={system.label}
                   >
-                    <div style={{ fontSize: '32px', marginBottom: '8px', color: selectedSystem === system.id ? '#FFFFFF' : '#16A34A' }}>
+                    <div style={{ fontSize: '20px', lineHeight: 1 }}>
                       {system.icon}
-                    </div>
-                    <div style={{ fontSize: FONTS.sizes.sm, fontWeight: FONTS.weight.bold, color: selectedSystem === system.id ? '#FFFFFF' : COLORS.green.dark }}>
-                      {system.label}
                     </div>
                   </div>
                 ))}
