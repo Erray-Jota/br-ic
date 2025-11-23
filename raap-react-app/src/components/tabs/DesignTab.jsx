@@ -101,8 +101,8 @@ const DesignTab = () => {
       {/* Units Subtab - Hero Video at Top for Desktop & Mobile */}
       {activeSubtabs.design === 2 && (
         <div>
-          <div style={{ background: 'white', borderRadius: '8px', overflow: 'hidden', marginBottom: '12px', height: isEffectivelyMobile ? '200px' : '380px', boxShadow: '0 4px 8px rgba(0,0,0,0.15)' }}>
-            <video controls loop muted autoPlay playsInline style={{ width: '100%', height: isEffectivelyMobile ? '400px' : '100%', objectFit: 'cover', display: 'block', background: '#e5e7eb' }}>
+          <div style={{ background: 'white', borderRadius: '8px', overflow: 'hidden', marginBottom: '12px', boxShadow: '0 4px 8px rgba(0,0,0,0.15)' }}>
+            <video controls loop muted autoPlay playsInline style={{ width: '100%', height: 'auto', display: 'block', background: '#e5e7eb' }}>
               <source src={ASSET_PATHS.VIDEO_WALKTHROUGH} type="video/mp4" />
             </video>
           </div>
@@ -116,8 +116,8 @@ const DesignTab = () => {
         <div>
           {/* Hero Video - Hide on mobile */}
           {!isEffectivelyMobile && (
-            <div style={{ background: 'white', borderRadius: '8px', overflow: 'hidden', marginBottom: '12px', height: '380px', boxShadow: '0 4px 8px rgba(0,0,0,0.15)' }}>
-              <video controls loop muted autoPlay style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', background: '#e5e7eb' }}>
+            <div style={{ background: 'white', borderRadius: '8px', overflow: 'hidden', marginBottom: '12px', boxShadow: '0 4px 8px rgba(0,0,0,0.15)' }}>
+              <video controls loop muted autoPlay style={{ width: '100%', height: 'auto', display: 'block', background: '#e5e7eb' }}>
                 <source src={videoSrc} type="video/mp4" />
               </video>
             </div>
@@ -654,8 +654,8 @@ const DesignTab = () => {
         <div>
           {/* Transforming Prefab Video - Desktop only */}
           {!isEffectivelyMobile && (
-            <div style={{ marginBottom: '20px', borderRadius: '12px', overflow: 'hidden', height: '300px', boxShadow: '0 4px 12px rgba(0,0,0,0.15)' }}>
-              <video controls loop muted autoPlay style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', background: '#e5e7eb' }}>
+            <div style={{ marginBottom: '20px', borderRadius: '12px', overflow: 'hidden', boxShadow: '0 4px 12px rgba(0,0,0,0.15)' }}>
+              <video controls loop muted autoPlay style={{ width: '100%', height: 'auto', display: 'block', background: '#e5e7eb' }}>
                 <source src={ASSET_PATHS.VIDEO_TRANSFORMING} type="video/mp4" />
               </video>
             </div>
@@ -715,21 +715,19 @@ const DesignTab = () => {
           {/* Floor Plan Image - Based on Units Per Floor */}
           <div className="card">
             <h2 style={{ fontSize: isEffectivelyMobile ? '14px' : '18px' }}>📐 Floor Plan Layout</h2>
-            
-            <div style={{ overflowX: 'auto', overflowY: 'hidden', background: '#f9fafb', padding: isEffectivelyMobile ? '24px 20px' : '24px 4px', borderRadius: '8px', marginBottom: '0', maxHeight: isEffectivelyMobile ? '46.875vh' : '46.875vh', display: 'flex', alignItems: 'center' }}>
-              <div style={{ display: 'flex', justifyContent: isEffectivelyMobile ? 'flex-start' : 'center', minWidth: isEffectivelyMobile ? 'max-content' : 'max-content' }}>
-                <img
-                  src={
-                    calculations.totalOptimized <= 12
-                      ? ASSET_PATHS.LAYOUT_SHORT
-                      : calculations.totalOptimized <= 25
-                      ? ASSET_PATHS.LAYOUT_MEDIUM
-                      : ASSET_PATHS.LAYOUT_LONG
-                  }
-                  alt="Floor Layout"
-                  style={{ width: isEffectivelyMobile ? '400px' : '2400px', height: 'auto', objectFit: 'contain', display: 'block', margin: 0 }}
-                />
-              </div>
+
+            <div style={{ overflowX: 'auto', overflowY: 'auto', background: '#f9fafb', padding: '8px', borderRadius: '8px', marginBottom: '0', display: 'flex', justifyContent: 'center' }}>
+              <img
+                src={
+                  calculations.totalOptimized <= 12
+                    ? ASSET_PATHS.LAYOUT_SHORT
+                    : calculations.totalOptimized <= 25
+                    ? ASSET_PATHS.LAYOUT_MEDIUM
+                    : ASSET_PATHS.LAYOUT_LONG
+                }
+                alt="Floor Layout"
+                style={{ width: '100%', height: 'auto', display: 'block' }}
+              />
             </div>
           </div>
         </div>

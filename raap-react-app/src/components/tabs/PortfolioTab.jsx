@@ -75,17 +75,14 @@ const PortfolioTab = () => {
       </div>
 
       {/* Portfolio Image */}
-      <div style={{ marginBottom: SPACING['3xl'], textAlign: 'center', overflow: 'hidden', borderRadius: BORDERS.radius.lg }}>
+      <div style={{ marginBottom: SPACING['3xl'], textAlign: 'center', borderRadius: BORDERS.radius.lg }}>
         <img
-          src="/images/portfolio.png"
+          src="/images/portfolio_2.png"
           alt="RaaP Portfolio Overview"
           style={{
             width: '100%',
-            maxWidth: '1200px',
             height: 'auto',
-            maxHeight: '300px',
-            objectFit: 'cover',
-            objectPosition: 'center',
+            display: 'block',
             borderRadius: BORDERS.radius.lg,
             boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
             border: `2px solid ${COLORS.gray.lighter}`

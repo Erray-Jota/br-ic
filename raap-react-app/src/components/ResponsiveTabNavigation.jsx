@@ -132,7 +132,50 @@ const ResponsiveTabNavigation = () => {
           ))}
         </div>
       )}
-      
+
+      {/* Cost sub-tabs - show only when Cost tab (4) is active */}
+      {activeTab === 4 && (
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(3, 1fr)',
+            gap: 0,
+            borderBottom: '1px solid #e5e7eb',
+          }}
+        >
+          {[
+            { id: 1, label: '📊 Summary' },
+            { id: 2, label: '⏱️ Time' },
+            { id: 4, label: '🔍 Details' },
+          ].map((subtab) => (
+            <button
+              key={subtab.id}
+              onClick={() => switchSubtab('cost', subtab.id)}
+              style={{
+                padding: '8px 6px',
+                background: activeSubtabs.cost === subtab.id ? '#FEF3C7' : 'white',
+                color: activeSubtabs.cost === subtab.id ? '#92400E' : '#6b7280',
+                border: 'none',
+                borderBottom: activeSubtabs.cost === subtab.id ? '3px solid #D97706' : 'none',
+                cursor: 'pointer',
+                fontSize: '10px',
+                fontWeight: activeSubtabs.cost === subtab.id ? 700 : 500,
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                gap: '2px',
+                transition: 'all 0.2s',
+              }}
+            >
+              <span style={{ fontSize: '14px' }}>{subtab.label.charAt(0)}</span>
+              <span style={{ fontSize: '9px', fontWeight: 500 }}>
+                {subtab.label.split(' ')[1] || ''}
+              </span>
+            </button>
+          ))}
+        </div>
+      )}
+
       {/* Main tabs */}
       <div
         style={{

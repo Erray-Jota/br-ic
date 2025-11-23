@@ -558,6 +558,101 @@ const CoordinationTab = () => {
                     }}
                   />
 
+                  {/* TEMPORARY GRID OVERLAY - Spreadsheet Style - Remove after label positioning */}
+                  <svg
+                    style={{
+                      position: 'absolute',
+                      top: 0,
+                      left: 0,
+                      width: '100%',
+                      height: '100%',
+                      pointerEvents: 'none',
+                      zIndex: 5
+                    }}
+                    viewBox="0 0 100 100"
+                    preserveAspectRatio="none"
+                  >
+                    {/* Vertical grid lines every 10% with letter labels (A-K) */}
+                    {[0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100].map((x, i) => (
+                      <g key={`v-${x}`}>
+                        <line
+                          x1={x}
+                          y1={0}
+                          x2={x}
+                          y2={100}
+                          stroke={x === 0 || x === 100 ? '#DC2626' : '#3B82F6'}
+                          strokeWidth={x === 50 ? '0.3' : '0.15'}
+                          opacity={0.6}
+                        />
+                        <text
+                          x={x}
+                          y={3}
+                          fontSize="3"
+                          fill="#FFFFFF"
+                          fontWeight="900"
+                          textAnchor="middle"
+                          stroke="#000000"
+                          strokeWidth="0.3"
+                        >
+                          {String.fromCharCode(65 + i)}
+                        </text>
+                      </g>
+                    ))}
+                    {/* Horizontal grid lines every 10% with number labels (1-11) */}
+                    {[0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100].map((y, i) => (
+                      <g key={`h-${y}`}>
+                        <line
+                          x1={0}
+                          y1={y}
+                          x2={100}
+                          y2={y}
+                          stroke={y === 0 || y === 100 ? '#DC2626' : '#3B82F6'}
+                          strokeWidth={y === 50 ? '0.3' : '0.15'}
+                          opacity={0.6}
+                        />
+                        <text
+                          x={2}
+                          y={y + 1.2}
+                          fontSize="3"
+                          fill="#FFFFFF"
+                          fontWeight="900"
+                          textAnchor="start"
+                          stroke="#000000"
+                          strokeWidth="0.3"
+                        >
+                          {i + 1}
+                        </text>
+                      </g>
+                    ))}
+                    {/* Fine grid lines every 5% */}
+                    {[5, 15, 25, 35, 45, 55, 65, 75, 85, 95].map(x => (
+                      <line
+                        key={`vf-${x}`}
+                        x1={x}
+                        y1={0}
+                        x2={x}
+                        y2={100}
+                        stroke="#94A3B8"
+                        strokeWidth="0.08"
+                        opacity={0.4}
+                        strokeDasharray="0.5,0.5"
+                      />
+                    ))}
+                    {[5, 15, 25, 35, 45, 55, 65, 75, 85, 95].map(y => (
+                      <line
+                        key={`hf-${y}`}
+                        x1={0}
+                        y1={y}
+                        x2={100}
+                        y2={y}
+                        stroke="#94A3B8"
+                        strokeWidth="0.08"
+                        opacity={0.4}
+                        strokeDasharray="0.5,0.5"
+                      />
+                    ))}
+                  </svg>
+
                   {/* Clickable Text Label Areas - Clock Position Layout */}
                   {[
                   { id: 'exterior', label: 'Exterior Walls', icon: '🧱', top: '50%', left: '1%', iconPosition: 'right', image: '/images/Outside_walls.png', pain: 'Water and fire continuity fail when factory + GC don\'t align.', fix: 'Pre-validated WRB overlaps, close-up sequencing, and fire stop details.' },

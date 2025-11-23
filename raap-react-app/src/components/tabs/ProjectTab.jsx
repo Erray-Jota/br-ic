@@ -65,8 +65,8 @@ const ProjectTab = () => {
       </div>
 
       {/* Hero Image - Changes based on number of floors */}
-      <div style={{ marginBottom: SPACING['2xl'], borderRadius: '12px', overflow: 'hidden', height: '200px', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}>
-        <video key={projectData.floors} autoPlay muted loop style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}>
+      <div style={{ marginBottom: SPACING['2xl'], borderRadius: '12px', overflow: 'hidden', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}>
+        <video key={projectData.floors} autoPlay muted loop style={{ width: '100%', height: 'auto', display: 'block' }}>
           <source src={projectImageSrc} type="video/mp4" />
         </video>
       </div>
