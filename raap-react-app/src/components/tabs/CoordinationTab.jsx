@@ -547,7 +547,7 @@ const CoordinationTab = () => {
               <div style={{ position: 'relative', textAlign: 'center', maxWidth: '1200px', margin: '0 auto' }}>
                 <>
                   <img
-                    src="/images/construction_hero.png"
+                    src="/images/construction_hero_2.png"
                     alt="Modular Construction Coordination"
                     style={{
                       width: '100%',
