@@ -20,7 +20,7 @@ const IntroductionTab = () => {
 
       {/* Hero Video Card */}
       <div className="card" style={{ padding: '0', marginBottom: '10px', borderRadius: '8px', overflow: 'hidden' }}>
-        <video autoPlay muted loop style={{ width: '100%', height: 'auto', display: 'block' }}>
+        <video autoPlay muted loop playsInline preload="metadata" style={{ width: '100%', height: 'auto', display: 'block' }}>
           <source src={ASSET_PATHS.INTRO_VIDEO_URL} type="video/mp4" />
           Your browser does not support the video tag.
         </video>
