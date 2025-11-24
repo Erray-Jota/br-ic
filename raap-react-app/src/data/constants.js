@@ -63,8 +63,8 @@ export const DUMMY_PARTNERS = [
  * Asset paths for graphics and media
  */
 export const ASSET_PATHS = {
-  INTRO_GRAPHIC_URL: "/images/Hero Video.mp4",
-  INTRO_VIDEO_URL: "/images/Hero Video.mp4",
+  INTRO_GRAPHIC_URL: "/images/HeroVideo.mp4",
+  INTRO_VIDEO_URL: "/images/HeroVideo.mp4",
   PROJECT_GRAPHIC_URL: "/images/Project_hero.png",
   PROJECT_GRAPHIC_3_FLOORS: "/images/3 Story.mp4",
   PROJECT_GRAPHIC_4_FLOORS: "/images/4 Story.mp4",
