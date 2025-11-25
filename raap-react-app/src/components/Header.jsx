@@ -1,0 +1,127 @@
+import { useProject } from '../contexts/ProjectContext';
+import { useMobile } from '../hooks/useMobile';
+import { COLORS, FONTS, SPACING } from '../styles/theme';
+
+const Header = () => {
+  const { showProjectsPage } = useProject();
+  const { isEffectivelyMobile } = useMobile();
+
+  if (isEffectivelyMobile) {
+    return (
+      <div className="header">
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flex: 1 }}>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="60"
+            height="40"
+            viewBox="0 0 185.07 96.21"
+            fill="#15803D"
+            style={{ flexShrink: 0 }}
+          >
+            <g>
+              <path d="m0,30.65h24.8c8.87,0,14.36,3.64,14.36,10.89v.48c0,5.93-2.97,9.66-9.35,10.38l.03.08c6.3.56,9.35,3.81,9.35,10.39v.78c0,2.69.28,5.32.87,7.87h-9.29c-.67-2.49-1.01-5.10-1.01-7.70v-1.04c0-4.73-2.18-6.8-7.42-6.8h-13.18v15.54H0V30.65Zm22.48,18.84c5.07,0,7.39-2.32,7.39-6.1v-.36c0-4.06-2.6-5.74-7.56-5.74h-13.16v12.21h13.32Z" />
+              <path d="m71.55,67.35c-3.05,3.33-7.81,4.95-13.86,4.95-8.01,0-11.95-3.5-11.95-9.1v-.17c0-5.46,4.03-8.68,15.76-9.88l9.52-.98v-1.45c0-3.75-2.35-5.74-7.95-5.74-6.05,0-8.15,2.01-8.15,5.49v.81h-8.31v-.78c0-7.36,4.93-11.11,16.43-11.11s16.29,3.64,16.29,11.59v7.39c0,4.73.36,9.1,1.43,13.16h-8.51c-.28-1.32-.5-2.74-.7-4.17Zm-10.86-.76c3.92,0,7.53-1.04,10.52-2.86-.14-1.85-.2-3.67-.2-5.37v-1.2l-7.73.81c-6.63.7-8.87,2.1-8.87,4.56v.17c0,2.43,2.01,3.89,6.27,3.89Z" />
+              <path d="m111,67.35c-3.05,3.33-7.81,4.95-13.86,4.95-8.01,0-11.95-3.5-11.95-9.1v-.17c0-5.46,4.03-8.68,15.76-9.88l9.52-.98v-1.45c0-3.75-2.35-5.74-7.95-5.74-6.05,0-8.15,2.01-8.15,5.49v.81h-8.31v-.78c0-7.36,4.93-11.11,16.43-11.11s16.29,3.64,16.29,11.59v7.39c0,4.73.36,9.1,1.43,13.16h-8.51c-.28-1.32-.5-2.74-.7-4.17Zm-10.86-.76c3.92,0,7.53-1.04,10.52-2.86-.14-1.85-.2-3.67-.2-5.37v-1.2l-7.73.81c-6.63.7-8.87,2.1-8.87,4.56v.17c0,2.43,2.01,3.89,6.27,3.89Z" />
+              <path d="m126.07,30.65h22.03c10.02,0,15.45,4.2,15.45,13.04v.53c0,8.76-5.43,13.21-15.45,13.21h-12.99v14.08h-9.04V30.65Zm9.01,20.15h11.56c5.57,0,7.73-2.18,7.73-6.58v-.53c0-4.37-2.18-6.41-7.73-6.41h-11.56v13.52Z" />
+              <polygon points="0 0 0 21.25 9.15 21.25 9.15 9.15 175.91 9.15 175.91 62.36 164.34 62.36 164.34 71.52 185.07 71.52 185.07 0 0 0" />
+            </g>
+          </svg>
+          <span style={{ fontSize: '18px', fontWeight: 700, color: '#15803D' }}>
+            RaaP
+          </span>
+          <span style={{ fontSize: '16px', fontWeight: 600, color: '#111827' }}>
+            Modular Feasibility
+          </span>
+        </div>
+        <button
+          onClick={showProjectsPage}
+          style={{
+            padding: '8px 16px',
+            fontSize: '14px',
+            fontWeight: FONTS.weight.bold,
+            display: 'flex',
+            alignItems: 'center',
+            gap: '6px',
+            flexShrink: 0,
+            background: COLORS.white,
+            color: COLORS.green.dark,
+            border: `2px solid ${COLORS.green.dark}`,
+            borderRadius: '8px',
+            cursor: 'pointer',
+            boxShadow: '0 2px 8px rgba(45, 90, 61, 0.15)',
+            transition: 'all 0.3s',
+          }}
+          onMouseEnter={(e) => {
+            e.target.style.boxShadow = '0 4px 12px rgba(45, 90, 61, 0.25)';
+            e.target.style.transform = 'translateY(-2px)';
+          }}
+          onMouseLeave={(e) => {
+            e.target.style.boxShadow = '0 2px 8px rgba(45, 90, 61, 0.15)';
+            e.target.style.transform = 'translateY(0)';
+          }}
+        >
+          ✨ Projects
+        </button>
+      </div>
+    );
+  }
+
+  // Desktop version (original)
+  return (
+    <div className="header">
+      <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="90"
+          height="60"
+          viewBox="0 0 185.07 96.21"
+          fill="#15803D"
+        >
+          <g>
+            <path d="m0,30.65h24.8c8.87,0,14.36,3.64,14.36,10.89v.48c0,5.93-2.97,9.66-9.35,10.38l.03.08c6.3.56,9.35,3.81,9.35,10.39v.78c0,2.69.28,5.32.87,7.87h-9.29c-.67-2.49-1.01-5.10-1.01-7.70v-1.04c0-4.73-2.18-6.8-7.42-6.8h-13.18v15.54H0V30.65Zm22.48,18.84c5.07,0,7.39-2.32,7.39-6.1v-.36c0-4.06-2.6-5.74-7.56-5.74h-13.16v12.21h13.32Z" />
+            <path d="m71.55,67.35c-3.05,3.33-7.81,4.95-13.86,4.95-8.01,0-11.95-3.5-11.95-9.1v-.17c0-5.46,4.03-8.68,15.76-9.88l9.52-.98v-1.45c0-3.75-2.35-5.74-7.95-5.74-6.05,0-8.15,2.01-8.15,5.49v.81h-8.31v-.78c0-7.36,4.93-11.11,16.43-11.11s16.29,3.64,16.29,11.59v7.39c0,4.73.36,9.1,1.43,13.16h-8.51c-.28-1.32-.5-2.74-.7-4.17Zm-10.86-.76c3.92,0,7.53-1.04,10.52-2.86-.14-1.85-.2-3.67-.2-5.37v-1.2l-7.73.81c-6.63.7-8.87,2.1-8.87,4.56v.17c0,2.43,2.01,3.89,6.27,3.89Z" />
+            <path d="m111,67.35c-3.05,3.33-7.81,4.95-13.86,4.95-8.01,0-11.95-3.5-11.95-9.1v-.17c0-5.46,4.03-8.68,15.76-9.88l9.52-.98v-1.45c0-3.75-2.35-5.74-7.95-5.74-6.05,0-8.15,2.01-8.15,5.49v.81h-8.31v-.78c0-7.36,4.93-11.11,16.43-11.11s16.29,3.64,16.29,11.59v7.39c0,4.73.36,9.1,1.43,13.16h-8.51c-.28-1.32-.5-2.74-.7-4.17Zm-10.86-.76c3.92,0,7.53-1.04,10.52-2.86-.14-1.85-.2-3.67-.2-5.37v-1.2l-7.73.81c-6.63.7-8.87,2.1-8.87,4.56v.17c0,2.43,2.01,3.89,6.27,3.89Z" />
+            <path d="m126.07,30.65h22.03c10.02,0,15.45,4.2,15.45,13.04v.53c0,8.76-5.43,13.21-15.45,13.21h-12.99v14.08h-9.04V30.65Zm9.01,20.15h11.56c5.57,0,7.73-2.18,7.73-6.58v-.53c0-4.37-2.18-6.41-7.73-6.41h-11.56v13.52Z" />
+            <polygon points="0 0 0 21.25 9.15 21.25 9.15 9.15 175.91 9.15 175.91 62.36 164.34 62.36 164.34 71.52 185.07 71.52 185.07 0 0 0" />
+          </g>
+        </svg>
+        <span style={{ fontSize: '32px', fontWeight: 700, color: '#15803D' }}>
+          Rooms as a Product:{' '}
+        </span>
+        <span style={{ fontSize: '32px', fontWeight: 700, color: '#111827' }}>
+          ModularFeasibility
+        </span>
+      </div>
+      <button
+        onClick={showProjectsPage}
+        style={{
+          padding: '10px 24px',
+          fontSize: '16px',
+          fontWeight: FONTS.weight.bold,
+          display: 'flex',
+          alignItems: 'center',
+          gap: '8px',
+          background: COLORS.white,
+          color: COLORS.green.dark,
+          border: `2px solid ${COLORS.green.dark}`,
+          borderRadius: '8px',
+          cursor: 'pointer',
+          boxShadow: '0 2px 8px rgba(45, 90, 61, 0.15)',
+          transition: 'all 0.3s',
+        }}
+        onMouseEnter={(e) => {
+          e.target.style.boxShadow = '0 4px 12px rgba(45, 90, 61, 0.25)';
+          e.target.style.transform = 'translateY(-2px)';
+        }}
+        onMouseLeave={(e) => {
+          e.target.style.boxShadow = '0 2px 8px rgba(45, 90, 61, 0.15)';
+          e.target.style.transform = 'translateY(0)';
+        }}
+      >
+        ✨ Projects
+      </button>
+    </div>
+  );
+};
+
+export default Header;

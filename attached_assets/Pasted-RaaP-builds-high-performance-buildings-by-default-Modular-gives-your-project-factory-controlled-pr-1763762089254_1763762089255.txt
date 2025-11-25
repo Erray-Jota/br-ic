@@ -1,0 +1,97 @@
+RaaP builds high-performance buildings by default.
+
+Modular gives your project factory-controlled precision, which inherently delivers NZE/PHIUS-ready performance with minimal costed upgrades.
+
+Traditional site-built construction varies by crew, weather, and sequence.
+Modular delivers repeatable, airtight, thermally efficient assemblies—the foundation for long-term savings, reduced energy use, and lower lifecycle cost.
+
+Your sustainability assessment data shows:
+
+5.0/5 score: Project already meets most NZE prerequisites
+
+Only two building upgrades needed (envelope + HVAC)
+
+Modular provides factory QA, precise air sealing, better thermal bridging, and up to 50% less waste
+
+Bottom line:
+
+RaaP gets you to Net Zero faster, cheaper, and with far less risk than any site-built pathway.
+
+📘 2. Clean, Developer-Ready Table: “What Modular Gives You for Free vs. What Still Needs Upgrading”
+High-Value Sustainability Features (Built In by Modular)
+
+From page 2–3 of the PDF:
+
+Built-In Feature	Status	Why It Matters
+Solar-ready roof	Ready	No structural redesign needed later
+Battery prep	Included	Pre-wired for future microgrid / resilience
+LED lighting	Standard	Lower energy use, lower OPEX
+Factory air-tightness	Factory Controlled	Consistent, verifiable air sealing
+Thermal bridging reduction	Optimized	Better comfort + lower HVAC loads
+Factory QC	Included	Higher performance + fewer field failures
+Low construction waste	Up to 50% less	Lower landfill fees + LEED points
+Costed Upgrade Items (If pursuing NZE/PHIUS Certification)
+
+From page 2 of the PDF:
+
+Component	Standard Spec	NZE/PHIUS Spec	Cost Impact
+Walls	R-19	R-24+ Continuous	+$8K
+Windows	U-0.30	U-0.15 Triple Glazed	+$25K
+HVAC	Std Heat Pump	High-Eff HP + HRV	+$35K
+Solar + Battery	None	120 kW + 200 kWh	+$180K
+Interpretation:
+
+RaaP’s modular shells get you 90% of the way to Net Zero.
+Only 4 targeted upgrades remain—and they’re predictable, quantifiable, and easy to price early.
+
+🌍 3. Suggested Graphic for the App (Clear, Intuitive)
+Graphic Concept: “Modular = High-Performance by Default”
+
+Three-part horizontal graphic bar:
+
+Left Section: “Built In by Modular” (Green)
+
+Icons: factory, air-sealing gasket, insulation, QC stamp
+Text bullets:
+
+Factory airtightness
+
+Reduced thermal bridging
+
+LED lighting
+
+Solar-ready roof
+
+Battery-ready electrical
+
+50% less waste
+
+Middle Section: “Upgrades Needed for NZE/PHIUS” (Yellow)
+
+Icons: wall, window, HVAC, solar panel
+Bullets with costs:
+
+R-24+ continuous insulation (+$8K)
+
+Triple-glazed windows (+$25K)
+
+High-efficiency HP + HRV (+$35K)
+
+Solar + storage (+$180K)
+
+Right Section: “Outcome: Net Zero Ready” (Deep Green)
+
+Icon: leaf/badge
+Bullets:
+
+Lower long-term energy OPEX
+
+Verified performance (5.0/5 score)
+
+Higher building value & tenant comfort
+
+Predictable lifecycle modeling
+
+🔥 4. One-Sentence Value Prop for the UI
+
+“Modular gives you a high-performance building envelope by default—RaaP maps the minimal, costed upgrades needed to achieve full Net Zero or PHIUS certification with predictable ROI.”

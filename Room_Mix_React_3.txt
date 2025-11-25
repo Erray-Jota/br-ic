@@ -1,0 +1,617 @@
+import React, { useMemo, useState } from "react";
+
+/**
+ * ROOM MIX CALCULATOR - Standalone Version
+ * 
+ * This calculator optimizes apartment unit configurations to fit within a target building length.
+ * It handles multiple unit types, lobbies, and stairs with complex placement rules.
+ * 
+ * KEY PLACEMENT RULES:
+ * 1. Units are placed on both sides of a central corridor
+ * 2. Corner units (3-bed, 2-bed corner, 1-bed Jr) go at top and bottom positions
+ * 3. Stairs are at FIXED positions: Right stair at position 2, Left stair at position n-1
+ * 4. When stairWidth = 13.5' (no 3-beds OR 4x3-beds): Place 1 studio on LEFT at position 2 (across from right stair) 
+ *    and 1 studio on RIGHT at position n-1 (across from left stair)
+ * 5. When stairWidth = 11' with 2x3-beds: 3-bed (42') on LEFT position 1 aligns with 
+ *    2-bed corner (31') + stair (11') on RIGHT positions 1-2
+ * 6. Lobby is centered with inline units distributed around it
+ * 7. Some lobby types provide bonus units
+ */
+
+const INVENTORY = {
+  units: {
+    studio: { key: "studio", label: "Studio", width: 13.5, bays: 1, color: "#93C5FD" },
+    oneBedJr: { key: "oneBedJr", label: "1 Bed Jr", width: 15.5, bays: 1, color: "#86EFAC" },
+    oneBed: { key: "oneBed", label: "1 Bed", width: 24.5, bays: 2, color: "#6EE7B7" },
+    twoBedCorner: { key: "twoBedCorner", label: "2B Corner", width: 31.0, bays: 2, color: "#C4B5FD" },
+    twoBedInline: { key: "twoBedInline", label: "2B Inline", width: 38.0, bays: 2, color: "#D8B4FE" },
+    threeBed: { key: "threeBed", label: "3 Bed", width: 42.0, bays: 3, color: "#FCA5A5" }
+  },
+  lobbies: {
+    oneBay: { key: "oneBay", label: "1-Bay", width: 13.5, bonusUnit: "studio", color: "#FDE047" },
+    twoBay: { key: "twoBay", label: "2-Bay", width: 24.5, bonusUnit: "oneBed", color: "#FDE047" },
+    fourBay: { key: "fourBay", label: "4-Bay", width: 24.5, bonusUnit: null, color: "#FDE047" }
+  },
+  stairs: {
+    standard: { key: "standard", width: 13.5, color: "#D1D5DB" },  // Used when no 3-beds
+    threeBed: { key: "threeBed", width: 11.0, color: "#D1D5DB" }   // Used when 3-beds exist
+  }
+};
+
+// Calculate the total length of one side of the building
+const calculateLength = (placement, lobbyType) => {
+  let length = 0;
+  length += placement.threeBed * INVENTORY.units.threeBed.width;
+  length += placement.twoBedCorner * INVENTORY.units.twoBedCorner.width;
+  length += placement.twoBedInline * INVENTORY.units.twoBedInline.width;
+  length += placement.oneBedJrCorner * INVENTORY.units.oneBedJr.width;
+  length += placement.oneBedInline * INVENTORY.units.oneBed.width;
+  length += placement.studio * INVENTORY.units.studio.width;
+  const lobby = INVENTORY.lobbies[lobbyType];
+  length += lobby.width;
+  const stairWidthFinal = placement.threeBed > 0 ? INVENTORY.stairs.threeBed.width : INVENTORY.stairs.standard.width;
+  length += stairWidthFinal;
+  return { length, stairWidthFinal };
+};
+
+// Calculate total units across all floors
+const calculateTotalUnits = (placement, totalFloors, lobbyType) => {
+  const lobby = INVENTORY.lobbies[lobbyType];
+  const hasBonusUnits = lobby.bonusUnit !== null;
+  const twoBedPerSide = placement.twoBedCorner + placement.twoBedInline;
+  const studioPerFloor = placement.studio * 2;
+  const twoBedPerFloor = twoBedPerSide * 2;
+  const threeBedPerFloor = placement.threeBed * 2;
+  const oneBedPerFloor = (placement.oneBedJrCorner + placement.oneBedInline) * 2;
+  let total = {
+    studio: studioPerFloor * totalFloors,
+    twoBed: twoBedPerFloor * totalFloors,
+    threeBed: threeBedPerFloor * totalFloors,
+    oneBed: oneBedPerFloor * totalFloors
+  };
+  if (hasBonusUnits) {
+    if (lobby.bonusUnit === "studio") total.studio += totalFloors;
+    else if (lobby.bonusUnit === "oneBed") total.oneBed += totalFloors;
+  }
+  return total;
+};
+
+export default function App() {
+  const [activeTab, setActiveTab] = useState("calculator");
+  const [floors, setFloors] = useState(5);
+  const [lobbyType, setLobbyType] = useState("twoBay");
+  const [targetLength, setTargetLength] = useState(280);
+  const [targets, setTargets] = useState({ studio: 40, oneBed: 40, twoBed: 40, threeBed: 0 });
+
+  // Main calculation logic with optimization
+  const result = useMemo(() => {
+    try {
+      const totalFloors = Number(floors);
+      const cornersPerSide = 2; // Max 2 corner units per side
+      const max3BUnits = 4 * totalFloors; // Max 4 three-beds per floor (2 per side)
+      const cappedThreeBedTarget = Math.min(targets.threeBed, max3BUnits);
+      
+      // Calculate units needed per side to meet targets
+      const unitsPerSideTarget = {
+        threeBed: Math.ceil(cappedThreeBedTarget / totalFloors / 2),
+        twoBed: Math.ceil(targets.twoBed / totalFloors / 2),
+        oneBed: Math.ceil(targets.oneBed / totalFloors / 2),
+        studio: Math.ceil(targets.studio / totalFloors / 2)
+      };
+      
+      // Initial placement - assign units to corners and inline positions
+      let p = {
+        threeBed: unitsPerSideTarget.threeBed,
+        twoBedCorner: 0,
+        twoBedInline: 0,
+        oneBedJrCorner: 0,
+        oneBedInline: 0,
+        studio: unitsPerSideTarget.studio
+      };
+      
+      // Assign corner positions (priority: 3-bed > 2-bed corner > 1-bed Jr)
+      let requiredCornersUsed = Math.min(p.threeBed, cornersPerSide);
+      p.twoBedCorner = Math.min(unitsPerSideTarget.twoBed, cornersPerSide - requiredCornersUsed);
+      requiredCornersUsed += p.twoBedCorner;
+      p.twoBedInline = unitsPerSideTarget.twoBed - p.twoBedCorner;
+      p.oneBedJrCorner = Math.min(unitsPerSideTarget.oneBed, cornersPerSide - requiredCornersUsed);
+      p.oneBedInline = unitsPerSideTarget.oneBed - p.oneBedJrCorner;
+      
+      const { length: requiredLength, stairWidthFinal: requiredStairWidth } = calculateLength(p, lobbyType);
+      
+      // If it fits, return the result
+      if (requiredLength <= targetLength) {
+        return {
+          length: requiredLength,
+          requiredLength,
+          totalUnits: calculateTotalUnits(p, totalFloors, lobbyType),
+          stairWidth: requiredStairWidth,
+          isConstrained: false,
+          threeBedCap: max3BUnits,
+          placement: p
+        };
+      }
+      
+      // Otherwise, reduce units to fit (priority: 3-bed > 2B inline > 2B corner > studio > 1-bed)
+      let currentLength = requiredLength;
+      const reductionPriority = [
+        { key: 'threeBed', width: INVENTORY.units.threeBed.width },
+        { key: 'twoBedInline', width: INVENTORY.units.twoBedInline.width },
+        { key: 'twoBedCorner', width: INVENTORY.units.twoBedCorner.width },
+        { key: 'studio', width: INVENTORY.units.studio.width },
+        { key: 'oneBed' }
+      ];
+      
+      while (currentLength > targetLength + 0.01) {
+        let unitReduced = false;
+        for (const item of reductionPriority) {
+          let count = 0;
+          if (item.key === 'threeBed') count = p.threeBed;
+          else if (item.key === 'twoBedInline') count = p.twoBedInline;
+          else if (item.key === 'twoBedCorner') count = p.twoBedCorner;
+          else if (item.key === 'studio') count = p.studio;
+          else if (item.key === 'oneBed') count = p.oneBedJrCorner + p.oneBedInline;
+          
+          if (count > 0) {
+            let widthToRemove = 0;
+            let stairAdjustment = 0;
+            
+            if (item.key === 'threeBed') {
+              widthToRemove = item.width;
+              // When removing last 3-bed, stair width changes from 11' to 13.5'
+              if (p.threeBed === 1) stairAdjustment = INVENTORY.stairs.standard.width - INVENTORY.stairs.threeBed.width;
+              p.threeBed--;
+            } else if (item.key === 'twoBedInline') {
+              widthToRemove = item.width;
+              p.twoBedInline--;
+            } else if (item.key === 'twoBedCorner') {
+              widthToRemove = item.width;
+              p.twoBedCorner--;
+            } else if (item.key === 'studio') {
+              widthToRemove = item.width;
+              p.studio--;
+            } else if (item.key === 'oneBed') {
+              if (p.oneBedInline > 0) {
+                widthToRemove = INVENTORY.units.oneBed.width;
+                p.oneBedInline--;
+              } else if (p.oneBedJrCorner > 0) {
+                widthToRemove = INVENTORY.units.oneBedJr.width;
+                p.oneBedJrCorner--;
+              }
+            }
+            
+            currentLength -= widthToRemove;
+            currentLength += stairAdjustment;
+            unitReduced = true;
+            break;
+          }
+        }
+        if (!unitReduced) break;
+      }
+      
+      const finalCalc = calculateLength(p, lobbyType);
+      return {
+        length: finalCalc.length,
+        requiredLength,
+        totalUnits: calculateTotalUnits(p, totalFloors, lobbyType),
+        stairWidth: finalCalc.stairWidthFinal,
+        isConstrained: true,
+        threeBedCap: max3BUnits,
+        placement: p
+      };
+    } catch (error) {
+      console.error('Calculation error:', error);
+      return {
+        length: 0,
+        requiredLength: 0,
+        totalUnits: { studio: 0, oneBed: 0, twoBed: 0, threeBed: 0 },
+        stairWidth: 13.5,
+        isConstrained: false,
+        threeBedCap: 0,
+        placement: { threeBed: 0, twoBedCorner: 0, twoBedInline: 0, oneBedJrCorner: 0, oneBedInline: 0, studio: 0 }
+      };
+    }
+  }, [floors, targetLength, lobbyType, targets]);
+
+  const totalTargetUnits = targets.studio + targets.oneBed + targets.twoBed + targets.threeBed;
+  const totalOptimizedUnits = result.totalUnits.studio + result.totalUnits.oneBed + result.totalUnits.twoBed + result.totalUnits.threeBed;
+  const remaining = targetLength - result.length;
+  const conditionMet = targetLength >= result.requiredLength;
+
+  return (
+    <div className="min-h-screen bg-gray-100 p-6">
+      <div className="max-w-6xl mx-auto">
+        <div className="mb-4">
+          <h1 className="text-3xl font-bold text-gray-900">RaaP Room Mix Calculator</h1>
+          <p className="text-gray-600 text-sm">Optimize unit mix to length constraint.</p>
+        </div>
+
+        <div className="flex gap-3 mb-4 justify-center">
+          <button 
+            onClick={() => setActiveTab("calculator")} 
+            className={`px-6 py-2 rounded-lg font-semibold transition-all ${activeTab === "calculator" ? "bg-blue-600 text-white shadow-lg" : "bg-white text-gray-700 hover:bg-gray-50"}`}
+          >
+            📊 Calculator
+          </button>
+          <button 
+            onClick={() => setActiveTab("floorplan")} 
+            className={`px-6 py-2 rounded-lg font-semibold transition-all ${activeTab === "floorplan" ? "bg-blue-600 text-white shadow-lg" : "bg-white text-gray-700 hover:bg-gray-50"}`}
+          >
+            🏗️ Floor Plan
+          </button>
+        </div>
+
+        {activeTab === "calculator" ? (
+          <>
+            <div className={`bg-gradient-to-r ${conditionMet ? 'from-green-500 to-green-600' : 'from-orange-500 to-orange-600'} rounded-xl p-4 mb-6 text-white shadow-lg transition-colors duration-500`}>
+              <div className="flex items-center justify-between">
+                <div>
+                  <span className="text-sm font-medium opacity-90">CALC:</span>
+                  <span className="text-4xl font-bold ml-2">{result.length.toFixed(1)} ft</span>
+                </div>
+                <div className="flex gap-8 text-sm">
+                  <div>
+                    <div className="font-bold text-xl">{result.requiredLength.toFixed(1)} ft</div>
+                    <div className="opacity-90">Required</div>
+                  </div>
+                  <div>
+                    <div className="font-bold text-xl">{targetLength} ft</div>
+                    <div className="opacity-90">Target</div>
+                  </div>
+                  <div>
+                    <div className="font-bold text-xl">{remaining.toFixed(1)} ft</div>
+                    <div className="opacity-90">Remaining</div>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2 bg-white bg-opacity-20 px-4 py-2 rounded-lg">
+                  <span className="text-xl">{conditionMet ? '✅' : '⚠️'}</span>
+                  <span className="font-semibold">{conditionMet ? 'Condition Met' : 'Site Constraint'}</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-6 mb-6">
+              <div className="bg-white rounded-xl shadow-md p-6">
+                <h2 className="text-lg font-bold text-gray-800 mb-4">🏢 Building Configuration</h2>
+                
+                <div className="space-y-4">
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-2">Floors</label>
+                      <select 
+                        value={floors} 
+                        onChange={(e) => setFloors(Number(e.target.value))} 
+                        className="w-full border-2 border-gray-300 rounded-lg px-3 py-2 focus:border-blue-500 focus:outline-none"
+                      >
+                        {[3, 4, 5, 6, 7, 8].map(n => <option key={n} value={n}>{n} Floors</option>)}
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-2">Lobby</label>
+                      <select 
+                        value={lobbyType} 
+                        onChange={(e) => setLobbyType(e.target.value)} 
+                        className="w-full border-2 border-gray-300 rounded-lg px-3 py-2 focus:border-blue-500 focus:outline-none"
+                      >
+                        <option value="oneBay">1-Bay</option>
+                        <option value="twoBay">2-Bay</option>
+                        <option value="fourBay">4-Bay</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                      Target Length: <span className="text-blue-600 font-bold">{targetLength} ft</span>
+                    </label>
+                    <input 
+                      type="range" 
+                      min="100" 
+                      max="400" 
+                      step="5" 
+                      value={targetLength} 
+                      onChange={(e) => setTargetLength(Number(e.target.value))} 
+                      className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+                    />
+                    <div className="flex justify-between text-xs text-gray-500 mt-1">
+                      <span>100 ft</span>
+                      <span>400 ft</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-white rounded-xl shadow-md p-6">
+                <h2 className="text-lg font-bold text-gray-800 mb-4">⚡ Unit Mix Targets</h2>
+
+                <p className="text-sm text-gray-600 mb-3">
+                  Target ({totalTargetUnits} total)
+                  {targets.threeBed > result.threeBedCap && (
+                    <span className="text-red-600 font-bold ml-2">(3B Max: {result.threeBedCap})</span>
+                  )}
+                </p>
+
+                <div className="grid grid-cols-4 gap-3">
+                  {['studio', 'oneBed', 'twoBed', 'threeBed'].map((key, idx) => (
+                    <div key={key} className={`border-2 rounded-lg p-3 ${['border-blue-400 bg-blue-50', 'border-green-400 bg-green-50', 'border-purple-400 bg-purple-50', 'border-orange-400 bg-orange-50'][idx]}`}>
+                      <label className="block text-sm font-semibold text-gray-700 mb-1">{['Studio', '1 Bed', '2 Bed', '3 Bed'][idx]}</label>
+                      <input 
+                        type="number" 
+                        min="0" 
+                        value={targets[key]} 
+                        onChange={(e) => setTargets({...targets, [key]: Math.max(0, Number(e.target.value))})} 
+                        className={`w-full text-2xl font-bold text-center bg-transparent border-none focus:outline-none ${['text-blue-700', 'text-green-700', 'text-purple-700', 'text-orange-700'][idx]}`}
+                      />
+                    </div>
+                  ))}
+                </div>
+
+                <div className="mt-4 pt-4 border-t border-gray-200">
+                  <p className="text-sm font-semibold text-gray-600 mb-3">Optimized ({totalOptimizedUnits} total)</p>
+                  <div className="grid grid-cols-4 gap-3">
+                    {['studio', 'oneBed', 'twoBed', 'threeBed'].map((key, idx) => (
+                      <div key={key} className={`rounded-lg p-3 text-center border-2 ${['bg-blue-100 border-blue-400', 'bg-green-100 border-green-400', 'bg-purple-100 border-purple-400', 'bg-orange-100 border-orange-400'][idx]}`}>
+                        <div className="text-sm font-medium text-gray-700">{['Studio', '1 Bed', '2 Bed', '3 Bed'][idx]}</div>
+                        <div className={`text-2xl font-bold ${['text-blue-700', 'text-green-700', 'text-purple-700', 'text-orange-700'][idx]}`}>{result.totalUnits[key]}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-white rounded-xl shadow-md p-6">
+              <h3 className="text-lg font-bold text-gray-800 mb-4">📋 Inventory Reference</h3>
+              
+              <div className="grid grid-cols-2 gap-8">
+                <div>
+                  <div className="font-bold text-gray-700 mb-3">Units (ft)</div>
+                  <div className="space-y-2 text-sm">
+                    {Object.entries(INVENTORY.units).map(([key, unit]) => (
+                      <div key={key} className="flex justify-between py-1 border-b border-gray-200">
+                        <span>{unit.label} ({unit.bays} Bay{unit.bays > 1 ? 's' : ''}):</span>
+                        <span className="font-semibold">{unit.width}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                
+                <div>
+                  <div className="font-bold text-gray-700 mb-3">Lobbies (ft)</div>
+                  <div className="space-y-2 text-sm">
+                    {Object.entries(INVENTORY.lobbies).map(([key, lobby]) => (
+                      <div key={key} className="flex justify-between py-1 border-b border-gray-200">
+                        <span>{lobby.label}:</span>
+                        <span className="font-semibold">{lobby.width} {lobby.bonusUnit ? `(+1 ${lobby.bonusUnit === 'studio' ? 'Studio' : '1B'})` : '(No Bonus)'}</span>
+                      </div>
+                    ))}
+                  </div>
+                  
+                  <div className="font-bold text-gray-700 mb-3 mt-6">Stairs (ft)</div>
+                  <div className="space-y-2 text-sm">
+                    <div className="flex justify-between py-1 border-b border-gray-200">
+                      <span>Standard (no 3-beds):</span>
+                      <span className="font-semibold">{INVENTORY.stairs.standard.width}</span>
+                    </div>
+                    <div className="flex justify-between py-1 border-b border-gray-200">
+                      <span>With 3-Beds:</span>
+                      <span className="font-semibold">{INVENTORY.stairs.threeBed.width}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </>
+        ) : (
+          <FloorPlanView result={result} lobbyType={lobbyType} />
+        )}
+      </div>
+    </div>
+  );
+}
+
+// Separate component for floor plan visualization
+function FloorPlanView({ result, lobbyType }) {
+  const generateFloorPlan = () => {
+    const p = result.placement;
+    const lobby = INVENTORY.lobbies[lobbyType];
+    const hasBonusUnits = lobby.bonusUnit !== null;
+    
+    const threeBedPerSide = p.threeBed;
+    const twoBedCornerPerSide = p.twoBedCorner;
+    const oneBedJrCornerPerSide = p.oneBedJrCorner;
+    const threeBedPerFloor = threeBedPerSide * 2;
+    const twoBedCornerPerFloor = twoBedCornerPerSide * 2;
+    
+    const leftSide = [];
+    const rightSide = [];
+    
+    // Collect inline units (these go in the middle, around the lobby)
+    const inlineUnits = [];
+    for (let i = 0; i < p.twoBedInline; i++) inlineUnits.push({ ...INVENTORY.units.twoBedInline });
+    for (let i = 0; i < p.oneBedInline; i++) inlineUnits.push({ ...INVENTORY.units.oneBed });
+    
+    // Special placement for studios across from stairs
+    let leftPos2Unit = null;
+    let rightPosBeforeBottomCorner = null;
+    
+    // When stairWidth = 13.5' (no 3-beds or 4x3-beds), place studios across from stairs
+    if (result.stairWidth === 13.5 && p.studio >= 2) {
+      leftPos2Unit = { ...INVENTORY.units.studio, acrossFromStair: true };
+      rightPosBeforeBottomCorner = { ...INVENTORY.units.studio, acrossFromStair: true };
+      // Add remaining studios to inline units
+      for (let i = 0; i < p.studio - 2; i++) inlineUnits.push({ ...INVENTORY.units.studio });
+    } else {
+      // Otherwise all studios go in inline units
+      for (let i = 0; i < p.studio; i++) inlineUnits.push({ ...INVENTORY.units.studio });
+    }
+    
+    // Split inline units around lobby (approximately centered)
+    const halfInline = Math.ceil(inlineUnits.length / 2);
+    
+    // ============ LEFT SIDE (top to bottom) ============
+    
+    // 1. TOP CORNER
+    if (threeBedPerSide >= 1) {
+      leftSide.push({ ...INVENTORY.units.threeBed });
+    } else if (twoBedCornerPerSide >= 1) {
+      leftSide.push({ ...INVENTORY.units.twoBedCorner });
+    } else if (oneBedJrCornerPerSide >= 1) {
+      leftSide.push({ ...INVENTORY.units.oneBedJr });
+    }
+    
+    // 2. STUDIO ACROSS FROM RIGHT STAIR (if applicable)
+    if (leftPos2Unit) {
+      leftSide.push(leftPos2Unit);
+    }
+    
+    // 3. FIRST HALF OF INLINE UNITS
+    for (let i = 0; i < halfInline; i++) {
+      leftSide.push({ ...inlineUnits[i] });
+    }
+    
+    // 4. LOBBY
+    leftSide.push({ type: "lobby", ...lobby });
+    
+    // 5. SECOND HALF OF INLINE UNITS
+    for (let i = halfInline; i < inlineUnits.length; i++) {
+      leftSide.push({ ...inlineUnits[i] });
+    }
+    
+    // 6. LEFT STAIR (position n-1 from bottom)
+    leftSide.push({ type: "stair", width: result.stairWidth, label: "Stair", color: "#D1D5DB" });
+    
+    // 7. BOTTOM CORNER
+    if (threeBedPerFloor === 4) {
+      leftSide.push({ ...INVENTORY.units.threeBed });
+    } else if (threeBedPerFloor === 2) {
+      leftSide.push({ ...INVENTORY.units.twoBedCorner });
+    } else if (twoBedCornerPerFloor === 4) {
+      leftSide.push({ ...INVENTORY.units.twoBedCorner });
+    } else if (oneBedJrCornerPerSide >= 1) {
+      leftSide.push({ ...INVENTORY.units.oneBedJr });
+    }
+    
+    // ============ RIGHT SIDE (top to bottom) ============
+    
+    // 1. TOP CORNER
+    if (threeBedPerFloor === 4) {
+      rightSide.push({ ...INVENTORY.units.threeBed });
+    } else if (threeBedPerFloor === 2) {
+      // When threeBedPerFloor = 2: 3-bed (42') on LEFT aligns with 2-bed corner (31') + stair (11') on RIGHT
+      rightSide.push({ ...INVENTORY.units.twoBedCorner });
+    } else if (twoBedCornerPerFloor === 4) {
+      rightSide.push({ ...INVENTORY.units.twoBedCorner });
+    } else if (oneBedJrCornerPerSide >= 1) {
+      rightSide.push({ ...INVENTORY.units.oneBedJr });
+    }
+    
+    // 2. RIGHT STAIR (position 2 - ALWAYS FIXED HERE)
+    rightSide.push({ type: "stair", width: result.stairWidth, label: "Stair", color: "#D1D5DB" });
+    
+    // 3. FIRST HALF OF INLINE UNITS (same as left)
+    for (let i = 0; i < halfInline; i++) {
+      rightSide.push({ ...inlineUnits[i] });
+    }
+    
+    // 4. BONUS UNIT OR LOBBY
+    if (hasBonusUnits) {
+      if (lobby.bonusUnit === "studio") {
+        rightSide.push({ ...INVENTORY.units.studio, isBonus: true });
+      } else if (lobby.bonusUnit === "oneBed") {
+        rightSide.push({ ...INVENTORY.units.oneBed, isBonus: true });
+      }
+    } else {
+      rightSide.push({ type: "lobby", ...lobby });
+    }
+    
+    // 5. SECOND HALF OF INLINE UNITS (same as left)
+    for (let i = halfInline; i < inlineUnits.length; i++) {
+      rightSide.push({ ...inlineUnits[i] });
+    }
+    
+    // 6. STUDIO ACROSS FROM LEFT STAIR (if applicable)
+    if (rightPosBeforeBottomCorner) {
+      rightSide.push(rightPosBeforeBottomCorner);
+    }
+    
+    // 7. BOTTOM CORNER
+    if (threeBedPerSide >= 1) {
+      rightSide.push({ ...INVENTORY.units.threeBed });
+    } else if (twoBedCornerPerSide >= 1) {
+      rightSide.push({ ...INVENTORY.units.twoBedCorner });
+    } else if (oneBedJrCornerPerSide >= 1) {
+      rightSide.push({ ...INVENTORY.units.oneBedJr });
+    }
+    
+    return { leftSide, rightSide };
+  };
+
+  const floorPlan = generateFloorPlan();
+  const maxHeight = Math.max(
+    floorPlan.leftSide.reduce((sum, u) => sum + u.width * 2.5, 0),
+    floorPlan.rightSide.reduce((sum, u) => sum + u.width * 2.5, 0)
+  );
+
+  return (
+    <div className="bg-white rounded-lg shadow-lg p-6">
+      <h2 className="text-xl font-semibold mb-4 text-center">Floor Plan - Vertical View</h2>
+      <div className="flex justify-center">
+        <svg width={320} height={maxHeight + 20} className="border-2 border-slate-300 rounded">
+          {/* LEFT SIDE UNITS */}
+          {floorPlan.leftSide.map((unit, i) => {
+            const y = floorPlan.leftSide.slice(0, i).reduce((sum, u) => sum + u.width * 2.5, 0);
+            return (
+              <g key={`left${i}`}>
+                <rect x={10} y={y + 10} width={110} height={unit.width * 2.5} fill={unit.color} stroke="#000" strokeWidth="2" rx="4" />
+                <text x={65} y={y + 10 + unit.width * 1.25} textAnchor="middle" fontSize="12" fontWeight="600" fill="#1e293b">
+                  {unit.isBonus ? "★ " : ""}{unit.acrossFromStair ? "◆ " : ""}{unit.label || unit.type || "Unit"}
+                </text>
+                <text x={65} y={y + 10 + unit.width * 1.25 + 14} textAnchor="middle" fontSize="10" fill="#475569">
+                  {unit.width}'
+                </text>
+              </g>
+            );
+          })}
+
+          {/* CORRIDOR */}
+          <rect x={120} y={10} width={80} height={maxHeight} fill="#E5E7EB" stroke="#9CA3AF" strokeWidth="2" rx="4" />
+          <text x={160} y={maxHeight / 2 + 10} textAnchor="middle" fontSize="14" fontWeight="700" fill="#374151" transform={`rotate(-90 160 ${maxHeight / 2 + 10})`}>
+            CORRIDOR
+          </text>
+
+          {/* RIGHT SIDE UNITS */}
+          {floorPlan.rightSide.map((unit, i) => {
+            const y = floorPlan.rightSide.slice(0, i).reduce((sum, u) => sum + u.width * 2.5, 0);
+            return (
+              <g key={`right${i}`}>
+                <rect x={200} y={y + 10} width={110} height={unit.width * 2.5} fill={unit.color} stroke="#000" strokeWidth="2" rx="4" />
+                <text x={255} y={y + 10 + unit.width * 1.25} textAnchor="middle" fontSize="12" fontWeight="600" fill="#1e293b">
+                  {unit.isBonus ? "★ " : ""}{unit.acrossFromStair ? "◆ " : ""}{unit.label || unit.type || "Unit"}
+                </text>
+                <text x={255} y={y + 10 + unit.width * 1.25 + 14} textAnchor="middle" fontSize="10" fill="#475569">
+                  {unit.width}'
+                </text>
+              </g>
+            );
+          })}
+        </svg>
+      </div>
+      <div className="mt-4 text-sm text-slate-600">
+        <p className="text-center mb-3 text-base">
+          ★ = bonus unit from lobby | ◆ = unit across from stair | Building length: <span className="font-bold text-blue-600">{result.length.toFixed(1)} ft</span>
+        </p>
+        <div className="bg-slate-50 rounded-lg p-4 space-y-2 max-w-2xl mx-auto">
+          <p className="font-semibold text-slate-800">Layout Rules:</p>
+          <ul className="list-disc list-inside space-y-1 text-sm">
+            <li>Units are on both sides of a central corridor</li>
+            <li>Corner units (3B, 2B Corner, 1B Jr) at top and bottom positions</li>
+            <li>Right stair always at position 2, Left stair at position n-1</li>
+            <li>When no 3-beds: studios placed across from both stairs</li>
+            <li>Lobby is centered with inline units distributed around it</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  );
+}
