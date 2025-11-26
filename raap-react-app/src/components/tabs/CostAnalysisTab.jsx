@@ -5,6 +5,7 @@ import { useMobile } from '../../hooks/useMobile';
 import { MASTER_DIVISIONS } from '../../data/constants';
 import { calculateDivisionCosts, LOCATION_FACTORS as COST_LOCATION_FACTORS, compareScenarios } from '../../engines/costEngine';
 import LocationInput from '../LocationInput';
+import ProjectInfoBanner from '../ProjectInfoBanner';
 import { COLORS, FONTS, SPACING, BORDERS, STYLE_PRESETS } from '../../styles/theme';
 import { AlertModal } from '../Modal';
 
