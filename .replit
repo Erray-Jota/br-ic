@@ -36,5 +36,5 @@ externalPort = 80
 
 [deployment]
 deploymentTarget = "static"
-build = ["bash", "-c", "cd raap-react-app && npm run build"]
-publicDir = "raap-react-app/dist"
+build = ["npm", "run", "build", "--prefix", "raap-react-app"]
+publicDir = "dist"
