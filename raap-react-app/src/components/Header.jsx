@@ -27,10 +27,10 @@ const Header = () => {
             </g>
           </svg>
           <span style={{ fontSize: '18px', fontWeight: 700, color: '#15803D' }}>
-            RaaP
+            BR-IC
           </span>
           <span style={{ fontSize: '16px', fontWeight: 600, color: '#111827' }}>
-            Modular Feasibility
+            Demo Platform
           </span>
         </div>
         <button
@@ -86,10 +86,10 @@ const Header = () => {
           </g>
         </svg>
         <span style={{ fontSize: '32px', fontWeight: 700, color: '#15803D' }}>
-          Rooms as a Product:{' '}
+          BR-IC:{' '}
         </span>
         <span style={{ fontSize: '32px', fontWeight: 700, color: '#111827' }}>
-          ModularFeasibility
+          Demo Platform
         </span>
       </div>
       <button

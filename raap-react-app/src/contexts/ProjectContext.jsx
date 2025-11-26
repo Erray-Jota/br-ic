@@ -78,6 +78,7 @@ export const ProjectProvider = ({ children }) => {
     cost: 1,
     factors: 1,
     smartstart: 1,
+    archive: 1,
   });
 
   const updateProjectData = useCallback((updates) => {

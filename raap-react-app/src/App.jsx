@@ -43,10 +43,10 @@ function AppContent() {
               <>
                 <ResponsiveTabNavigation />
                 <div style={{ marginTop: isEffectivelyMobile ? '10px' : '20px', marginBottom: '20px' }}>
+                  {activeTab === 6 && <PortfolioTab />}
                   {activeTab === 3 && <DesignTab />}
                   {activeTab === 4 && <CostAnalysisTab />}
                   {activeTab === 5 && <CoordinationTab />}
-                  {activeTab === 6 && <PortfolioTab />}
                   {activeTab === 8 && <ArchiveTab />}
                 </div>
               </>

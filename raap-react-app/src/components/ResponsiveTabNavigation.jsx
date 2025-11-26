@@ -25,10 +25,10 @@ const ResponsiveTabNavigation = () => {
   }, [lastScrollY]);
 
   const tabs = [
-    { id: 3, label: '📐 Design', shortLabel: 'Design' },
-    { id: 4, label: '💰 Cost', shortLabel: 'Cost' },
-    { id: 5, label: '⚙️ Coordination', shortLabel: 'Coordination' },
-    { id: 6, label: '🎨 Portfolio', shortLabel: 'Portfolio' },
+    { id: 6, label: '🎨 Intro', shortLabel: 'Intro' },
+    { id: 3, label: '⚙️ Configure', shortLabel: 'Configure' },
+    { id: 4, label: '💰 Budget', shortLabel: 'Budget' },
+    { id: 5, label: '🏗️ Build', shortLabel: 'Build' },
     { id: 8, label: '📦 Archive', shortLabel: 'Archive' },
   ];
 
