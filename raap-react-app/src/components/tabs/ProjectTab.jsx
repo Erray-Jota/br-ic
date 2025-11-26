@@ -56,9 +56,11 @@ const ProjectTab = () => {
         </p>
       </div>
 
-      {/* Hero Image - Static for all floor counts */}
+      {/* Hero Video - Static for all floor counts */}
       <div style={{ marginBottom: SPACING['2xl'], borderRadius: '12px', overflow: 'hidden', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}>
-        <img src="/hero-configure.png" alt="Configure Platform" style={{ width: '100%', height: 'auto', display: 'block' }} />
+        <video autoPlay muted loop style={{ width: '100%', height: 'auto', display: 'block' }}>
+          <source src="/hero-configure.mp4" type="video/mp4" />
+        </video>
       </div>
 
       {/* Project Info Banner */}
