@@ -80,10 +80,12 @@ export const ProjectProvider = ({ children }) => {
   const SUBTAB_NAMES = {
     design: { summary: 1, units: 2, floorplan: 3, building: 4 },
     cost: { summary: 1, 'build-time': 2, assemblies: 3 },
+    archive: { intro: 1, project: 2, 'smart-start': 3, scenarios: 4 },
   };
   const SUBTAB_IDS = {
     design: { 1: 'summary', 2: 'units', 3: 'floorplan', 4: 'building' },
     cost: { 1: 'summary', 2: 'build-time', 3: 'assemblies' },
+    archive: { 1: 'intro', 2: 'project', 3: 'smart-start', 4: 'scenarios' },
   };
 
   // Initialize tab from URL or default to Intro
@@ -105,6 +107,9 @@ export const ProjectProvider = ({ children }) => {
       }
       if (tabName === 'budget' && SUBTAB_NAMES.cost[subtabName]) {
         return { ...defaults, cost: SUBTAB_NAMES.cost[subtabName] };
+      }
+      if (tabName === 'manage' && SUBTAB_NAMES.archive[subtabName]) {
+        return { ...defaults, archive: SUBTAB_NAMES.archive[subtabName] };
       }
     }
     
@@ -129,6 +134,9 @@ export const ProjectProvider = ({ children }) => {
       } else if (tabName === 'budget' && activeSubtabs.cost !== 1) {
         const costName = SUBTAB_IDS.cost[activeSubtabs.cost];
         if (costName) newPath += `/${costName}`;
+      } else if (tabName === 'manage' && activeSubtabs.archive !== 1) {
+        const archiveName = SUBTAB_IDS.archive[activeSubtabs.archive];
+        if (archiveName) newPath += `/${archiveName}`;
       }
     }
     
