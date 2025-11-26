@@ -32,7 +32,7 @@ const LocationInput = ({ value, onChange, label, placeholder = 'Enter city or zi
     setInputValue(value || '');
   }, [value, setInputValue]);
 
-  // Search using Vite proxy to Google Places API
+  // Search using Google Geocoding API via Vite proxy
   const searchLocations = async (query) => {
     if (query.length < 2) {
       setSuggestions([]);
@@ -47,43 +47,28 @@ const LocationInput = ({ value, onChange, label, placeholder = 'Enter city or zi
         return;
       }
 
-      // Call through Vite proxy to avoid CORS
-      const url = `/api/places/autocomplete/json?input=${encodeURIComponent(query)}&key=${apiKey}&components=country:us`;
+      // Use Google Geocoding API through proxy
+      const url = `/api/geocode/json?address=${encodeURIComponent(query)}&country=us&key=${apiKey}`;
       const response = await fetch(url);
       const data = await response.json();
-      console.log('Google Places response:', data.predictions?.length || 0, 'results');
+      console.log('Google Geocoding response:', data.results?.length || 0, 'results');
 
-      if (data.predictions && data.predictions.length > 0) {
-        const results = await Promise.all(
-          data.predictions.slice(0, 8).map(async (prediction) => {
-            try {
-              // Get detailed location info through proxy
-              const detailsUrl = `/api/places/details/json?place_id=${prediction.place_id}&key=${apiKey}&fields=geometry,formatted_address`;
-              const detailsResponse = await fetch(detailsUrl);
-              const detailsData = await detailsResponse.json();
-              
-              if (detailsData.result && detailsData.result.geometry) {
-                const lat = detailsData.result.geometry.location.lat;
-                const lng = detailsData.result.geometry.location.lng;
-                return {
-                  display: prediction.description,
-                  fullDisplay: detailsData.result.formatted_address || prediction.description,
-                  lat,
-                  lng,
-                  zip: ''
-                };
-              }
-            } catch (err) {
-              console.error('Error fetching place details:', err);
-            }
-            return null;
-          })
-        );
+      if (data.results && data.results.length > 0) {
+        const results = data.results.slice(0, 8).map((result) => {
+          const lat = result.geometry.location.lat;
+          const lng = result.geometry.location.lng;
+          return {
+            display: result.formatted_address,
+            fullDisplay: result.formatted_address,
+            lat,
+            lng,
+            zip: ''
+          };
+        });
 
-        const validResults = results.filter(r => r !== null);
-        setSuggestions(validResults);
-        setShowSuggestions(validResults.length > 0);
-        console.log('Filtered results:', validResults.length);
+        setSuggestions(results);
+        setShowSuggestions(results.length > 0);
+        console.log('Results found:', results.length);
       } else {
         console.log('No results found');
         setSuggestions([]);

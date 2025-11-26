@@ -13,15 +13,10 @@ export default defineConfig({
       protocol: 'wss',
     },
     proxy: {
-      '/api/places': {
-        target: 'https://maps.googleapis.com/maps/api/place',
+      '/api/geocode': {
+        target: 'https://maps.googleapis.com/maps/api/geocode',
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api\/places/, ''),
-        configure: (proxy) => {
-          proxy.on('proxyRes', (proxyRes) => {
-            proxyRes.headers['Access-Control-Allow-Origin'] = '*';
-          });
-        }
+        rewrite: (path) => path.replace(/^\/api\/geocode/, '')
       }
     }
   },
