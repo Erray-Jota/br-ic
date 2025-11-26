@@ -159,12 +159,12 @@ const DesignTab = () => {
 
             {/* Right Side: Target Unit Mix (Input) and Proposed Unit Mix */}
             <div className="card">
-              <h2 style={{ marginBottom: '16px' }}>
+              <h2 style={{ marginBottom: '12px' }}>
                 🎯 Target Unit Mix
               </h2>
               <p className="small-text" style={{ marginBottom: '8px' }}>Enter target units. Final mix will be proposed below.</p>
 
-              <div className="grid-4" style={{ gap: '8px', marginBottom: '16px' }}>
+              <div className="grid-4" style={{ gap: '8px', marginBottom: '12px' }}>
                 <div className="unit-input-container">
                   <label>Studio</label>
                   <input type="number" value={projectData.targets.studio} min="0" onChange={(e) => handleTargetChange('studio', e.target.value)} />
@@ -183,13 +183,16 @@ const DesignTab = () => {
                 </div>
               </div>
 
-              <div style={{ borderTop: '1px solid #e5e7eb', paddingTop: '16px' }}>
-                <h2 style={{ fontSize: '16px', fontWeight: 700, color: '#111827', marginBottom: '8px' }}>
-                  📊 Proposed Unit Mix ({calculations.totalOptimized} Total)
-                </h2>
+              <div style={{ borderTop: '1px solid #e5e7eb', paddingTop: '12px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                  <h2 style={{ marginBottom: 0 }}>
+                    📊 Proposed Unit Mix ({calculations.totalOptimized} Total)
+                  </h2>
+                  <span style={{ fontSize: '14px', fontWeight: 600, color: '#6b7280' }}>Total GSF: {Math.round(calculations.totalGSF).toLocaleString()}</span>
+                </div>
                 <p className="small-text" style={{ marginBottom: '8px' }}>Optimized mix based on your target inputs and building length.</p>
 
-                <div className="grid-4" style={{ gap: '8px', marginBottom: '16px' }}>
+                <div className="grid-4" style={{ gap: '8px' }}>
                   {['Studio', '1 Bed', '2 Bed', '3 Bed'].map((label, index) => {
                     const key = ['studio', 'oneBed', 'twoBed', 'threeBed'][index];
                     const count = calculations.optimized[key];
@@ -201,32 +204,13 @@ const DesignTab = () => {
                     );
                   })}
                 </div>
-
-                {/* Total GSF Box */}
-                <div style={{
-                  background: '#f0fdf4',
-                  border: '2px solid #0051BA',
-                  borderRadius: '8px',
-                  padding: '16px',
-                  textAlign: 'center'
-                }}>
-                  <div style={{ fontSize: '13px', fontWeight: 600, color: '#003F87', marginBottom: '6px' }}>
-                    TOTAL GROSS SQUARE FEET
-                  </div>
-                  <div style={{ fontSize: '32px', fontWeight: 700, color: '#111827' }}>
-                    {Math.round(calculations.totalGSF).toLocaleString()} SF
-                  </div>
-                  <div className="small-text" style={{ marginTop: '4px', color: '#003F87' }}>
-                    {(calculations.totalOptimized / projectData.floors).toFixed(0)} units/floor × {projectData.floors} floors
-                  </div>
-                </div>
               </div>
             </div>
           </div>
 
           {/* Video - Responsive Heights Based on Floors */}
           {!isEffectivelyMobile && videoSrc && (
-            <div style={{ marginBottom: '20px', borderRadius: '12px', overflow: 'hidden', boxShadow: '0 4px 12px rgba(0,0,0,0.15)' }}>
+            <div style={{ marginBottom: '8px', borderRadius: '12px', overflow: 'hidden', boxShadow: '0 4px 12px rgba(0,0,0,0.15)' }}>
               <video key={projectData.floors} autoPlay muted loop playsInline preload="metadata" style={{ width: '100%', height: 'auto', display: 'block', background: '#e5e7eb' }}>
                 <source src={videoSrc} type="video/mp4" />
               </video>
