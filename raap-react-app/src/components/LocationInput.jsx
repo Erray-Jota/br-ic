@@ -32,7 +32,7 @@ const LocationInput = ({ value, onChange, label, placeholder = 'Enter city or zi
     setInputValue(value || '');
   }, [value, setInputValue]);
 
-  // Search using Google Geocoding API - Reliable and handles military bases well
+  // Search using backend proxy to Google Places API (avoids CORS issues)
   const searchLocations = async (query) => {
     if (query.length < 2) {
       setSuggestions([]);
@@ -40,17 +40,8 @@ const LocationInput = ({ value, onChange, label, placeholder = 'Enter city or zi
     }
 
     try {
-      const apiKey = import.meta.env.VITE_GOOGLE_API_KEY;
-      if (!apiKey) {
-        console.error('Google API key not found');
-        setSuggestions([]);
-        return;
-      }
-
-      // Use Google Places API for autocomplete (more reliable than geocoding alone)
-      const url = `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${encodeURIComponent(query)}&key=${apiKey}&components=country:us`;
-      
-      const response = await fetch(url);
+      // Call backend proxy instead of Google API directly
+      const response = await fetch(`/api/places/autocomplete?input=${encodeURIComponent(query)}`);
       const data = await response.json();
       console.log('Google Places response:', data.predictions?.length || 0, 'results');
 
@@ -58,9 +49,8 @@ const LocationInput = ({ value, onChange, label, placeholder = 'Enter city or zi
         const results = await Promise.all(
           data.predictions.slice(0, 8).map(async (prediction) => {
             try {
-              // Get detailed information including lat/lng using Place ID
-              const detailsUrl = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${prediction.place_id}&key=${apiKey}&fields=geometry,formatted_address`;
-              const detailsResponse = await fetch(detailsUrl);
+              // Get detailed information including lat/lng using backend proxy
+              const detailsResponse = await fetch(`/api/places/details?placeId=${prediction.place_id}`);
               const detailsData = await detailsResponse.json();
               
               if (detailsData.result && detailsData.result.geometry) {
