@@ -2,7 +2,7 @@ export const ENTITLEMENT_IMAGES = [
   {
     id: 'building',
     title: 'Building',
-    image: '/images/construction.png',
+    image: '/images/building.png',
     raapScope: 'Provides modular building prototypes with standardized heights, widths, and depth constraints optimized for factory production',
     raapActivity: 'Delivers baseline massing logic within first 2 weeks',
     aorScope: 'Tests massing against site envelope, zoning height limits, and setback requirements; refines building placement and orientation',
