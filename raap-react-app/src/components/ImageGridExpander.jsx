@@ -2,23 +2,19 @@ import { useState } from 'react';
 import { COLORS, FONTS, SPACING } from '../styles/theme';
 
 const GanttChart = ({ raapStart, raapEnd, aorStart, aorEnd, raapActivity, aorActivity }) => {
-  const totalMonths = 6;
-  const weekToMonth = (week) => Math.floor(week / 3);
-  const getMonthStart = (month) => (month / totalMonths) * 100;
-  const getMonthWidth = () => (1 / totalMonths) * 100;
+  const maxEnd = Math.max(raapEnd, aorEnd);
+  const totalWeeks = maxEnd;
 
   const getBarStyle = (startWeek, endWeek, color) => {
-    const startMonth = weekToMonth(startWeek);
-    const endMonth = weekToMonth(endWeek);
-    const startPercent = getMonthStart(startMonth);
-    const widthPercent = (endMonth - startMonth + 1) * getMonthWidth();
+    const startPercent = (startWeek / totalWeeks) * 100;
+    const widthPercent = ((endWeek - startWeek) / totalWeeks) * 100;
 
     return {
       left: `${startPercent}%`,
-      width: `${Math.max(widthPercent - 1, 5)}%`,
+      width: `${Math.max(widthPercent, 3)}%`,
       background: color,
-      height: '28px',
-      borderRadius: '4px',
+      height: '24px',
+      borderRadius: '3px',
       position: 'absolute',
       top: '0',
       transition: 'all 0.2s'
@@ -31,37 +27,37 @@ const GanttChart = ({ raapStart, raapEnd, aorStart, aorEnd, raapActivity, aorAct
         📅 Timeline & Sequencing
       </h4>
 
-      {/* Month Headers */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(6, 1fr)', gap: '8px', marginBottom: SPACING.lg, fontSize: FONTS.sizes.sm, textAlign: 'center', color: COLORS.gray.dark, fontWeight: FONTS.weight.bold }}>
-        {Array.from({ length: 6 }).map((_, i) => (
-          <div key={i} style={{ padding: '8px', background: 'white', borderRadius: '6px', border: `1px solid ${COLORS.gray.light}` }}>
-            M{i + 1}
+      {/* Week Headers */}
+      <div style={{ display: 'grid', gridTemplateColumns: `repeat(${totalWeeks}, 1fr)`, gap: '2px', marginBottom: SPACING.lg, fontSize: FONTS.sizes.xs, textAlign: 'center', color: COLORS.gray.medium, fontWeight: FONTS.weight.bold }}>
+        {Array.from({ length: totalWeeks }).map((_, i) => (
+          <div key={i} style={{ padding: '4px', background: 'white', borderRadius: '3px', border: `1px solid ${COLORS.gray.light}` }}>
+            W{i}
           </div>
         ))}
       </div>
 
       {/* RaaP Timeline */}
-      <div style={{ marginBottom: SPACING.lg }}>
-        <div style={{ fontSize: FONTS.sizes.sm, fontWeight: FONTS.weight.bold, color: COLORS.green.dark, marginBottom: '8px' }}>🏭 RaaP</div>
-        <div style={{ position: 'relative', height: '40px', background: 'white', borderRadius: '8px', border: `1px solid ${COLORS.gray.light}`, marginBottom: '8px' }}>
+      <div style={{ marginBottom: SPACING.lg, display: 'grid', gridTemplateColumns: '80px 1fr 200px', gap: SPACING.md, alignItems: 'center' }}>
+        <div style={{ fontSize: FONTS.sizes.sm, fontWeight: FONTS.weight.bold, color: COLORS.green.dark }}>🏭 RaaP</div>
+        <div style={{ position: 'relative', height: '32px', background: 'white', borderRadius: '6px', border: `1px solid ${COLORS.gray.light}` }}>
           <div style={getBarStyle(raapStart, raapEnd, COLORS.green.main)} />
         </div>
         {raapActivity && (
-          <div style={{ fontSize: FONTS.sizes.sm, color: COLORS.gray.dark, marginBottom: '8px', lineHeight: '1.5' }}>
-            • {raapActivity}
+          <div style={{ fontSize: FONTS.sizes.sm, color: COLORS.gray.dark, lineHeight: '1.4' }}>
+            {raapActivity}
           </div>
         )}
       </div>
 
       {/* AoR Timeline */}
-      <div>
-        <div style={{ fontSize: FONTS.sizes.sm, fontWeight: FONTS.weight.bold, color: COLORS.blue.dark, marginBottom: '8px' }}>🏗️ AoR</div>
-        <div style={{ position: 'relative', height: '40px', background: 'white', borderRadius: '8px', border: `1px solid ${COLORS.gray.light}`, marginBottom: '8px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: '80px 1fr 200px', gap: SPACING.md, alignItems: 'center' }}>
+        <div style={{ fontSize: FONTS.sizes.sm, fontWeight: FONTS.weight.bold, color: COLORS.blue.dark }}>🏗️ AoR</div>
+        <div style={{ position: 'relative', height: '32px', background: 'white', borderRadius: '6px', border: `1px solid ${COLORS.gray.light}` }}>
           <div style={getBarStyle(aorStart, aorEnd, COLORS.blue.main)} />
         </div>
         {aorActivity && (
-          <div style={{ fontSize: FONTS.sizes.sm, color: COLORS.gray.dark, lineHeight: '1.5' }}>
-            • {aorActivity}
+          <div style={{ fontSize: FONTS.sizes.sm, color: COLORS.gray.dark, lineHeight: '1.4' }}>
+            {aorActivity}
           </div>
         )}
       </div>
@@ -82,7 +78,7 @@ const ImageGridExpander = ({ images }) => {
           left: 0,
           right: 0,
           bottom: 0,
-          background: 'rgba(0, 0, 0, 0.85)',
+          background: 'rgba(0, 0, 0, 0)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -151,19 +147,13 @@ const ImageGridExpander = ({ images }) => {
             <tbody>
               <tr style={{ borderBottom: `1px solid ${COLORS.gray.light}`, background: 'white' }}>
                 <td style={{ padding: SPACING.md, textAlign: 'left', fontSize: FONTS.sizes.sm, color: COLORS.gray.dark, verticalAlign: 'top', lineHeight: '1.8' }}>
-                  <div style={{ paddingLeft: '16px', textIndent: '-16px', marginBottom: '8px' }}>
-                    <span style={{ color: COLORS.green.main, fontWeight: FONTS.weight.bold }}>✓</span> {expandedImage.raapScope}
-                  </div>
                   <div style={{ paddingLeft: '16px', textIndent: '-16px' }}>
-                    <span style={{ color: COLORS.green.main, fontWeight: FONTS.weight.bold }}>•</span> {expandedImage.raapActivity}
+                    <span style={{ color: COLORS.green.main, fontWeight: FONTS.weight.bold }}>✓</span> {expandedImage.raapScope}
                   </div>
                 </td>
                 <td style={{ padding: SPACING.md, textAlign: 'left', fontSize: FONTS.sizes.sm, color: COLORS.gray.dark, verticalAlign: 'top', lineHeight: '1.8' }}>
-                  <div style={{ paddingLeft: '16px', textIndent: '-16px', marginBottom: '8px' }}>
-                    <span style={{ color: COLORS.blue.main, fontWeight: FONTS.weight.bold }}>✓</span> {expandedImage.aorScope}
-                  </div>
                   <div style={{ paddingLeft: '16px', textIndent: '-16px' }}>
-                    <span style={{ color: COLORS.blue.main, fontWeight: FONTS.weight.bold }}>•</span> {expandedImage.aorActivity}
+                    <span style={{ color: COLORS.blue.main, fontWeight: FONTS.weight.bold }}>✓</span> {expandedImage.aorScope}
                   </div>
                 </td>
               </tr>
