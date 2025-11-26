@@ -197,101 +197,95 @@ const ArchitectTab = () => {
     <div>
       {/* Header */}
       <div style={{ background: `linear-gradient(135deg, ${COLORS.blue.bg} 0%, #ffffff 100%)`, padding: SPACING['2xl'], borderRadius: '12px', border: `3px solid ${COLORS.blue.light}`, marginBottom: SPACING['3xl'], boxShadow: '0 4px 12px rgba(0, 81, 186, 0.1)', textAlign: 'center' }}>
-        <h1 style={{ fontSize: FONTS.sizes['2xl'], fontWeight: FONTS.weight.black, color: COLORS.blue.dark, margin: 0, marginBottom: SPACING.sm }}>
-          🎯 Coordination – Architect
-        </h1>
-        <p style={{ fontSize: FONTS.sizes.base, color: COLORS.gray.medium, margin: 0, fontWeight: FONTS.weight.bold }}>
+        <p style={{ fontSize: FONTS.sizes['2xl'], fontWeight: FONTS.weight.black, color: COLORS.blue.dark, margin: 0 }}>
           RaaP defines the Product. The AoR customizes the Project. Together, they eliminate the fragmentation that usually destroys modular schedules.
         </p>
       </div>
 
-      {/* RaaP's Role */}
-      <div style={{ marginBottom: SPACING['2xl'], padding: SPACING.lg, background: '#f0f7ff', border: `2px solid ${COLORS.blue.light}`, borderRadius: '12px' }}>
-        <h2 style={{ fontSize: FONTS.sizes.lg, fontWeight: FONTS.weight.bold, color: COLORS.blue.dark, marginBottom: SPACING.md, margin: 0 }}>🏭 RaaP's Role (Product Architect)</h2>
-        <ul style={{ margin: 0, paddingLeft: '20px', color: COLORS.gray.dark, lineHeight: '1.8', fontSize: FONTS.sizes.sm }}>
-          <li style={{ marginBottom: '8px' }}>Creates the standardized modular product: unit prototypes, module assemblies, UL/GA walls, chassis, connection details, schedules, façade logic.</li>
-          <li style={{ marginBottom: '8px' }}>Delivers 80% of the Factory Permit Set and ~40% of the AHJ Set via repeatable, validated design content.</li>
-          <li style={{ marginBottom: '8px' }}>Ensures DfMA correctness so the factory and GC have zero ambiguity.</li>
-          <li>Maintains product integrity—no project-specific drift, no redesign loops, no unplanned liability.</li>
-        </ul>
-      </div>
-
-      {/* AoR's Role */}
-      <div style={{ marginBottom: SPACING['2xl'], padding: SPACING.lg, background: '#fff8f0', border: `2px solid ${COLORS.green.light}`, borderRadius: '12px' }}>
-        <h2 style={{ fontSize: FONTS.sizes.lg, fontWeight: FONTS.weight.bold, color: COLORS.green.dark, marginBottom: SPACING.md, margin: 0 }}>🏗️ AoR's Role (Project Architect)</h2>
-        <ul style={{ margin: 0, paddingLeft: '20px', color: COLORS.gray.dark, lineHeight: '1.8', fontSize: FONTS.sizes.sm }}>
-          <li style={{ marginBottom: '8px' }}>Localizes the product to the exact site, codes, zoning, and AHJ requirements.</li>
-          <li style={{ marginBottom: '8px' }}>Owns Title 24/energy, civil coordination, site plan, foundation/podium, wind/seismic, accessibility paths, and all items requiring a stamp.</li>
-          <li>Integrates RaaP's product kit into a complete, permit-ready building.</li>
-        </ul>
-      </div>
-
-      {/* Shared Outcomes */}
-      <div style={{ marginBottom: SPACING['3xl'], padding: SPACING.lg, background: `linear-gradient(90deg, ${COLORS.blue.bg} 0%, ${COLORS.green.bg} 100%)`, border: `3px solid ${COLORS.blue.main}`, borderRadius: '12px', boxShadow: '0 4px 12px rgba(0, 81, 186, 0.15)' }}>
-        <h2 style={{ fontSize: FONTS.sizes.lg, fontWeight: FONTS.weight.bold, color: COLORS.blue.dark, marginBottom: SPACING.md, margin: 0, textAlign: 'center' }}>✨ Shared Outcomes</h2>
-        <ul style={{ margin: 0, paddingLeft: '20px', color: COLORS.gray.dark, lineHeight: '1.8', fontSize: FONTS.sizes.sm }}>
-          <li style={{ marginBottom: '8px' }}>Zero rework (AoR doesn't redraw modules; RaaP doesn't touch local design).</li>
-          <li style={{ marginBottom: '8px' }}>Parallelization (AoR proceeds on project work while factory uses RaaP's kit).</li>
-          <li>Predictability (clear scope = fewer RFIs, fewer change orders, and faster approvals).</li>
-        </ul>
-      </div>
-
-      {/* Comparison Table */}
+      {/* Roles & Outcomes Table */}
       <div style={{ marginBottom: SPACING['3xl'], overflowX: 'auto' }}>
-        <div style={{ textAlign: 'center', marginBottom: SPACING.lg }}>
-          <h2 style={{ fontSize: FONTS.sizes['2xl'], fontWeight: FONTS.weight.black, color: COLORS.blue.dark, margin: 0 }}>Why</h2>
-        </div>
         <table style={{ width: '100%', borderCollapse: 'collapse', background: 'white', border: `2px solid ${COLORS.gray.light}`, borderRadius: '12px', overflow: 'hidden' }}>
           <thead>
             <tr style={{ background: `linear-gradient(90deg, ${COLORS.green.bg} 0%, ${COLORS.blue.bg} 100%)`, borderBottom: `3px solid ${COLORS.green.dark}` }}>
-              <th style={{ padding: '16px', textAlign: 'left', fontWeight: FONTS.weight.bold, fontSize: FONTS.sizes.base, color: COLORS.green.dark }}>Outcomes</th>
+              <th style={{ padding: '16px', textAlign: 'left', fontWeight: FONTS.weight.bold, fontSize: FONTS.sizes.base, color: COLORS.green.dark }}></th>
               <th style={{ padding: '16px', textAlign: 'left', fontWeight: FONTS.weight.bold, fontSize: FONTS.sizes.base, color: COLORS.green.dark }}>🏭 RaaP – Product Architect</th>
               <th style={{ padding: '16px', textAlign: 'left', fontWeight: FONTS.weight.bold, fontSize: FONTS.sizes.base, color: COLORS.blue.dark }}>🏗️ AoR – Project Architect</th>
             </tr>
           </thead>
           <tbody>
+            {/* Role Row */}
+            <tr style={{ borderBottom: `2px solid ${COLORS.gray.light}`, background: '#f0f9ff' }}>
+              <td style={{ padding: '16px', fontWeight: FONTS.weight.bold, color: COLORS.blue.dark, fontSize: FONTS.sizes.base }}>Role</td>
+              <td style={{ padding: '16px', color: COLORS.gray.dark, fontSize: FONTS.sizes.sm, lineHeight: '1.8' }}>
+                <div style={{ color: COLORS.blue.dark, fontWeight: FONTS.weight.bold, marginBottom: '8px', fontSize: FONTS.sizes.base }}>Creates the standardized modular product</div>
+                <ul style={{ margin: 0, paddingLeft: '0', listStyle: 'none', color: COLORS.gray.dark }}>
+                  <li style={{ marginBottom: '6px' }}>✓ Unit prototypes, module assemblies, UL/GA walls, chassis, connection details, schedules, façade logic</li>
+                  <li style={{ marginBottom: '6px' }}>✓ Delivers 80% of the Factory Permit Set and ~40% of the AHJ Set</li>
+                  <li style={{ marginBottom: '6px' }}>✓ Ensures DfMA correctness so the factory and GC have zero ambiguity</li>
+                  <li>✓ Maintains product integrity—no project-specific drift, no redesign loops, no unplanned liability</li>
+                </ul>
+              </td>
+              <td style={{ padding: '16px', color: COLORS.gray.dark, fontSize: FONTS.sizes.sm, lineHeight: '1.8' }}>
+                <div style={{ color: COLORS.green.dark, fontWeight: FONTS.weight.bold, marginBottom: '8px', fontSize: FONTS.sizes.base }}>Localizes the product to the site</div>
+                <ul style={{ margin: 0, paddingLeft: '0', listStyle: 'none', color: COLORS.gray.dark }}>
+                  <li style={{ marginBottom: '6px' }}>✓ Adapts product to exact site, codes, zoning, and AHJ requirements</li>
+                  <li style={{ marginBottom: '6px' }}>✓ Owns Title 24/energy, civil coordination, site plan, foundation/podium, wind/seismic, accessibility paths</li>
+                  <li>✓ Integrates RaaP's product kit into a complete, permit-ready building</li>
+                </ul>
+              </td>
+            </tr>
+            {/* Why Section Header Row */}
+            <tr style={{ borderBottom: `1px solid ${COLORS.gray.light}`, background: '#fafbfc' }}>
+              <td style={{ padding: '14px 16px', fontWeight: FONTS.weight.bold, color: COLORS.green.dark, fontSize: FONTS.sizes.base, verticalAlign: 'top' }}>Why</td>
+              <td colSpan="2" style={{ padding: '14px 16px', color: COLORS.gray.dark, fontSize: FONTS.sizes.xs }}>
+                <span style={{ fontWeight: FONTS.weight.bold, color: COLORS.gray.medium }}>Outcomes that drive the partnership</span>
+              </td>
+            </tr>
+            {/* SPEED */}
             <tr style={{ borderBottom: `1px solid ${COLORS.gray.light}`, background: '#f9fafb' }}>
               <td style={{ padding: '16px', fontWeight: FONTS.weight.bold, color: COLORS.green.main, fontSize: FONTS.sizes.base }}>⚡ SPEED</td>
-              <td style={{ padding: '16px', color: COLORS.gray.dark, fontSize: FONTS.sizes.sm, lineHeight: '1.5' }}>
-                <ul style={{ margin: 0, paddingLeft: '20px' }}>
-                  <li>✓ Provides pre-validated modular units, assemblies, façade logic, and details already optimized for factory production.</li>
-                  <li>✓ Eliminates concept-phase redesign cycles by starting from a fixed product.</li>
+              <td style={{ padding: '16px', color: COLORS.gray.dark, fontSize: FONTS.sizes.sm, lineHeight: '1.7' }}>
+                <ul style={{ margin: 0, paddingLeft: '0', listStyle: 'none' }}>
+                  <li style={{ marginBottom: '8px', fontWeight: FONTS.weight.bold }}>✓ Pre-validated modules, assemblies, façade logic optimized for factory production</li>
+                  <li style={{ fontWeight: FONTS.weight.bold }}>✓ Eliminates concept-phase redesign cycles by starting from fixed product</li>
                 </ul>
               </td>
-              <td style={{ padding: '16px', color: COLORS.gray.dark, fontSize: FONTS.sizes.sm, lineHeight: '1.5' }}>
-                <ul style={{ margin: 0, paddingLeft: '20px' }}>
-                  <li>✓ Accelerates entitlement and permitting by adapting a ready-made product to local site/zoning codes.</li>
-                  <li>✓ Reduces agency review time because modules and assemblies are already standardized.</li>
+              <td style={{ padding: '16px', color: COLORS.gray.dark, fontSize: FONTS.sizes.sm, lineHeight: '1.7' }}>
+                <ul style={{ margin: 0, paddingLeft: '0', listStyle: 'none' }}>
+                  <li style={{ marginBottom: '8px', fontWeight: FONTS.weight.bold }}>✓ Accelerates entitlement/permitting by adapting ready-made product to site/zoning codes</li>
+                  <li style={{ fontWeight: FONTS.weight.bold }}>✓ Reduces agency review time—modules are already standardized</li>
                 </ul>
               </td>
             </tr>
+            {/* SAVINGS */}
             <tr style={{ borderBottom: `1px solid ${COLORS.gray.light}`, background: 'white' }}>
               <td style={{ padding: '16px', fontWeight: FONTS.weight.bold, color: COLORS.green.main, fontSize: FONTS.sizes.base }}>💰 SAVINGS</td>
-              <td style={{ padding: '16px', color: COLORS.gray.dark, fontSize: FONTS.sizes.sm, lineHeight: '1.5' }}>
-                <ul style={{ margin: 0, paddingLeft: '20px' }}>
-                  <li>✓ Eliminates 70–90% of architectural effort normally spent designing units, corridors, stairs, and assemblies.</li>
-                  <li>✓ Reduces soft costs by standardizing drawings, assemblies, and schedules across all projects.</li>
+              <td style={{ padding: '16px', color: COLORS.gray.dark, fontSize: FONTS.sizes.sm, lineHeight: '1.7' }}>
+                <ul style={{ margin: 0, paddingLeft: '0', listStyle: 'none' }}>
+                  <li style={{ marginBottom: '8px', fontWeight: FONTS.weight.bold }}>✓ Eliminates 70–90% of architectural effort (units, corridors, stairs, assemblies)</li>
+                  <li style={{ fontWeight: FONTS.weight.bold }}>✓ Reduces soft costs by standardizing drawings, assemblies, and schedules</li>
                 </ul>
               </td>
-              <td style={{ padding: '16px', color: COLORS.gray.dark, fontSize: FONTS.sizes.sm, lineHeight: '1.5' }}>
-                <ul style={{ margin: 0, paddingLeft: '20px' }}>
-                  <li>✓ Focuses only on the 30–50% project-specific content—site plans, energy, egress, utilities—reducing hours and fees.</li>
-                  <li>✓ Avoids redesign cycles and costly scope drift because the product architecture is fixed.</li>
+              <td style={{ padding: '16px', color: COLORS.gray.dark, fontSize: FONTS.sizes.sm, lineHeight: '1.7' }}>
+                <ul style={{ margin: 0, paddingLeft: '0', listStyle: 'none' }}>
+                  <li style={{ marginBottom: '8px', fontWeight: FONTS.weight.bold }}>✓ Focuses on 30–50% project-specific work (site plans, energy, egress, utilities)</li>
+                  <li style={{ fontWeight: FONTS.weight.bold }}>✓ Avoids redesign cycles and costly scope drift—product architecture is fixed</li>
                 </ul>
               </td>
             </tr>
+            {/* DE-RISK */}
             <tr style={{ background: '#f9fafb' }}>
               <td style={{ padding: '16px', fontWeight: FONTS.weight.bold, color: COLORS.green.main, fontSize: FONTS.sizes.base }}>🛡️ DE-RISK</td>
-              <td style={{ padding: '16px', color: COLORS.gray.dark, fontSize: FONTS.sizes.sm, lineHeight: '1.5' }}>
-                <ul style={{ margin: 0, paddingLeft: '20px' }}>
-                  <li>✓ Provides factory-validated UL/GA assemblies, structural logic, tolerances, and MEP interface rules that eliminate manufacturing uncertainty.</li>
-                  <li>✓ Prevents design drift and reduces RFIs by defining a complete, repeatable kit of parts.</li>
+              <td style={{ padding: '16px', color: COLORS.gray.dark, fontSize: FONTS.sizes.sm, lineHeight: '1.7' }}>
+                <ul style={{ margin: 0, paddingLeft: '0', listStyle: 'none' }}>
+                  <li style={{ marginBottom: '8px', fontWeight: FONTS.weight.bold }}>✓ Factory-validated UL/GA assemblies, tolerances, MEP interfaces—zero manufacturing uncertainty</li>
+                  <li style={{ fontWeight: FONTS.weight.bold }}>✓ Prevents design drift and reduces RFIs with complete, repeatable kit of parts</li>
                 </ul>
               </td>
-              <td style={{ padding: '16px', color: COLORS.gray.dark, fontSize: FONTS.sizes.sm, lineHeight: '1.5' }}>
-                <ul style={{ margin: 0, paddingLeft: '20px' }}>
-                  <li>✓ Ensures local code compliance (fire, egress, accessibility, energy), preventing permitting failures.</li>
-                  <li>✓ Reduces construction-phase issues by clarifying site vs factory scope and eliminating coordination gaps.</li>
+              <td style={{ padding: '16px', color: COLORS.gray.dark, fontSize: FONTS.sizes.sm, lineHeight: '1.7' }}>
+                <ul style={{ margin: 0, paddingLeft: '0', listStyle: 'none' }}>
+                  <li style={{ marginBottom: '8px', fontWeight: FONTS.weight.bold }}>✓ Ensures local code compliance (fire, egress, accessibility, energy)</li>
+                  <li style={{ fontWeight: FONTS.weight.bold }}>✓ Reduces construction-phase issues by clarifying site vs factory scope</li>
                 </ul>
               </td>
             </tr>
