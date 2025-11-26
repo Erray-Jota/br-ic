@@ -80,12 +80,12 @@ export const ProjectProvider = ({ children }) => {
   const SUBTAB_NAMES = {
     design: { summary: 1, units: 2, floorplan: 3, building: 4 },
     cost: { summary: 1, 'build-time': 2, assemblies: 3 },
-    archive: { intro: 1, project: 2, 'smart-start': 3, scenarios: 4 },
+    factors: { marketplace: 1, fabricator: 2, logistics: 3, construction: 4 },
   };
   const SUBTAB_IDS = {
     design: { 1: 'summary', 2: 'units', 3: 'floorplan', 4: 'building' },
     cost: { 1: 'summary', 2: 'build-time', 3: 'assemblies' },
-    archive: { 1: 'intro', 2: 'project', 3: 'smart-start', 4: 'scenarios' },
+    factors: { 1: 'marketplace', 2: 'fabricator', 3: 'logistics', 4: 'construction' },
   };
 
   // Initialize tab from URL or default to Intro
@@ -96,7 +96,7 @@ export const ProjectProvider = ({ children }) => {
 
   const getInitialSubtabs = () => {
     const pathParts = window.location.pathname.split('/').filter(Boolean);
-    const defaults = { design: 1, cost: 1, factors: 1, smartstart: 1, archive: 1 };
+    const defaults = { design: 1, cost: 1, factors: 1 };
     
     if (pathParts.length >= 2) {
       const tabName = pathParts[0]?.toLowerCase();
@@ -108,8 +108,8 @@ export const ProjectProvider = ({ children }) => {
       if (tabName === 'budget' && SUBTAB_NAMES.cost[subtabName]) {
         return { ...defaults, cost: SUBTAB_NAMES.cost[subtabName] };
       }
-      if (tabName === 'manage' && SUBTAB_NAMES.archive[subtabName]) {
-        return { ...defaults, archive: SUBTAB_NAMES.archive[subtabName] };
+      if (tabName === 'manage' && SUBTAB_NAMES.factors[subtabName]) {
+        return { ...defaults, factors: SUBTAB_NAMES.factors[subtabName] };
       }
     }
     
@@ -134,9 +134,9 @@ export const ProjectProvider = ({ children }) => {
       } else if (tabName === 'budget' && activeSubtabs.cost !== 1) {
         const costName = SUBTAB_IDS.cost[activeSubtabs.cost];
         if (costName) newPath += `/${costName}`;
-      } else if (tabName === 'manage' && activeSubtabs.archive !== 1) {
-        const archiveName = SUBTAB_IDS.archive[activeSubtabs.archive];
-        if (archiveName) newPath += `/${archiveName}`;
+      } else if (tabName === 'manage' && activeSubtabs.factors !== 1) {
+        const factorName = SUBTAB_IDS.factors[activeSubtabs.factors];
+        if (factorName) newPath += `/${factorName}`;
       }
     }
     
