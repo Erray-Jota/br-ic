@@ -28,7 +28,7 @@ const ResponsiveTabNavigation = () => {
     { id: 6, label: '🎨 Intro', shortLabel: 'Intro' },
     { id: 3, label: '⚙️ Configure', shortLabel: 'Configure' },
     { id: 4, label: '💰 Budget', shortLabel: 'Budget' },
-    { id: 5, label: '🏗️ Build', shortLabel: 'Build' },
+    { id: 5, label: '📋 Manage', shortLabel: 'Manage' },
     { id: 8, label: '📦 Archive', shortLabel: 'Archive' },
   ];
 
