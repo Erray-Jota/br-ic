@@ -164,22 +164,14 @@ const DesignTab = () => {
               </h2>
               <p className="small-text" style={{ marginBottom: '8px' }}>Enter target units. Final mix will be proposed below.</p>
 
-              <div className="grid-4" style={{ gap: '8px', marginBottom: '12px' }}>
+              <div className="grid-2" style={{ gap: '8px', marginBottom: '12px' }}>
                 <div className="unit-input-container">
-                  <label>Studio</label>
-                  <input type="number" value={projectData.targets.studio} min="0" onChange={(e) => handleTargetChange('studio', e.target.value)} />
+                  <label>2 Bedroom</label>
+                  <input type="number" value={projectData.targets.twoBedroom} min="0" onChange={(e) => handleTargetChange('twoBedroom', e.target.value)} />
                 </div>
                 <div className="unit-input-container">
-                  <label>1 Bed</label>
-                  <input type="number" value={projectData.targets.oneBed} min="0" onChange={(e) => handleTargetChange('oneBed', e.target.value)} />
-                </div>
-                <div className="unit-input-container">
-                  <label>2 Bed</label>
-                  <input type="number" value={projectData.targets.twoBed} min="0" onChange={(e) => handleTargetChange('twoBed', e.target.value)} />
-                </div>
-                <div className="unit-input-container">
-                  <label>3 Bed</label>
-                  <input type="number" value={projectData.targets.threeBed} min="0" onChange={(e) => handleTargetChange('threeBed', e.target.value)} />
+                  <label>4 Bedroom</label>
+                  <input type="number" value={projectData.targets.fourBedroom} min="0" onChange={(e) => handleTargetChange('fourBedroom', e.target.value)} />
                 </div>
               </div>
 
@@ -192,9 +184,9 @@ const DesignTab = () => {
                 </div>
                 <p className="small-text" style={{ marginBottom: '8px' }}>Optimized mix based on your target inputs and building length.</p>
 
-                <div className="grid-4" style={{ gap: '8px' }}>
-                  {['Studio', '1 Bed', '2 Bed', '3 Bed'].map((label, index) => {
-                    const key = ['studio', 'oneBed', 'twoBed', 'threeBed'][index];
+                <div className="grid-2" style={{ gap: '8px' }}>
+                  {['2 Bedroom', '4 Bedroom'].map((label, index) => {
+                    const key = ['twoBedroom', 'fourBedroom'][index];
                     const count = calculations.optimized[key];
                     return (
                       <div key={key} className="proposed-unit-mix-item">
