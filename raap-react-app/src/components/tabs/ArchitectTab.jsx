@@ -217,15 +217,15 @@ const ArchitectTab = () => {
             <tr style={{ borderBottom: `2px solid ${COLORS.gray.light}`, background: '#f0f9ff' }}>
               <td style={{ padding: '16px', textAlign: 'center', fontWeight: FONTS.weight.bold, color: COLORS.blue.dark, fontSize: FONTS.sizes.base, verticalAlign: 'top', whiteSpace: 'nowrap' }}>Responsibility</td>
               <td style={{ padding: '16px', textAlign: 'left', color: COLORS.gray.dark, fontSize: FONTS.sizes.sm, lineHeight: '1.6', verticalAlign: 'top' }}>
-                <div style={{ color: COLORS.green.main, fontWeight: FONTS.weight.bold, marginBottom: '4px', paddingLeft: '20px', marginLeft: '-20px' }}>✓ Creates the standardized modular product: prototypes, assemblies, UL/GA walls, chassis, details, schedules, façade logic</div>
-                <div style={{ color: COLORS.green.main, fontWeight: FONTS.weight.bold, marginBottom: '4px', paddingLeft: '20px', marginLeft: '-20px' }}>✓ Delivers 80% of the Factory Permit Set and ~40% of the AHJ Set via repeatable, validated design</div>
-                <div style={{ color: COLORS.green.main, fontWeight: FONTS.weight.bold, marginBottom: '4px', paddingLeft: '20px', marginLeft: '-20px' }}>✓ Ensures DfMA correctness so the factory and GC have zero ambiguity</div>
-                <div style={{ color: COLORS.green.main, fontWeight: FONTS.weight.bold, paddingLeft: '20px', marginLeft: '-20px' }}>✓ Maintains product integrity—no project-specific drift, no redesign loops, no unplanned liability</div>
+                <div style={{ color: COLORS.green.main, fontWeight: FONTS.weight.bold, marginBottom: '4px', paddingLeft: '20px', textIndent: '-20px' }}>✓ Creates the standardized modular product: prototypes, assemblies, UL/GA walls, chassis, details, schedules, façade logic</div>
+                <div style={{ color: COLORS.green.main, fontWeight: FONTS.weight.bold, marginBottom: '4px', paddingLeft: '20px', textIndent: '-20px' }}>✓ Delivers 80% of the Factory Permit Set and ~40% of the AHJ Set via repeatable, validated design</div>
+                <div style={{ color: COLORS.green.main, fontWeight: FONTS.weight.bold, marginBottom: '4px', paddingLeft: '20px', textIndent: '-20px' }}>✓ Ensures DfMA correctness so the factory and GC have zero ambiguity</div>
+                <div style={{ color: COLORS.green.main, fontWeight: FONTS.weight.bold, paddingLeft: '20px', textIndent: '-20px' }}>✓ Maintains product integrity—no project-specific drift, no redesign loops, no unplanned liability</div>
               </td>
               <td style={{ padding: '16px', textAlign: 'left', color: COLORS.gray.dark, fontSize: FONTS.sizes.sm, lineHeight: '1.6', verticalAlign: 'top' }}>
-                <div style={{ color: COLORS.green.main, fontWeight: FONTS.weight.bold, marginBottom: '4px', paddingLeft: '20px', marginLeft: '-20px' }}>✓ Localizes the product to exact site, codes, zoning, and AHJ requirements</div>
-                <div style={{ color: COLORS.green.main, fontWeight: FONTS.weight.bold, marginBottom: '4px', paddingLeft: '20px', marginLeft: '-20px' }}>✓ Owns Title 24/energy, civil coordination, site plan, foundation/podium, wind/seismic, accessibility paths, and items requiring a stamp</div>
-                <div style={{ color: COLORS.green.main, fontWeight: FONTS.weight.bold, paddingLeft: '20px', marginLeft: '-20px' }}>✓ Integrates RaaP's product kit into a complete, permit-ready building</div>
+                <div style={{ color: COLORS.green.main, fontWeight: FONTS.weight.bold, marginBottom: '4px', paddingLeft: '20px', textIndent: '-20px' }}>✓ Localizes the product to exact site, codes, zoning, and AHJ requirements</div>
+                <div style={{ color: COLORS.green.main, fontWeight: FONTS.weight.bold, marginBottom: '4px', paddingLeft: '20px', textIndent: '-20px' }}>✓ Owns Title 24/energy, civil coordination, site plan, foundation/podium, wind/seismic, accessibility paths, and items requiring a stamp</div>
+                <div style={{ color: COLORS.green.main, fontWeight: FONTS.weight.bold, paddingLeft: '20px', textIndent: '-20px' }}>✓ Integrates RaaP's product kit into a complete, permit-ready building</div>
               </td>
             </tr>
             {/* SPEED */}
