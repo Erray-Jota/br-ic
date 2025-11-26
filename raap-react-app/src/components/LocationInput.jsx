@@ -32,7 +32,7 @@ const LocationInput = ({ value, onChange, label, placeholder = 'Enter city or zi
     setInputValue(value || '');
   }, [value, setInputValue]);
 
-  // Search using Google Geocoding API via Vite proxy
+  // Search using Nominatim (OpenStreetMap) - Free, no API key required
   const searchLocations = async (query) => {
     if (query.length < 2) {
       setSuggestions([]);
@@ -40,26 +40,27 @@ const LocationInput = ({ value, onChange, label, placeholder = 'Enter city or zi
     }
 
     try {
-      const apiKey = import.meta.env.VITE_GOOGLE_API_KEY;
-      if (!apiKey) {
-        console.error('Google API key not found');
-        setSuggestions([]);
-        return;
-      }
-
-      // Use Google Geocoding API through proxy
-      const url = `/api/geocode/json?address=${encodeURIComponent(query)}&country=us&key=${apiKey}`;
+      // Use Nominatim API directly
+      const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&country=us&limit=15`;
+      
       const response = await fetch(url);
       const data = await response.json();
-      console.log('Google Geocoding response:', data.results?.length || 0, 'results');
+      console.log('Nominatim response:', data.length, 'results');
 
-      if (data.results && data.results.length > 0) {
-        const results = data.results.slice(0, 8).map((result) => {
-          const lat = result.geometry.location.lat;
-          const lng = result.geometry.location.lng;
+      if (data && Array.isArray(data) && data.length > 0) {
+        // Filter to city/town level results only
+        const filtered = data.filter(r => {
+          const type = (r.type || '').toLowerCase();
+          const displayName = (r.display_name || '').toLowerCase();
+          return (type === 'city' || type === 'town' || type === 'village' || displayName.includes(',')) && displayName.includes(', united states');
+        });
+
+        const results = filtered.slice(0, 8).map((result) => {
+          const lat = parseFloat(result.lat);
+          const lng = parseFloat(result.lon);
           return {
-            display: result.formatted_address,
-            fullDisplay: result.formatted_address,
+            display: result.display_name.split(',').slice(0, 2).join(',').trim(),
+            fullDisplay: result.display_name,
             lat,
             lng,
             zip: ''
@@ -68,7 +69,7 @@ const LocationInput = ({ value, onChange, label, placeholder = 'Enter city or zi
 
         setSuggestions(results);
         setShowSuggestions(results.length > 0);
-        console.log('Results found:', results.length);
+        console.log('Filtered results:', results.length);
       } else {
         console.log('No results found');
         setSuggestions([]);

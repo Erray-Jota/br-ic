@@ -219,14 +219,12 @@ const DesignTab = () => {
             </div>
           </div>
 
-          {/* Video - Responsive Heights Based on Floors */}
-          {!isEffectivelyMobile && videoSrc && (
-            <div style={{ marginBottom: '8px', borderRadius: '12px', overflow: 'hidden', boxShadow: '0 4px 12px rgba(0,0,0,0.15)' }}>
-              <video key={projectData.floors} autoPlay muted loop playsInline preload="metadata" style={{ width: '100%', height: 'auto', display: 'block', background: '#e5e7eb' }}>
-                <source src={videoSrc} type="video/mp4" />
-              </video>
-            </div>
-          )}
+          {/* Building Visualization Video */}
+          <div style={{ marginBottom: '12px', borderRadius: '12px', overflow: 'hidden', boxShadow: '0 4px 12px rgba(0,0,0,0.15)' }}>
+            <video autoPlay muted loop playsInline preload="metadata" style={{ width: '100%', height: 'auto', display: 'block', background: '#e5e7eb' }}>
+              <source src={ASSET_PATHS.VIDEO_WALKTHROUGH} type="video/mp4" />
+            </video>
+          </div>
 
           {/* RaaP DfMA Benefits */}
           <div className="card" style={{ marginTop: isEffectivelyMobile ? '8px' : '12px' }}>
