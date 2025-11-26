@@ -1,6 +1,7 @@
 import { useProject } from '../../contexts/ProjectContext';
 import { COLORS, FONTS, SPACING, BORDERS, STYLE_PRESETS } from '../../styles/theme';
 import ComparisonTable from '../ComparisonTable';
+import { ASSET_PATHS } from '../../data/constants';
 
 const PortfolioTab = () => {
   const { switchTab } = useProject();
@@ -67,27 +68,24 @@ const PortfolioTab = () => {
       {/* Hero Section */}
       <div style={STYLE_PRESETS.heroGreenGradient}>
         <h1 style={{ ...STYLE_PRESETS.heroTitle, color: COLORS.green.dark }}>
-          Three Products. One Mission: De-Risk Modular.
+          Three Steps. One Mission: De-Risk Industrialized Construction.
         </h1>
         <p style={{ fontSize: FONTS.sizes.xl, color: COLORS.green.medium, marginBottom: '0px', lineHeight: '1.8', textAlign: 'center', fontWeight: FONTS.weight.bold, fontFamily: FONTS.system }}>
-          From feasibility to fabrication, RaaP guides you through modular construction with firm costs, partner certainty, and factory-ready design.
+          From feasibility to fabrication, RaaP guides you through industrialized construction with DfMA-optimized designs, budget certainty and a IC-optimization process that can scale globally.
         </p>
       </div>
 
-      {/* Portfolio Image */}
-      <div style={{ marginBottom: SPACING['3xl'], textAlign: 'center', borderRadius: BORDERS.radius.lg }}>
-        <img
-          src="/images/portfolio_2.png"
-          alt="RaaP Portfolio Overview"
-          style={{
-            width: '100%',
-            height: 'auto',
-            display: 'block',
-            borderRadius: BORDERS.radius.lg,
-            boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
-            border: `2px solid ${COLORS.gray.lighter}`
-          }}
-        />
+      {/* Hero Video */}
+      <div className="card" style={{ padding: '0', marginBottom: SPACING['3xl'], borderRadius: '8px', overflow: 'hidden' }}>
+        <video autoPlay muted loop playsInline preload="metadata" style={{ width: '100%', height: 'auto', display: 'block' }}>
+          <source src={ASSET_PATHS.INTRO_VIDEO_URL} type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+        <div style={{ background: '#15803D', color: 'white', padding: '6px', textAlign: 'center' }}>
+          <p style={{ fontWeight: 600, fontSize: '12px', margin: 0 }}>
+            Your project, factory-ready — before you spend months on design.
+          </p>
+        </div>
       </div>
 
       {/* Product Cards */}
