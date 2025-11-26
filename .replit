@@ -35,6 +35,7 @@ localPort = 5000
 externalPort = 80
 
 [deployment]
-deploymentTarget = "static"
+deploymentTarget = "autoscale"
 build = ["npm", "run", "build", "--prefix", "raap-react-app"]
 publicDir = "dist"
+run = ["npm", "run", "preview"]
