@@ -205,6 +205,66 @@ const ArchitectTab = () => {
         </p>
       </div>
 
+      {/* Comparison Table */}
+      <div style={{ marginBottom: SPACING['3xl'], overflowX: 'auto' }}>
+        <table style={{ width: '100%', borderCollapse: 'collapse', background: 'white', border: `2px solid ${COLORS.gray.light}`, borderRadius: '12px', overflow: 'hidden' }}>
+          <thead>
+            <tr style={{ background: `linear-gradient(90deg, ${COLORS.green.bg} 0%, ${COLORS.blue.bg} 100%)`, borderBottom: `3px solid ${COLORS.green.dark}` }}>
+              <th style={{ padding: '16px', textAlign: 'left', fontWeight: FONTS.weight.bold, fontSize: FONTS.sizes.base, color: COLORS.green.dark }}>Why Two Roles Exist in Industrialized Construction</th>
+              <th style={{ padding: '16px', textAlign: 'left', fontWeight: FONTS.weight.bold, fontSize: FONTS.sizes.base, color: COLORS.green.dark }}>🏭 RaaP – Product Architect</th>
+              <th style={{ padding: '16px', textAlign: 'left', fontWeight: FONTS.weight.bold, fontSize: FONTS.sizes.base, color: COLORS.blue.dark }}>🏗️ AoR – Project Architect</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style={{ borderBottom: `1px solid ${COLORS.gray.light}`, background: '#f9fafb' }}>
+              <td style={{ padding: '16px', fontWeight: FONTS.weight.bold, color: COLORS.green.main, fontSize: FONTS.sizes.base }}>⚡ SPEED</td>
+              <td style={{ padding: '16px', color: COLORS.gray.dark, fontSize: FONTS.sizes.sm, lineHeight: '1.5' }}>
+                <ul style={{ margin: 0, paddingLeft: '20px' }}>
+                  <li>✓ Provides pre-validated modular units, assemblies, façade logic, and details already optimized for factory production.</li>
+                  <li>✓ Eliminates concept-phase redesign cycles by starting from a fixed product.</li>
+                </ul>
+              </td>
+              <td style={{ padding: '16px', color: COLORS.gray.dark, fontSize: FONTS.sizes.sm, lineHeight: '1.5' }}>
+                <ul style={{ margin: 0, paddingLeft: '20px' }}>
+                  <li>✓ Accelerates entitlement and permitting by adapting a ready-made product to local site/zoning codes.</li>
+                  <li>✓ Reduces agency review time because modules and assemblies are already standardized.</li>
+                </ul>
+              </td>
+            </tr>
+            <tr style={{ borderBottom: `1px solid ${COLORS.gray.light}`, background: 'white' }}>
+              <td style={{ padding: '16px', fontWeight: FONTS.weight.bold, color: COLORS.green.main, fontSize: FONTS.sizes.base }}>💰 SAVINGS</td>
+              <td style={{ padding: '16px', color: COLORS.gray.dark, fontSize: FONTS.sizes.sm, lineHeight: '1.5' }}>
+                <ul style={{ margin: 0, paddingLeft: '20px' }}>
+                  <li>✓ Eliminates 70–90% of architectural effort normally spent designing units, corridors, stairs, and assemblies.</li>
+                  <li>✓ Reduces soft costs by standardizing drawings, assemblies, and schedules across all projects.</li>
+                </ul>
+              </td>
+              <td style={{ padding: '16px', color: COLORS.gray.dark, fontSize: FONTS.sizes.sm, lineHeight: '1.5' }}>
+                <ul style={{ margin: 0, paddingLeft: '20px' }}>
+                  <li>✓ Focuses only on the 30–50% project-specific content—site plans, energy, egress, utilities—reducing hours and fees.</li>
+                  <li>✓ Avoids redesign cycles and costly scope drift because the product architecture is fixed.</li>
+                </ul>
+              </td>
+            </tr>
+            <tr style={{ background: '#f9fafb' }}>
+              <td style={{ padding: '16px', fontWeight: FONTS.weight.bold, color: COLORS.green.main, fontSize: FONTS.sizes.base }}>🛡️ DE-RISK</td>
+              <td style={{ padding: '16px', color: COLORS.gray.dark, fontSize: FONTS.sizes.sm, lineHeight: '1.5' }}>
+                <ul style={{ margin: 0, paddingLeft: '20px' }}>
+                  <li>✓ Provides factory-validated UL/GA assemblies, structural logic, tolerances, and MEP interface rules that eliminate manufacturing uncertainty.</li>
+                  <li>✓ Prevents design drift and reduces RFIs by defining a complete, repeatable kit of parts.</li>
+                </ul>
+              </td>
+              <td style={{ padding: '16px', color: COLORS.gray.dark, fontSize: FONTS.sizes.sm, lineHeight: '1.5' }}>
+                <ul style={{ margin: 0, paddingLeft: '20px' }}>
+                  <li>✓ Ensures local code compliance (fire, egress, accessibility, energy), preventing permitting failures.</li>
+                  <li>✓ Reduces construction-phase issues by clarifying site vs factory scope and eliminating coordination gaps.</li>
+                </ul>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
       {/* Phase Toggle */}
       <div style={{ display: 'flex', gap: '12px', marginBottom: SPACING['2xl'], justifyContent: 'center' }}>
         <button
