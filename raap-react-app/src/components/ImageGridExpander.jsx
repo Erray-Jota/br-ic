@@ -1,25 +1,26 @@
 import { useState } from 'react';
 import { COLORS, FONTS, SPACING } from '../styles/theme';
 
-const GanttChart = ({ raapStart, raapEnd, aorStart, aorEnd, activity }) => {
-  const totalWeeks = 18;
-  
-  const getBarStyle = (start, end, color) => {
-    const startPercent = (start / totalWeeks) * 100;
-    const widthPercent = ((end - start) / totalWeeks) * 100;
+const GanttChart = ({ raapStart, raapEnd, aorStart, aorEnd, raapActivity, aorActivity }) => {
+  const totalMonths = 6;
+  const weekToMonth = (week) => Math.floor(week / 3);
+  const getMonthStart = (month) => (month / totalMonths) * 100;
+  const getMonthWidth = () => (1 / totalMonths) * 100;
+
+  const getBarStyle = (startWeek, endWeek, color) => {
+    const startMonth = weekToMonth(startWeek);
+    const endMonth = weekToMonth(endWeek);
+    const startPercent = getMonthStart(startMonth);
+    const widthPercent = (endMonth - startMonth + 1) * getMonthWidth();
+
     return {
       left: `${startPercent}%`,
-      width: `${widthPercent}%`,
+      width: `${Math.max(widthPercent - 1, 5)}%`,
       background: color,
-      height: '24px',
+      height: '28px',
       borderRadius: '4px',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      fontSize: FONTS.sizes.xs,
-      fontWeight: FONTS.weight.bold,
-      color: 'white',
       position: 'absolute',
+      top: '0',
       transition: 'all 0.2s'
     };
   };
@@ -29,40 +30,41 @@ const GanttChart = ({ raapStart, raapEnd, aorStart, aorEnd, activity }) => {
       <h4 style={{ fontSize: FONTS.sizes.base, fontWeight: FONTS.weight.bold, color: COLORS.gray.dark, marginBottom: SPACING.md }}>
         📅 Timeline & Sequencing
       </h4>
-      
-      {/* Week Headers */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(18, 1fr)', gap: '2px', marginBottom: SPACING.md, fontSize: FONTS.sizes.xs, textAlign: 'center', color: COLORS.gray.medium, fontWeight: FONTS.weight.bold }}>
-        {Array.from({ length: 18 }).map((_, i) => (
-          <div key={i}>W{i + 1}</div>
+
+      {/* Month Headers */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(6, 1fr)', gap: '8px', marginBottom: SPACING.lg, fontSize: FONTS.sizes.sm, textAlign: 'center', color: COLORS.gray.dark, fontWeight: FONTS.weight.bold }}>
+        {Array.from({ length: 6 }).map((_, i) => (
+          <div key={i} style={{ padding: '8px', background: 'white', borderRadius: '6px', border: `1px solid ${COLORS.gray.light}` }}>
+            M{i + 1}
+          </div>
         ))}
       </div>
 
       {/* RaaP Timeline */}
-      <div style={{ marginBottom: SPACING.md }}>
+      <div style={{ marginBottom: SPACING.lg }}>
         <div style={{ fontSize: FONTS.sizes.sm, fontWeight: FONTS.weight.bold, color: COLORS.green.dark, marginBottom: '8px' }}>🏭 RaaP</div>
-        <div style={{ position: 'relative', height: '32px', background: '#f0f0f0', borderRadius: '8px', marginBottom: '8px' }}>
-          <div style={getBarStyle(raapStart, raapEnd, COLORS.green.main)}>
-            Weeks {raapStart}–{raapEnd}
-          </div>
+        <div style={{ position: 'relative', height: '40px', background: 'white', borderRadius: '8px', border: `1px solid ${COLORS.gray.light}`, marginBottom: '8px' }}>
+          <div style={getBarStyle(raapStart, raapEnd, COLORS.green.main)} />
         </div>
+        {raapActivity && (
+          <div style={{ fontSize: FONTS.sizes.sm, color: COLORS.gray.dark, marginBottom: '8px', lineHeight: '1.5' }}>
+            • {raapActivity}
+          </div>
+        )}
       </div>
 
       {/* AoR Timeline */}
       <div>
         <div style={{ fontSize: FONTS.sizes.sm, fontWeight: FONTS.weight.bold, color: COLORS.blue.dark, marginBottom: '8px' }}>🏗️ AoR</div>
-        <div style={{ position: 'relative', height: '32px', background: '#f0f0f0', borderRadius: '8px' }}>
-          <div style={getBarStyle(aorStart, aorEnd, COLORS.blue.main)}>
-            Weeks {aorStart}–{aorEnd}
+        <div style={{ position: 'relative', height: '40px', background: 'white', borderRadius: '8px', border: `1px solid ${COLORS.gray.light}`, marginBottom: '8px' }}>
+          <div style={getBarStyle(aorStart, aorEnd, COLORS.blue.main)} />
+        </div>
+        {aorActivity && (
+          <div style={{ fontSize: FONTS.sizes.sm, color: COLORS.gray.dark, lineHeight: '1.5' }}>
+            • {aorActivity}
           </div>
-        </div>
+        )}
       </div>
-
-      {/* Activity Description */}
-      {activity && (
-        <div style={{ marginTop: SPACING.md, fontSize: FONTS.sizes.sm, color: COLORS.gray.dark, lineHeight: '1.6', fontStyle: 'italic' }}>
-          <strong>Activity:</strong> {activity}
-        </div>
-      )}
     </div>
   );
 };
@@ -106,7 +108,7 @@ const ImageGridExpander = ({ images }) => {
             background: 'white',
             borderRadius: '16px',
             padding: SPACING['2xl'],
-            maxWidth: '900px',
+            maxWidth: '800px',
             width: '100%',
             boxShadow: '0 20px 60px rgba(0, 0, 0, 0.3)',
             animation: 'slideUp 0.3s ease-out',
@@ -138,58 +140,45 @@ const ImageGridExpander = ({ images }) => {
             </button>
           </div>
 
-          {/* Content Grid */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: SPACING['2xl'], marginBottom: SPACING['2xl'] }}>
-            {/* Image */}
-            <div>
-              <img
-                src={expandedImage.image}
-                alt={expandedImage.title}
-                style={{
-                  width: '100%',
-                  height: '300px',
-                  objectFit: 'cover',
-                  borderRadius: '12px',
-                  border: `2px solid ${COLORS.gray.light}`
-                }}
-              />
-            </div>
+          {/* Comparison Table */}
+          <table style={{ width: '100%', borderCollapse: 'collapse', marginBottom: SPACING.lg }}>
+            <thead>
+              <tr style={{ background: `linear-gradient(90deg, ${COLORS.green.bg} 0%, ${COLORS.blue.bg} 100%)`, borderBottom: `2px solid ${COLORS.green.dark}` }}>
+                <th style={{ padding: SPACING.md, textAlign: 'left', fontWeight: FONTS.weight.bold, fontSize: FONTS.sizes.sm, color: COLORS.green.dark }}>🏭 RaaP</th>
+                <th style={{ padding: SPACING.md, textAlign: 'left', fontWeight: FONTS.weight.bold, fontSize: FONTS.sizes.sm, color: COLORS.blue.dark }}>🏗️ AoR</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style={{ borderBottom: `1px solid ${COLORS.gray.light}`, background: 'white' }}>
+                <td style={{ padding: SPACING.md, textAlign: 'left', fontSize: FONTS.sizes.sm, color: COLORS.gray.dark, verticalAlign: 'top', lineHeight: '1.8' }}>
+                  <div style={{ paddingLeft: '16px', textIndent: '-16px', marginBottom: '8px' }}>
+                    <span style={{ color: COLORS.green.main, fontWeight: FONTS.weight.bold }}>✓</span> {expandedImage.raapScope}
+                  </div>
+                  <div style={{ paddingLeft: '16px', textIndent: '-16px' }}>
+                    <span style={{ color: COLORS.green.main, fontWeight: FONTS.weight.bold }}>•</span> {expandedImage.raapActivity}
+                  </div>
+                </td>
+                <td style={{ padding: SPACING.md, textAlign: 'left', fontSize: FONTS.sizes.sm, color: COLORS.gray.dark, verticalAlign: 'top', lineHeight: '1.8' }}>
+                  <div style={{ paddingLeft: '16px', textIndent: '-16px', marginBottom: '8px' }}>
+                    <span style={{ color: COLORS.blue.main, fontWeight: FONTS.weight.bold }}>✓</span> {expandedImage.aorScope}
+                  </div>
+                  <div style={{ paddingLeft: '16px', textIndent: '-16px' }}>
+                    <span style={{ color: COLORS.blue.main, fontWeight: FONTS.weight.bold }}>•</span> {expandedImage.aorActivity}
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
 
-            {/* Comparison Table */}
-            <div>
-              <table style={{ width: '100%', borderCollapse: 'collapse', marginBottom: SPACING.lg }}>
-                <thead>
-                  <tr style={{ background: `linear-gradient(90deg, ${COLORS.green.bg} 0%, ${COLORS.blue.bg} 100%)`, borderBottom: `2px solid ${COLORS.green.dark}` }}>
-                    <th style={{ padding: SPACING.md, textAlign: 'center', fontWeight: FONTS.weight.bold, fontSize: FONTS.sizes.sm, color: COLORS.green.dark }}>🏭 RaaP</th>
-                    <th style={{ padding: SPACING.md, textAlign: 'center', fontWeight: FONTS.weight.bold, fontSize: FONTS.sizes.sm, color: COLORS.blue.dark }}>🏗️ AoR</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr style={{ borderBottom: `1px solid ${COLORS.gray.light}`, background: 'white' }}>
-                    <td style={{ padding: SPACING.md, textAlign: 'left', fontSize: FONTS.sizes.sm, color: COLORS.gray.dark, verticalAlign: 'top', lineHeight: '1.5' }}>
-                      <div style={{ color: COLORS.green.main, fontWeight: FONTS.weight.bold, paddingLeft: '16px', textIndent: '-16px' }}>
-                        <span>✓</span> {expandedImage.raapScope}
-                      </div>
-                    </td>
-                    <td style={{ padding: SPACING.md, textAlign: 'left', fontSize: FONTS.sizes.sm, color: COLORS.gray.dark, verticalAlign: 'top', lineHeight: '1.5' }}>
-                      <div style={{ color: COLORS.blue.main, fontWeight: FONTS.weight.bold, paddingLeft: '16px', textIndent: '-16px' }}>
-                        <span>✓</span> {expandedImage.aorScope}
-                      </div>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-
-              {/* Gantt Chart */}
-              <GanttChart
-                raapStart={expandedImage.raapStart}
-                raapEnd={expandedImage.raapEnd}
-                aorStart={expandedImage.aorStart}
-                aorEnd={expandedImage.aorEnd}
-                activity={expandedImage.activity}
-              />
-            </div>
-          </div>
+          {/* Gantt Chart */}
+          <GanttChart
+            raapStart={expandedImage.raapStart}
+            raapEnd={expandedImage.raapEnd}
+            aorStart={expandedImage.aorStart}
+            aorEnd={expandedImage.aorEnd}
+            raapActivity={expandedImage.raapActivity}
+            aorActivity={expandedImage.aorActivity}
+          />
         </div>
       </div>
     );
