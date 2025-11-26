@@ -251,6 +251,14 @@ const DesignTab = () => {
 
       {activeSubtabs.design === 2 && (
         <div>
+          <div style={{ background: 'white', borderRadius: '8px', overflow: 'hidden', marginBottom: '12px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }}>
+            <img src="/images/Barracks-Layout.png" alt="Barracks Floor Plan Layout" style={{ width: '100%', height: 'auto', display: 'block' }} />
+          </div>
+        </div>
+      )}
+
+      {activeSubtabs.design === 3 && (
+        <div>
           <div style={{ marginBottom: '24px' }}>
             <h2 style={{ fontSize: '20px', fontWeight: 700, color: '#111827', marginBottom: '8px' }}>
               🏠 Unit Types in Your Design
@@ -265,63 +273,31 @@ const DesignTab = () => {
               const skus = calculations.skus || {};
               const unitsToDisplay = [];
 
-              // Studio
-              if (skus.sku_studio > 0) {
+              // 2-Bed
+              {
                 unitsToDisplay.push({
-                  key: 'studio',
-                  name: 'Studio',
-                  link: ASSET_PATHS.UNIT_STUDIO,
-                  sqft: 450,
-                  icon: '📦',
-                  perFloor: skus.sku_studio,
-                  count: skus.sku_studio * projectData.floors,
-                });
-              }
-
-              // 1-Bed Corner
-              if (skus.sku_1_corner > 0) {
-                unitsToDisplay.push({
-                  key: '1br_corner',
-                  name: '1 Bedroom (Corner)',
-                  link: ASSET_PATHS.UNIT_1BR_CORNER,
-                  sqft: 650,
-                  icon: '🛏️',
-                  perFloor: skus.sku_1_corner,
-                  count: skus.sku_1_corner * projectData.floors,
-                });
-              }
-
-              // 1-Bed Inline
-              if (skus.sku_1_inline > 0) {
-                unitsToDisplay.push({
-                  key: '1br_inline',
-                  name: '1 Bedroom (Inline)',
-                  link: ASSET_PATHS.UNIT_1BR_INLINE,
-                  sqft: 650,
-                  icon: '🛏️',
-                  perFloor: skus.sku_1_inline,
-                  count: skus.sku_1_inline * projectData.floors,
-                });
-              }
-
-              // 2-Bed Corner
-              if (skus.sku_2_corner > 0) {
-                unitsToDisplay.push({
-                  key: '2br_corner',
-                  name: '2 Bedroom (Corner)',
+                  key: '2br',
+                  name: '2-Bedroom Unit (43.5\')',
                   link: ASSET_PATHS.UNIT_2BR_CORNER,
-                  sqft: 950,
+                  sqft: 1436,
                   icon: '🛏️🛏️',
-                  perFloor: skus.sku_2_corner,
-                  count: skus.sku_2_corner * projectData.floors,
+                  perFloor: calculations.optimized?.twoBedroom || 0,
+                  count: (calculations.optimized?.twoBedroom || 0) * projectData.floors,
                 });
               }
 
-              // 2-Bed Inline
-              if (skus.sku_2_inline > 0) {
+              // 4-Bed
+              {
                 unitsToDisplay.push({
-                  key: '2br_inline',
-                  name: '2 Bedroom (Inline)',
+                  key: '4br',
+                  name: '4-Bedroom Unit (72.5\')',
+                  link: ASSET_PATHS.UNIT_3BR_CORNER,
+                  sqft: 2393,
+                  icon: '🛏️🛏️🛏️🛏️',
+                  perFloor: calculations.optimized?.fourBedroom || 0,
+                  count: (calculations.optimized?.fourBedroom || 0) * projectData.floors,
+                });
+              }
                   link: ASSET_PATHS.UNIT_2BR_INLINE,
                   sqft: 950,
                   icon: '🛏️🛏️',
