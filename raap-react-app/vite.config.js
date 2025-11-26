@@ -11,17 +11,12 @@ export default defineConfig({
     hmr: {
       clientPort: 443,
       protocol: 'wss',
-    },
-    proxy: {
-      '/api/geocode': {
-        target: 'https://maps.googleapis.com/maps/api/geocode',
-        changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api\/geocode/, '')
-      }
     }
   },
   build: {
     outDir: 'dist',
-    emptyOutDir: true
+    emptyOutDir: true,
+    minify: 'terser',
+    sourcemap: false
   }
 })
