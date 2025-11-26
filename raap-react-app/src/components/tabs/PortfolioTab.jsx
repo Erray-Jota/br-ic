@@ -66,11 +66,11 @@ const PortfolioTab = () => {
   return (
     <div style={{ padding: '0 8px' }}>
       {/* Hero Section */}
-      <div style={STYLE_PRESETS.heroGreenGradient}>
-        <h1 style={{ ...STYLE_PRESETS.heroTitle, color: COLORS.green.dark }}>
+      <div style={{ ...STYLE_PRESETS.heroGreenGradient, padding: SPACING['3xl'], marginBottom: SPACING['2xl'] }}>
+        <h1 style={{ ...STYLE_PRESETS.heroTitle, color: COLORS.green.dark, fontSize: FONTS.sizes['4xl'], marginBottom: SPACING.md }}>
           Three Steps. One Mission: De-Risk Industrialized Construction.
         </h1>
-        <p style={{ fontSize: FONTS.sizes.xl, color: COLORS.green.medium, marginBottom: '0px', lineHeight: '1.8', textAlign: 'center', fontWeight: FONTS.weight.bold, fontFamily: FONTS.system }}>
+        <p style={{ fontSize: FONTS.sizes.lg, color: COLORS.green.medium, marginBottom: '0px', lineHeight: '1.6', textAlign: 'center', fontWeight: FONTS.weight.bold, fontFamily: FONTS.system }}>
           From feasibility to fabrication, RaaP guides you through industrialized construction with DfMA-optimized designs, budget certainty and a IC-optimization process that can scale globally.
         </p>
       </div>
