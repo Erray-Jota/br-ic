@@ -29,7 +29,6 @@ const ResponsiveTabNavigation = () => {
     { id: 3, label: '⚙️ Configure', shortLabel: 'Configure' },
     { id: 4, label: '💰 Budget', shortLabel: 'Budget' },
     { id: 5, label: '📋 Manage', shortLabel: 'Manage' },
-    { id: 8, label: '📦 Archive', shortLabel: 'Archive' },
   ];
 
   // Desktop top navigation
