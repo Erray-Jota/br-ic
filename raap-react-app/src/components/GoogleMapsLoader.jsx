@@ -1,9 +1,7 @@
-import React from 'react';
 import { useJsApiLoader } from '@react-google-maps/api';
+import { GoogleMapsContext } from '../contexts/GoogleMapsContext';
 
 const libraries = ['places'];
-
-export const GoogleMapsContext = React.createContext({ isLoaded: false, loadError: null });
 
 export const GoogleMapsLoader = ({ children }) => {
   const { isLoaded, loadError } = useJsApiLoader({

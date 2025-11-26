@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useProject } from '../../contexts/ProjectContext';
 import { useCalculations, formatCurrency, formatMega } from '../../hooks/useCalculations';
 import { useMobile } from '../../hooks/useMobile';
@@ -63,28 +63,26 @@ const CostAnalysisTab = () => {
   ]);
   const [chatInput, setChatInput] = useState('');
 
-  // Calculate division costs with adjustments
-  const divisionCosts = calculateDivisionCosts(
+  // Calculate division costs with adjustments (memoized to prevent redundant calculations)
+  const divisionCosts = useMemo(() => calculateDivisionCosts(
     calculations.totalOptimized,
     projectData.floors,
     projectData.propertyFactor,
     projectData.factoryFactor,
     costAdjustments
-  );
+  ), [calculations.totalOptimized, projectData.floors, projectData.propertyFactor, projectData.factoryFactor, costAdjustments]);
 
-  // Helper to group divisions
-  const groupDivisions = (divisions) => {
+  // Helper to group divisions (memoized)
+  const groupedDivisions = useMemo(() => {
     const groups = {};
-    divisions.forEach(div => {
+    divisionCosts.divisions.forEach(div => {
       if (!groups[div.group]) {
         groups[div.group] = [];
       }
       groups[div.group].push(div);
     });
     return groups;
-  };
-
-  const groupedDivisions = groupDivisions(divisionCosts.divisions);
+  }, [divisionCosts.divisions]);
 
   // Toggle group collapse
   const toggleGroup = (groupName) => {

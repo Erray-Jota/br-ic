@@ -1,11 +1,6 @@
-import React, { useContext, useState, useEffect, useRef, memo } from 'react';
+import React, { useContext, useState, useEffect, useRef, memo, useCallback } from 'react';
 import { GoogleMap, Marker, DirectionsRenderer } from '@react-google-maps/api';
-import { GoogleMapsContext } from './GoogleMapsLoader';
-
-const defaultContainerStyle = {
-    width: '100%',
-    height: '400px'
-};
+import { GoogleMapsContext } from '../contexts/GoogleMapsContext';
 
 const defaultCenter = {
     lat: 37.7749,
@@ -18,27 +13,36 @@ const MapComponent = ({
     markers = [],
     showRoute = false,
     height = '400px',
-    onRouteCalculated = null,
-    autoFitBounds = false
+    onRouteCalculated = null
 }) => {
     const { isLoaded } = useContext(GoogleMapsContext);
     const [directions, setDirections] = useState(null);
     const [map, setMap] = useState(null);
     const hasFitBounds = useRef(false);
+    const previousMarkersRef = useRef(null);
 
     const containerStyle = {
         width: '100%',
         height: height
     };
 
+    const handleRouteCalculated = useCallback((metadata) => {
+        if (onRouteCalculated) {
+            onRouteCalculated(metadata);
+        }
+    }, [onRouteCalculated]);
+
     // Fetch directions when showRoute is enabled and we have exactly 2 markers
     useEffect(() => {
         if (!isLoaded || !showRoute || markers.length !== 2) {
-            setDirections(null);
-            hasFitBounds.current = false;
-            if (onRouteCalculated) {
-                onRouteCalculated(null);
+            if (directions) {
+                setDirections(null);
             }
+            if (previousMarkersRef.current?.length === 2 && markers.length !== 2) {
+                hasFitBounds.current = false;
+                handleRouteCalculated(null);
+            }
+            previousMarkersRef.current = markers;
             return;
         }
 
@@ -55,7 +59,7 @@ const MapComponent = ({
                     setDirections(result);
 
                     // Extract route metadata
-                    if (onRouteCalculated && result.routes[0]) {
+                    if (result.routes[0]) {
                         const route = result.routes[0];
                         const leg = route.legs[0];
 
@@ -69,18 +73,19 @@ const MapComponent = ({
                             warnings: route.warnings || []
                         };
 
-                        onRouteCalculated(metadata);
+                        handleRouteCalculated(metadata);
                     }
                 } else {
                     console.error('Directions request failed:', status);
-                    setDirections(null);
-                    if (onRouteCalculated) {
-                        onRouteCalculated(null);
+                    if (directions) {
+                        setDirections(null);
                     }
+                    handleRouteCalculated(null);
                 }
             }
         );
-    }, [isLoaded, showRoute, markers, onRouteCalculated]);
+        previousMarkersRef.current = markers;
+    }, [isLoaded, showRoute, markers, handleRouteCalculated]);
 
     // Fit bounds once when directions are loaded and map is ready
     useEffect(() => {

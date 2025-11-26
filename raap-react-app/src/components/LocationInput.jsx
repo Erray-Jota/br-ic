@@ -28,12 +28,10 @@ const LocationInput = ({ value, onChange, label, placeholder = 'Enter city or zi
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  // Update input value when prop changes
+  // Update input value when prop changes (only on external value changes, not internal edits)
   useEffect(() => {
-    if (value !== inputValue) {
-      setInputValue(value || '');
-    }
-  }, [value]);
+    setInputValue(value || '');
+  }, [value, setInputValue]);
 
   // Search using Google Geocoding API with filtering for cities
   const searchLocations = async (query) => {
