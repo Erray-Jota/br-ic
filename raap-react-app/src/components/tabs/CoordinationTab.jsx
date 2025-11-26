@@ -3,6 +3,7 @@ import { useProject } from '../../contexts/ProjectContext';
 import { DUMMY_PARTNERS } from '../../data/constants';
 import { COLORS, FONTS, SPACING, BORDERS } from '../../styles/theme';
 import { MapComponent } from '../MapComponent';
+import ArchitectTab from './ArchitectTab';
 
 const CoordinationTab = () => {
   const { switchTab, activeSubtabs, switchSubtab, projectData } = useProject();
@@ -120,18 +121,24 @@ const CoordinationTab = () => {
             🗺️ Marketplace
           </button>
           <button onClick={() => switchSubtab('factors', 2)} className={`subtab-btn ${activeSubtabs.factors === 2 ? 'active-subtab' : ''}`}>
-            🔍 Fabricator
+            🎯 Architect
           </button>
           <button onClick={() => switchSubtab('factors', 3)} className={`subtab-btn ${activeSubtabs.factors === 3 ? 'active-subtab' : ''}`}>
-            🚚 Logistics
+            🔍 Fabricator
           </button>
           <button onClick={() => switchSubtab('factors', 4)} className={`subtab-btn ${activeSubtabs.factors === 4 ? 'active-subtab' : ''}`}>
+            🚚 Logistics
+          </button>
+          <button onClick={() => switchSubtab('factors', 5)} className={`subtab-btn ${activeSubtabs.factors === 5 ? 'active-subtab' : ''}`}>
             🏗️ Construction
           </button>
         </div>
       </div>
 
       <div style={{ padding: '0 8px' }}>
+        {/* Architect Tab */}
+        {activeSubtabs.factors === 2 && <ArchitectTab />}
+
         {/* Marketplace Tab */}
         {activeSubtabs.factors === 1 && (
           <div className="card" style={{ padding: SPACING.lg }}>
@@ -263,7 +270,7 @@ const CoordinationTab = () => {
         )}
 
         {/* Fabricator Tab */}
-        {activeSubtabs.factors === 2 && (
+        {activeSubtabs.factors === 3 && (
           <div style={{ padding: '0 8px' }}>
             {/* Main Hero Section */}
             <div style={{ background: 'linear-gradient(135deg, #f0fdf4 0%, #e8f5e9 100%)', padding: '28px', borderRadius: '12px', border: '4px solid #003F87', marginBottom: '28px', boxShadow: '0 8px 24px rgba(6, 95, 70, 0.2)' }}>
@@ -394,7 +401,7 @@ const CoordinationTab = () => {
         )}
 
         {/* Logistics Tab */}
-        {activeSubtabs.factors === 3 && (
+        {activeSubtabs.factors === 4 && (
           <div className="card" style={{ padding: SPACING.lg }}>
             <h2 style={{ fontSize: '24px', color: '#2563EB', fontWeight: 800, marginBottom: SPACING.sm }}>
               🚚 LOGISTICS: Zero Surprises. Maximum Site Efficiency.
@@ -515,7 +522,7 @@ const CoordinationTab = () => {
         )}
 
         {/* Construction Tab */}
-        {activeSubtabs.factors === 4 && (
+        {activeSubtabs.factors === 5 && (
           <div style={{ padding: '0 8px' }}>
             <style>{`
               .clickable-label {

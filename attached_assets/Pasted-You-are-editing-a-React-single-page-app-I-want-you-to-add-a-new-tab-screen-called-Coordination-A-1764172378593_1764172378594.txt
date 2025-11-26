@@ -1,0 +1,122 @@
+You are editing a React single-page app. I want you to add a new tab/screen called "Coordination – Architect" that shows how RaaP (Product Architect) and the AoR (Project Architect) share scope and sequencing during Entitlement and Permitting.
+
+### High-level behavior
+
+1. This screen should have:
+   - A toggle at the top for **Entitlement** vs **Permitting**.
+   - Below the toggle, a **grid of category tiles** (4–6 tiles depending on the selected phase).
+   - When I click a tile, an **expanded detail panel** appears that shows:
+     - The category name
+     - RaaP scope + sequencing
+     - AoR scope + sequencing
+
+2. No backend changes needed. This is purely a front-end, data-driven component.
+
+---
+
+### Implementation details
+
+1. **Create a new React component file** (or update the existing one if I already have it) for this tab, for example:
+
+   `src/components/CoordinationArchitectTab.jsx`
+
+2. In this component, use React state to track:
+   - `phase`: `"entitlement"` or `"permitting"`
+   - `selectedCategoryId`: `null` or the ID of the selected category
+
+3. Define two **configuration arrays** inside the file:
+
+   - `ENTITLEMENT_CATEGORIES`
+   - `PERMITTING_CATEGORIES`
+
+   Each category should look like this:
+
+   ```js
+   const ENTITLEMENT_CATEGORIES = [
+     {
+       id: "massing",
+       label: "Massing & Building Form",
+       icon: "🏗️", // placeholder emoji; I'll swap for real icons later
+       raapScope: [
+         "Provides core modular building logic (stacking rules, bay widths, length increments).",
+         "Supplies unit prototypes and allowable combinations.",
+         "Defines DfMA constraints that shape massing options."
+       ],
+       raapSequencing: [
+         "Delivered Day 0–14 as the fixed product baseline.",
+         "Used immediately by the AoR for site fit studies."
+       ],
+       aorScope: [
+         "Tests massing against zoning envelopes, setbacks, and height limits.",
+         "Adjusts building orientation and placement on the site.",
+         "Prepares diagrams for agency/community review."
+       ],
+       aorSequencing: [
+         "Weeks 2–6: entitlement moves forward in parallel.",
+         "Refines massing as entitlement decisions evolve."
+       ]
+     },
+     {
+       id: "site-zoning",
+       label: "Site Fit & Zoning",
+       icon: "🗺️",
+       raapScope: [
+         "Provides standardized module dimensions and building depth rules.",
+         "Defines minimum circulation and stacking logic.",
+         "Ensures modular product complies with prototype IBC assumptions."
+       ],
+       raapSequencing: [
+         "Supplies zoning-relevant product constraints in Days 0–14."
+       ],
+       aorScope: [
+         "Performs zoning checks (use, FAR, parking, open space).",
+         "Develops site plans, setbacks, and access points.",
+         "Leads community/agency communication and adjustments."
+       ],
+       aorSequencing: [
+         "Weeks 2–6: entitlement iterations proceed using RaaP constraints."
+       ]
+     },
+     {
+       id: "early-code",
+       label: "Early Code & Life Safety",
+       icon: "📘",
+       raapScope: [
+         "Provides prototype IBC-based code matrix.",
+         "Supplies standard egress concepts and travel distance assumptions.",
+         "Provides ADA-compliant prototype unit layouts (not site paths)."
+       ],
+       raapSequencing: [
+         "Delivered as part of the Product Kit in Days 0–14."
+       ],
+       aorScope: [
+         "Localizes egress, fire separations, and rated walls.",
+         "Establishes preliminary life-safety strategy for entitlement.",
+         "Evaluates local amendments and overlays onto RaaP logic."
+       ],
+       aorSequencing: [
+         "Weeks 2–6: code approach refined for agency input."
+       ]
+     },
+     {
+       id: "early-cost",
+       label: "Early Cost & Feasibility",
+       icon: "💰",
+       raapScope: [
+         "Provides modular vs site-built comparative costs.",
+         "Defines factory vs GC scope split.",
+         "Validates feasibility via DfMA constraints and productized design."
+       ],
+       raapSequencing: [
+         "Generates early cost and feasibility within the first 1–2 weeks."
+       ],
+       aorScope: [
+         "Confirms entitlement decisions align with modular feasibility.",
+         "Incorporates cost-aware design into site plans and massing.",
+         "Aligns entitlement drawings with factory realities."
+       ],
+       aorSequencing: [
+         "Continuous feedback during Weeks 2–6."
+       ]
+     }
+   ];

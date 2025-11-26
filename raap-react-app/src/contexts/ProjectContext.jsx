@@ -80,12 +80,12 @@ export const ProjectProvider = ({ children }) => {
   const SUBTAB_NAMES = {
     design: { summary: 1, units: 2, floorplan: 3, building: 4 },
     cost: { summary: 1, 'build-time': 2, assemblies: 3 },
-    factors: { marketplace: 1, fabricator: 2, logistics: 3, construction: 4 },
+    factors: { marketplace: 1, architect: 2, fabricator: 3, logistics: 4, construction: 5 },
   };
   const SUBTAB_IDS = {
     design: { 1: 'summary', 2: 'units', 3: 'floorplan', 4: 'building' },
     cost: { 1: 'summary', 2: 'build-time', 3: 'assemblies' },
-    factors: { 1: 'marketplace', 2: 'fabricator', 3: 'logistics', 4: 'construction' },
+    factors: { 1: 'marketplace', 2: 'architect', 3: 'fabricator', 4: 'logistics', 5: 'construction' },
   };
 
   // Initialize tab from URL or default to Intro
