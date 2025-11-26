@@ -40,26 +40,41 @@ const LocationInput = ({ value, onChange, label, placeholder = 'Enter city or zi
     }
 
     try {
+      // Detect if query is a zip code (5 digits)
+      const isZipCode = /^\d{5}$/.test(query);
+      
       // Use Nominatim API (free, no authentication required)
+      // Search by city or postal code
+      const searchParam = isZipCode ? `postalcode=${encodeURIComponent(query)}` : `city=${encodeURIComponent(query)}`;
       const response = await fetch(
-        `https://nominatim.openstreetmap.org/search?format=json&country=us&city=${encodeURIComponent(query)}&limit=8&addressdetails=1`,
+        `https://nominatim.openstreetmap.org/search?format=json&country=us&${searchParam}&limit=15&addressdetails=1&extratags=1`,
         { headers: { 'Accept': 'application/json' } }
       );
 
       const data = await response.json();
 
       if (data && Array.isArray(data) && data.length > 0) {
-        const results = data.map((result) => {
+        // Filter results to only show cities, towns, villages, and postal codes (exclude streets, places, etc.)
+        const filteredResults = data.filter(result => {
+          const type = result.type || '';
+          const className = result.class || '';
+          
+          // Only include city-level results
+          return (className === 'place' && (type === 'city' || type === 'town' || type === 'village' || type === 'hamlet')) ||
+                 (className === 'postal_code');
+        });
+
+        const results = filteredResults.slice(0, 8).map((result) => {
           const lat = parseFloat(result.lat);
           const lng = parseFloat(result.lon);
           const address = result.address || {};
           
           // Extract city and state
-          const city = address.city || address.town || address.village || '';
+          const city = address.city || address.town || address.village || address.hamlet || '';
           const state = address.state || '';
           const postcode = address.postcode || '';
 
-          // Format display: "City, State" or "City, State ZIP"
+          // Format display: "City, State ZIP"
           const displayText = postcode && city
             ? `${city}, ${state} ${postcode}`
             : city && state
