@@ -44,36 +44,6 @@ const DesignTab = () => {
         </p>
       </div>
 
-      {/* Design Metrics Banner */}
-      <div className="project-info-banner design-metrics-banner">
-        <div className="cost-column">
-          <div className="metric-label">BUILDING LENGTH REQUIRED</div>
-          <div className="metric-main-value" style={{ color: '#111827' }}>
-            {Math.ceil(calculations.requiredLength)} ft
-          </div>
-        </div>
-
-        <div className="cost-column">
-          <div className="metric-label">BUILDING LENGTH TARGET</div>
-          <div className="metric-main-value" style={{ color: isConstraintMet ? '#16A34A' : '#DC2626' }}>
-            {projectData.targetLength} ft
-          </div>
-        </div>
-
-        <div className="cost-column">
-          <div className="metric-label">BUILDING LENGTH REMAINING</div>
-          <div className="metric-main-value" style={{ color: isConstraintMet ? '#16A34A' : '#DC2626' }}>
-            {Math.round(remainingLength)} ft
-          </div>
-        </div>
-
-        <div className="cost-column">
-          <div className="metric-label">MODULES (COUNT)</div>
-          <div className="metric-main-value" style={{ color: '#111827' }}>
-            {calculations.totalOptimized * 2}
-          </div>
-        </div>
-      </div>
 
       {/* Sub-tabs - Hide on mobile to save space */}
       {!isEffectivelyMobile && (
@@ -164,7 +134,7 @@ const DesignTab = () => {
               <div style={{ marginBottom: '12px' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
                   <label className="form-label" style={{ marginBottom: 0 }}>Building Length: {projectData.targetLength} ft</label>
-                  <span style={{ fontSize: '14px', fontWeight: 600, color: '#6b7280' }}>Required Length: {calculations.requiredLength.toFixed(1)} ft</span>
+                  <span style={{ fontSize: '14px', fontWeight: 600, color: '#6b7280' }}>Required Length: {Math.round(calculations.requiredLength)} ft</span>
                 </div>
                 <input
                   type="range"
@@ -176,7 +146,7 @@ const DesignTab = () => {
                   style={{
                     width: '100%',
                     height: '8px',
-                    accentColor: isConstraintMet ? '#0051BA' : '#dc2626'
+                    accentColor: isConstraintMet ? '#16A34A' : '#dc2626'
                   }}
                 />
                 <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', fontWeight: 600, color: '#6b7280', marginTop: '6px' }}>
@@ -185,82 +155,80 @@ const DesignTab = () => {
                 </div>
               </div>
 
-              {/* Target Unit Mix */}
-              <div>
-                <h3 style={{ fontSize: '16px', fontWeight: 700, color: '#111827', marginBottom: '8px' }}>
-                  🎯 Target Unit Mix
-                  <span style={{ fontSize: '13px', fontWeight: 600, color: '#6b7280', marginLeft: '8px' }}>
-                    (Required: {calculations.requiredLength.toFixed(1)} ft)
-                  </span>
-                </h3>
-                <p className="small-text" style={{ marginBottom: '8px' }}>Enter target units. Final mix will be proposed on right.</p>
-
-                <div className="grid-4" style={{ gap: '8px' }}>
-                  <div className="unit-input-container">
-                    <label>Studio</label>
-                    <input type="number" value={projectData.targets.studio} min="0" onChange={(e) => handleTargetChange('studio', e.target.value)} />
-                  </div>
-                  <div className="unit-input-container">
-                    <label>1 Bed</label>
-                    <input type="number" value={projectData.targets.oneBed} min="0" onChange={(e) => handleTargetChange('oneBed', e.target.value)} />
-                  </div>
-                  <div className="unit-input-container">
-                    <label>2 Bed</label>
-                    <input type="number" value={projectData.targets.twoBed} min="0" onChange={(e) => handleTargetChange('twoBed', e.target.value)} />
-                  </div>
-                  <div className="unit-input-container">
-                    <label>3 Bed</label>
-                    <input type="number" value={projectData.targets.threeBed} min="0" onChange={(e) => handleTargetChange('threeBed', e.target.value)} />
-                  </div>
-                </div>
-              </div>
             </div>
 
-            {/* Right Side: Proposed Unit Mix and Total GSF */}
+            {/* Right Side: Target Unit Mix (Input) and Proposed Unit Mix */}
             <div className="card">
-              <h2>📊 Proposed Unit Mix ({calculations.totalOptimized} Total)</h2>
-              <p className="small-text" style={{ marginBottom: '8px' }}>Optimized mix based on your target inputs and building length.</p>
+              <h2 style={{ marginBottom: '16px' }}>
+                🎯 Target Unit Mix
+              </h2>
+              <p className="small-text" style={{ marginBottom: '8px' }}>Enter target units. Final mix will be proposed below.</p>
 
-              <div className="grid-4" style={{ gap: '8px' }}>
-                {['Studio', '1 Bed', '2 Bed', '3 Bed'].map((label, index) => {
-                  const key = ['studio', 'oneBed', 'twoBed', 'threeBed'][index];
-                  const count = calculations.optimized[key];
-                  return (
-                    <div key={key} className="proposed-unit-mix-item">
-                      <div className="small-text">{label}</div>
-                      <div className="proposed-unit-count">{count}</div>
-                    </div>
-                  );
-                })}
+              <div className="grid-4" style={{ gap: '8px', marginBottom: '16px' }}>
+                <div className="unit-input-container">
+                  <label>Studio</label>
+                  <input type="number" value={projectData.targets.studio} min="0" onChange={(e) => handleTargetChange('studio', e.target.value)} />
+                </div>
+                <div className="unit-input-container">
+                  <label>1 Bed</label>
+                  <input type="number" value={projectData.targets.oneBed} min="0" onChange={(e) => handleTargetChange('oneBed', e.target.value)} />
+                </div>
+                <div className="unit-input-container">
+                  <label>2 Bed</label>
+                  <input type="number" value={projectData.targets.twoBed} min="0" onChange={(e) => handleTargetChange('twoBed', e.target.value)} />
+                </div>
+                <div className="unit-input-container">
+                  <label>3 Bed</label>
+                  <input type="number" value={projectData.targets.threeBed} min="0" onChange={(e) => handleTargetChange('threeBed', e.target.value)} />
+                </div>
               </div>
 
-              {/* Total GSF Box */}
-              <div style={{
-                background: '#f0fdf4',
-                border: '2px solid #0051BA',
-                borderRadius: '8px',
-                padding: '16px',
-                marginTop: '16px',
-                textAlign: 'center'
-              }}>
-                <div style={{ fontSize: '13px', fontWeight: 600, color: '#003F87', marginBottom: '6px' }}>
-                  TOTAL GROSS SQUARE FEET
+              <div style={{ borderTop: '1px solid #e5e7eb', paddingTop: '16px' }}>
+                <h2 style={{ fontSize: '16px', fontWeight: 700, color: '#111827', marginBottom: '8px' }}>
+                  📊 Proposed Unit Mix ({calculations.totalOptimized} Total)
+                </h2>
+                <p className="small-text" style={{ marginBottom: '8px' }}>Optimized mix based on your target inputs and building length.</p>
+
+                <div className="grid-4" style={{ gap: '8px', marginBottom: '16px' }}>
+                  {['Studio', '1 Bed', '2 Bed', '3 Bed'].map((label, index) => {
+                    const key = ['studio', 'oneBed', 'twoBed', 'threeBed'][index];
+                    const count = calculations.optimized[key];
+                    return (
+                      <div key={key} className="proposed-unit-mix-item">
+                        <div className="small-text">{label}</div>
+                        <div className="proposed-unit-count">{count}</div>
+                      </div>
+                    );
+                  })}
                 </div>
-                <div style={{ fontSize: '32px', fontWeight: 700, color: '#111827' }}>
-                  {Math.round(calculations.totalGSF).toLocaleString()} SF
-                </div>
-                <div className="small-text" style={{ marginTop: '4px', color: '#003F87' }}>
-                  {(calculations.totalOptimized / projectData.floors).toFixed(0)} units/floor × {projectData.floors} floors
+
+                {/* Total GSF Box */}
+                <div style={{
+                  background: '#f0fdf4',
+                  border: '2px solid #0051BA',
+                  borderRadius: '8px',
+                  padding: '16px',
+                  textAlign: 'center'
+                }}>
+                  <div style={{ fontSize: '13px', fontWeight: 600, color: '#003F87', marginBottom: '6px' }}>
+                    TOTAL GROSS SQUARE FEET
+                  </div>
+                  <div style={{ fontSize: '32px', fontWeight: 700, color: '#111827' }}>
+                    {Math.round(calculations.totalGSF).toLocaleString()} SF
+                  </div>
+                  <div className="small-text" style={{ marginTop: '4px', color: '#003F87' }}>
+                    {(calculations.totalOptimized / projectData.floors).toFixed(0)} units/floor × {projectData.floors} floors
+                  </div>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Transforming Prefab Video - Desktop only */}
-          {!isEffectivelyMobile && (
+          {/* Video - Responsive Heights Based on Floors */}
+          {!isEffectivelyMobile && videoSrc && (
             <div style={{ marginBottom: '20px', borderRadius: '12px', overflow: 'hidden', boxShadow: '0 4px 12px rgba(0,0,0,0.15)' }}>
-              <video autoPlay muted loop playsInline preload="metadata" style={{ width: '100%', height: 'auto', display: 'block', background: '#e5e7eb' }}>
-                <source src={ASSET_PATHS.VIDEO_TRANSFORMING} type="video/mp4" />
+              <video key={projectData.floors} autoPlay muted loop playsInline preload="metadata" style={{ width: '100%', height: 'auto', display: 'block', background: '#e5e7eb' }}>
+                <source src={videoSrc} type="video/mp4" />
               </video>
             </div>
           )}
