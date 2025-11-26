@@ -38,6 +38,10 @@ externalPort = 80
 localPort = 40737
 externalPort = 3000
 
+[[ports]]
+localPort = 42667
+externalPort = 3001
+
 [deployment]
 deploymentTarget = "static"
 build = ["bash", "-c", "cd raap-react-app && npm run build"]
