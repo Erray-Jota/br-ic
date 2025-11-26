@@ -72,29 +72,43 @@ export const ProjectProvider = ({ children }) => {
 
   const currentProject = projects.find((p) => p.id === currentProjectId) || projects[0];
 
-  // Initialize tab from URL or default to Intro (tab 1)
+  // Tab name to ID mapping
+  const TAB_NAMES = { Intro: 6, Configure: 3, Budget: 4, Manage: 5 };
+  const TAB_IDS = { 6: 'Intro', 3: 'Configure', 4: 'Budget', 5: 'Manage' };
+  
+  // Subtab name to ID mapping
+  const SUBTAB_NAMES = {
+    design: { Summary: 1, Units: 2, Floorplan: 3, Building: 4 },
+    cost: { Summary: 1, 'Build Time': 2, Assemblies: 3 },
+  };
+  const SUBTAB_IDS = {
+    design: { 1: 'Summary', 2: 'Units', 3: 'Floorplan', 4: 'Building' },
+    cost: { 1: 'Summary', 2: 'Build Time', 3: 'Assemblies' },
+  };
+
+  // Initialize tab from URL or default to Intro
   const getInitialTab = () => {
-    const params = new URLSearchParams(window.location.search);
-    const tabParam = params.get('tab');
-    return tabParam ? parseInt(tabParam, 10) : 1;
+    const pathname = window.location.pathname.split('/').filter(Boolean)[0];
+    return TAB_NAMES[pathname] || 6; // Default to Intro (tab 6)
   };
 
   const getInitialSubtabs = () => {
-    const params = new URLSearchParams(window.location.search);
+    const pathParts = window.location.pathname.split('/').filter(Boolean);
     const defaults = { design: 1, cost: 1, factors: 1, smartstart: 1, archive: 1 };
-    const designParam = params.get('design');
-    const costParam = params.get('cost');
-    const factorsParam = params.get('factors');
-    const smartstartParam = params.get('smartstart');
-    const archiveParam = params.get('archive');
     
-    return {
-      design: designParam ? parseInt(designParam, 10) : defaults.design,
-      cost: costParam ? parseInt(costParam, 10) : defaults.cost,
-      factors: factorsParam ? parseInt(factorsParam, 10) : defaults.factors,
-      smartstart: smartstartParam ? parseInt(smartstartParam, 10) : defaults.smartstart,
-      archive: archiveParam ? parseInt(archiveParam, 10) : defaults.archive,
-    };
+    if (pathParts.length >= 2) {
+      const tabName = pathParts[0];
+      const subtabName = pathParts[1];
+      
+      if (tabName === 'Configure' && SUBTAB_NAMES.design[subtabName]) {
+        return { ...defaults, design: SUBTAB_NAMES.design[subtabName] };
+      }
+      if (tabName === 'Budget' && SUBTAB_NAMES.cost[subtabName]) {
+        return { ...defaults, cost: SUBTAB_NAMES.cost[subtabName] };
+      }
+    }
+    
+    return defaults;
   };
 
   const [activeTab, setActiveTab] = useState(getInitialTab());
@@ -102,19 +116,26 @@ export const ProjectProvider = ({ children }) => {
 
   // Update URL whenever tab or subtabs change
   useEffect(() => {
-    const params = new URLSearchParams();
-    params.set('tab', activeTab.toString());
-    if (activeSubtabs.design !== 1) params.set('design', activeSubtabs.design.toString());
-    if (activeSubtabs.cost !== 1) params.set('cost', activeSubtabs.cost.toString());
-    if (activeSubtabs.factors !== 1) params.set('factors', activeSubtabs.factors.toString());
-    if (activeSubtabs.smartstart !== 1) params.set('smartstart', activeSubtabs.smartstart.toString());
-    if (activeSubtabs.archive !== 1) params.set('archive', activeSubtabs.archive.toString());
+    let newPath = '/';
+    const tabName = TAB_IDS[activeTab];
     
-    const newUrl = `${window.location.pathname}?${params.toString()}`;
-    if (newUrl !== window.location.pathname + window.location.search) {
-      window.history.replaceState({}, '', newUrl);
+    if (tabName) {
+      newPath += tabName;
+      
+      // Add subtab name if it's not the default
+      if (tabName === 'Configure' && activeSubtabs.design !== 1) {
+        const designName = SUBTAB_IDS.design[activeSubtabs.design];
+        if (designName) newPath += `/${designName}`;
+      } else if (tabName === 'Budget' && activeSubtabs.cost !== 1) {
+        const costName = SUBTAB_IDS.cost[activeSubtabs.cost];
+        if (costName) newPath += `/${costName}`;
+      }
     }
-  }, [activeTab, activeSubtabs]);
+    
+    if (newPath !== window.location.pathname) {
+      window.history.replaceState({}, '', newPath);
+    }
+  }, [activeTab, activeSubtabs, TAB_IDS, SUBTAB_IDS]);
 
   const updateProjectData = useCallback((updates) => {
     setProjects((prevProjects) =>
