@@ -4,22 +4,20 @@ import { calculateBaseCosts, calculateCostMetrics, calculateTimeSavings } from '
 
 export const useCalculations = (projectData) => {
   return useMemo(() => {
-    const { targets, floors, targetLength, propertyFactor, factoryFactor, lobbyType, commonAreaPct, podiumCount } = projectData;
+    const { targets, floors, targetLength, propertyFactor, factoryFactor, commonAreaType, commonAreaPct, podiumCount } = projectData;
 
     // Calculate total target units
     const totalTargetUnits =
-      (targets.studio || 0) +
-      (targets.oneBed || 0) +
-      (targets.twoBed || 0) +
-      (targets.threeBed || 0);
+      (targets.twoBedroom || 0) +
+      (targets.fourBedroom || 0);
 
     // Use Unit Optimization Engine
-    const optimization = optimizeUnits(targets, targetLength, lobbyType || 2, floors);
+    const optimization = optimizeUnits(targets, targetLength, commonAreaType || 2, floors);
     const optimized = optimization.optimized;
     const totalOptimized = optimization.totalOptimized;
 
-    // Calculate building GSF with exact dimensions and SKU breakdown (including bonus units)
-    const gsfCalc = calculateBuildingGSF(optimized, floors, lobbyType || 2, optimization.skus, optimization.bonusUnits || 0, podiumCount || 0);
+    // Calculate building GSF with exact dimensions
+    const gsfCalc = calculateBuildingGSF(optimized, floors, commonAreaType || 2, podiumCount || 0);
     const totalGSF = gsfCalc.totalGSF;
 
     // Calculate scale factors
@@ -40,9 +38,6 @@ export const useCalculations = (projectData) => {
       requiredWidth: optimization.requiredWidth,
       availableWidth: optimization.availableWidth,
       utilizationPct: optimization.utilizationPct,
-      skus: optimization.skus,  // SKU breakdown for floorplan generation
-      bonusUnits: optimization.bonusUnits,  // Bonus units (studios for 1-Bay, 1-beds for 2-Bay)
-      bonusUnitType: optimization.bonusUnitType,  // Type of bonus units: 'studio' or 'oneBed'
 
       // Cost results
       siteCost: costs.siteBuildCost,
@@ -68,7 +63,7 @@ export const useCalculations = (projectData) => {
       timeSavingsPercent: timeMetrics.timeSavingsPercent,
 
       // Required length based ONLY on target unit mix (independent of slider)
-      requiredLength: calculateIdealRequiredLength(targets, lobbyType || 2, floors),
+      requiredLength: calculateIdealRequiredLength(targets, commonAreaType || 2, floors),
 
       // Scale factors
       unitRatio,

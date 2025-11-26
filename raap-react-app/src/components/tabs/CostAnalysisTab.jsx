@@ -288,8 +288,8 @@ const CostAnalysisTab = () => {
                       </select>
                     </div>
                     <div className="form-group" style={{ marginBottom: 0 }}>
-                      <label className="form-label" style={{ fontSize: '11px' }}>Lobby</label>
-                      <select className="form-select" value={projectData.lobbyType} onChange={(e) => updateProjectData({ lobbyType: parseInt(e.target.value) })} style={{ padding: '6px' }}>
+                      <label className="form-label" style={{ fontSize: '11px' }}>Common Area</label>
+                      <select className="form-select" value={projectData.commonAreaType} onChange={(e) => updateProjectData({ commonAreaType: parseInt(e.target.value) })} style={{ padding: '6px' }}>
                         <option value={1}>1-Bay</option>
                         <option value={2}>2-Bay</option>
                         <option value={4}>4-Bay</option>
@@ -307,12 +307,12 @@ const CostAnalysisTab = () => {
                     </div>
                   </div>
 
-                  {/* Target Unit Mix (4 Editable Boxes) */}
+                  {/* Target Unit Mix (2 Editable Boxes) */}
                   <div>
                     <label className="form-label">Target Unit Mix</label>
-                    <div className="grid-4" style={{ gap: '8px', marginBottom: '12px' }}>
-                      {['Studio', '1BR', '2BR', '3BR'].map((label, i) => {
-                        const key = ['studio', 'oneBed', 'twoBed', 'threeBed'][i];
+                    <div className="grid-2" style={{ gap: '8px', marginBottom: '12px' }}>
+                      {['2 Bedroom', '4 Bedroom'].map((label, i) => {
+                        const key = ['twoBedroom', 'fourBedroom'][i];
                         return (
                           <div key={key} className="form-group" style={{ marginBottom: 0 }}>
                             <label className="form-label" style={{ fontSize: '11px' }}>{label}</label>
@@ -331,12 +331,12 @@ const CostAnalysisTab = () => {
                       })}
                     </div>
 
-                    {/* Actual Unit Mix (4 Display Boxes) */}
+                    {/* Actual Unit Mix (2 Display Boxes) */}
                     <div style={{ marginBottom: 0 }}>
                       <label className="form-label" style={{ marginBottom: '6px' }}>Actual Unit Mix</label>
-                      <div className="grid-4" style={{ gap: '6px', marginBottom: 0 }}>
-                        {['Studio', '1BR', '2BR', '3BR'].map((label, i) => {
-                          const key = ['studio', 'oneBed', 'twoBed', 'threeBed'][i];
+                      <div className="grid-2" style={{ gap: '6px', marginBottom: 0 }}>
+                        {['2 Bedroom', '4 Bedroom'].map((label, i) => {
+                          const key = ['twoBedroom', 'fourBedroom'][i];
                           const actual = calculations.optimized[key];
                           return (
                             <div key={key} style={{ padding: '4px 6px', background: '#f0fdf4', borderRadius: '4px', textAlign: 'center', border: '1px solid #86efac' }}>
