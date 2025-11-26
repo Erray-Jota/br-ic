@@ -24,7 +24,7 @@ const GanttChart = ({ raapStart, raapEnd, aorStart, aorEnd, raapActivity, aorAct
   return (
     <div style={{ marginTop: SPACING.lg, padding: SPACING.lg, background: '#f9fafb', borderRadius: '8px' }}>
       <h4 style={{ fontSize: FONTS.sizes.base, fontWeight: FONTS.weight.bold, color: COLORS.gray.dark, marginBottom: SPACING.md }}>
-        📅 Timeline & Sequencing
+        📅 Timeline
       </h4>
 
       {/* Week Headers */}
@@ -37,26 +37,26 @@ const GanttChart = ({ raapStart, raapEnd, aorStart, aorEnd, raapActivity, aorAct
       </div>
 
       {/* RaaP Timeline */}
-      <div style={{ marginBottom: SPACING.lg, display: 'grid', gridTemplateColumns: '80px 1fr 200px', gap: SPACING.md, alignItems: 'center' }}>
-        <div style={{ fontSize: FONTS.sizes.sm, fontWeight: FONTS.weight.bold, color: COLORS.green.dark }}>🏭 RaaP</div>
-        <div style={{ position: 'relative', height: '32px', background: 'white', borderRadius: '6px', border: `1px solid ${COLORS.gray.light}` }}>
-          <div style={getBarStyle(raapStart, raapEnd, COLORS.green.main)} />
+      <div style={{ marginBottom: SPACING.lg, display: 'grid', gridTemplateColumns: '80px 1fr 160px', gap: SPACING.md, alignItems: 'flex-start' }}>
+        <div style={{ fontSize: FONTS.sizes.sm, fontWeight: FONTS.weight.bold, color: COLORS.blue.dark, paddingTop: '4px' }}>🏭 RaaP</div>
+        <div style={{ position: 'relative', height: '24px', paddingTop: '4px' }}>
+          <div style={getBarStyle(raapStart, raapEnd, COLORS.blue.main)} />
         </div>
         {raapActivity && (
-          <div style={{ fontSize: FONTS.sizes.sm, color: COLORS.gray.dark, lineHeight: '1.4' }}>
+          <div style={{ fontSize: FONTS.sizes.sm, color: COLORS.gray.dark, lineHeight: '1.3', wordBreak: 'break-word' }}>
             {raapActivity}
           </div>
         )}
       </div>
 
       {/* AoR Timeline */}
-      <div style={{ display: 'grid', gridTemplateColumns: '80px 1fr 200px', gap: SPACING.md, alignItems: 'center' }}>
-        <div style={{ fontSize: FONTS.sizes.sm, fontWeight: FONTS.weight.bold, color: COLORS.blue.dark }}>🏗️ AoR</div>
-        <div style={{ position: 'relative', height: '32px', background: 'white', borderRadius: '6px', border: `1px solid ${COLORS.gray.light}` }}>
-          <div style={getBarStyle(aorStart, aorEnd, COLORS.blue.main)} />
+      <div style={{ display: 'grid', gridTemplateColumns: '80px 1fr 160px', gap: SPACING.md, alignItems: 'flex-start' }}>
+        <div style={{ fontSize: FONTS.sizes.sm, fontWeight: FONTS.weight.bold, color: '#1a1a1a', paddingTop: '4px' }}>🏗️ AoR</div>
+        <div style={{ position: 'relative', height: '24px', paddingTop: '4px' }}>
+          <div style={getBarStyle(aorStart, aorEnd, '#000000')} />
         </div>
         {aorActivity && (
-          <div style={{ fontSize: FONTS.sizes.sm, color: COLORS.gray.dark, lineHeight: '1.4' }}>
+          <div style={{ fontSize: FONTS.sizes.sm, color: COLORS.gray.dark, lineHeight: '1.3', wordBreak: 'break-word' }}>
             {aorActivity}
           </div>
         )}
