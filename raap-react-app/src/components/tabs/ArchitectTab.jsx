@@ -232,30 +232,30 @@ const ArchitectTab = () => {
             <tr style={{ borderBottom: `1px solid ${COLORS.gray.light}`, background: '#f9fafb' }}>
               <td style={{ padding: '16px', textAlign: 'center', fontWeight: FONTS.weight.bold, color: COLORS.green.main, fontSize: FONTS.sizes.base, verticalAlign: 'top' }}>⚡ SPEED</td>
               <td style={{ padding: '16px', textAlign: 'left', color: COLORS.gray.dark, fontSize: FONTS.sizes.sm, verticalAlign: 'top' }}>
-                <div style={{ color: COLORS.green.main, fontWeight: FONTS.weight.bold, paddingLeft: '20px', textIndent: '-20px' }}>✓ Pre-validated modules, assemblies, and façade logic optimized for factory production</div>
+                <div style={{ paddingLeft: '20px', textIndent: '-20px' }}><span style={{ color: COLORS.green.main, fontWeight: FONTS.weight.bold }}>✓</span> Pre-validated modules, assemblies, and façade logic optimized for factory production</div>
               </td>
               <td style={{ padding: '16px', textAlign: 'left', color: COLORS.gray.dark, fontSize: FONTS.sizes.sm, verticalAlign: 'top' }}>
-                <div style={{ color: COLORS.green.main, fontWeight: FONTS.weight.bold, paddingLeft: '20px', textIndent: '-20px' }}>✓ Accelerates entitlement/permitting by adapting ready-made product to site/zoning codes</div>
+                <div style={{ paddingLeft: '20px', textIndent: '-20px' }}><span style={{ color: COLORS.green.main, fontWeight: FONTS.weight.bold }}>✓</span> Accelerates entitlement/permitting by adapting ready-made product to site/zoning codes</div>
               </td>
             </tr>
             {/* SAVINGS */}
             <tr style={{ borderBottom: `1px solid ${COLORS.gray.light}`, background: 'white' }}>
               <td style={{ padding: '16px', textAlign: 'center', fontWeight: FONTS.weight.bold, color: COLORS.green.main, fontSize: FONTS.sizes.base, verticalAlign: 'top' }}>💰 SAVINGS</td>
               <td style={{ padding: '16px', textAlign: 'left', color: COLORS.gray.dark, fontSize: FONTS.sizes.sm, verticalAlign: 'top' }}>
-                <div style={{ color: COLORS.green.main, fontWeight: FONTS.weight.bold, paddingLeft: '20px', textIndent: '-20px' }}>✓ Eliminates 70–90% of architectural effort normally spent on units, corridors, and assemblies</div>
+                <div style={{ paddingLeft: '20px', textIndent: '-20px' }}><span style={{ color: COLORS.green.main, fontWeight: FONTS.weight.bold }}>✓</span> Eliminates 70–90% of architectural effort normally spent on units, corridors, and assemblies</div>
               </td>
               <td style={{ padding: '16px', textAlign: 'left', color: COLORS.gray.dark, fontSize: FONTS.sizes.sm, verticalAlign: 'top' }}>
-                <div style={{ color: COLORS.green.main, fontWeight: FONTS.weight.bold, paddingLeft: '20px', textIndent: '-20px' }}>✓ Focuses on 30–50% project-specific work with fixed product architecture</div>
+                <div style={{ paddingLeft: '20px', textIndent: '-20px' }}><span style={{ color: COLORS.green.main, fontWeight: FONTS.weight.bold }}>✓</span> Focuses on 30–50% project-specific work with fixed product architecture</div>
               </td>
             </tr>
             {/* DE-RISK */}
             <tr style={{ background: '#f9fafb' }}>
               <td style={{ padding: '16px', textAlign: 'center', fontWeight: FONTS.weight.bold, color: COLORS.green.main, fontSize: FONTS.sizes.base, verticalAlign: 'top' }}>🛡️ DE-RISK</td>
               <td style={{ padding: '16px', textAlign: 'left', color: COLORS.gray.dark, fontSize: FONTS.sizes.sm, verticalAlign: 'top' }}>
-                <div style={{ color: COLORS.green.main, fontWeight: FONTS.weight.bold, paddingLeft: '20px', textIndent: '-20px' }}>✓ Factory-validated UL/GA assemblies, tolerances, and MEP interfaces eliminate manufacturing uncertainty</div>
+                <div style={{ paddingLeft: '20px', textIndent: '-20px' }}><span style={{ color: COLORS.green.main, fontWeight: FONTS.weight.bold }}>✓</span> Factory-validated UL/GA assemblies, tolerances, and MEP interfaces eliminate manufacturing uncertainty</div>
               </td>
               <td style={{ padding: '16px', textAlign: 'left', color: COLORS.gray.dark, fontSize: FONTS.sizes.sm, verticalAlign: 'top' }}>
-                <div style={{ color: COLORS.green.main, fontWeight: FONTS.weight.bold, paddingLeft: '20px', textIndent: '-20px' }}>✓ Ensures local code compliance and clarifies site vs factory scope</div>
+                <div style={{ paddingLeft: '20px', textIndent: '-20px' }}><span style={{ color: COLORS.green.main, fontWeight: FONTS.weight.bold }}>✓</span> Ensures local code compliance and clarifies site vs factory scope</div>
               </td>
             </tr>
           </tbody>
