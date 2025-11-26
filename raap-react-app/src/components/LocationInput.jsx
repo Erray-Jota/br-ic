@@ -13,17 +13,7 @@ const LocationInput = ({ value, onChange, label, placeholder = 'Enter city or zi
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const wrapperRef = useRef(null);
-  const apiKey = import.meta.env.VITE_GOOGLE_API_KEY || '';
   const debounceTimer = useRef(null);
-
-  // Debug: Log API key availability
-  useEffect(() => {
-    if (!apiKey) {
-      console.warn('LocationInput: Google API key not found');
-    } else {
-      console.log('LocationInput: Google API key loaded successfully');
-    }
-  }, [apiKey]);
 
   // Close suggestions when clicking outside
   useEffect(() => {
@@ -42,65 +32,46 @@ const LocationInput = ({ value, onChange, label, placeholder = 'Enter city or zi
     setInputValue(value || '');
   }, [value, setInputValue]);
 
-  // Search using Google Geocoding API with filtering for cities
+  // Search using Nominatim (OpenStreetMap) - Free, no API key required
   const searchLocations = async (query) => {
-    if (!apiKey || query.length < 2) {
-      console.log('Search blocked: API key missing or query too short', { hasKey: !!apiKey, queryLen: query.length });
+    if (query.length < 2) {
       setSuggestions([]);
       return;
     }
 
-    console.log('Searching locations for:', query);
     try {
-      // Use Geocoding API to find locations
+      // Use Nominatim API (free, no authentication required)
       const response = await fetch(
-        `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(query)}&components=country:us&key=${apiKey}`
+        `https://nominatim.openstreetmap.org/search?format=json&country=us&city=${encodeURIComponent(query)}&limit=8&addressdetails=1`,
+        { headers: { 'Accept': 'application/json' } }
       );
 
       const data = await response.json();
-      console.log('API Response status:', data.status, 'Results count:', data.results?.length);
 
-      if (data.status === 'OK' && data.results && data.results.length > 0) {
-        // Filter results to only include cities/localities and postal codes
-        const filteredResults = data.results.filter(result => {
-          const types = result.types || [];
-          return types.includes('locality') ||
-            types.includes('postal_code') ||
-            types.includes('sublocality');
-        });
-
-        const results = filteredResults.slice(0, 8).map((result) => {
-          const location = result.geometry.location;
-          const addressComponents = result.address_components || [];
-
-          // Extract components
-          const cityComponent = addressComponents.find(
-            comp => comp.types.includes('locality') || comp.types.includes('sublocality')
-          );
-          const stateComponent = addressComponents.find(
-            comp => comp.types.includes('administrative_area_level_1')
-          );
-          const zipComponent = addressComponents.find(
-            comp => comp.types.includes('postal_code')
-          );
-
-          const city = cityComponent?.long_name || '';
-          const state = stateComponent?.short_name || '';
-          const zipCode = zipComponent?.long_name || '';
+      if (data && Array.isArray(data) && data.length > 0) {
+        const results = data.map((result) => {
+          const lat = parseFloat(result.lat);
+          const lng = parseFloat(result.lon);
+          const address = result.address || {};
+          
+          // Extract city and state
+          const city = address.city || address.town || address.village || '';
+          const state = address.state || '';
+          const postcode = address.postcode || '';
 
           // Format display: "City, State" or "City, State ZIP"
-          const displayText = zipCode && city
-            ? `${city}, ${state} ${zipCode}`
-            : city
+          const displayText = postcode && city
+            ? `${city}, ${state} ${postcode}`
+            : city && state
               ? `${city}, ${state}`
-              : result.formatted_address;
+              : result.display_name || '';
 
           return {
             display: displayText,
-            fullDisplay: result.formatted_address,
-            lat: location.lat,
-            lng: location.lng,
-            zip: zipCode
+            fullDisplay: result.display_name,
+            lat,
+            lng,
+            zip: postcode
           };
         });
 
