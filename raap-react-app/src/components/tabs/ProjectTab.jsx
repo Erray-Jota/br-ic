@@ -41,10 +41,8 @@ const ProjectTab = () => {
   };
 
   const totalUnits =
-    (projectData.targets.studio || 0) +
-    (projectData.targets.oneBed || 0) +
-    (projectData.targets.twoBed || 0) +
-    (projectData.targets.threeBed || 0);
+    (projectData.targets.twoBedroom || 0) +
+    (projectData.targets.fourBedroom || 0);
 
   const projectImageSrc = {
     3: ASSET_PATHS.PROJECT_GRAPHIC_3_FLOORS,
@@ -148,48 +146,26 @@ const ProjectTab = () => {
             </p>
           )}
 
-          <div className="grid-4" style={{ gap: '8px' }}>
+          <div className="grid-2" style={{ gap: '8px' }}>
             <div className="unit-input-container">
-              <label>Studio</label>
+              <label>2 Bedroom</label>
               <input
                 type="number"
-                value={projectData.targets.studio}
+                value={projectData.targets.twoBedroom}
                 min="0"
                 onFocus={(e) => e.target.select()}
-                onChange={(e) => handleTargetChange('studio', e.target.value)}
+                onChange={(e) => handleTargetChange('twoBedroom', e.target.value)}
                 style={{ textAlign: 'center', fontSize: '18px', fontWeight: 600, padding: '8px' }}
               />
             </div>
             <div className="unit-input-container">
-              <label>1 Bed</label>
+              <label>4 Bedroom</label>
               <input
                 type="number"
-                value={projectData.targets.oneBed}
+                value={projectData.targets.fourBedroom}
                 min="0"
                 onFocus={(e) => e.target.select()}
-                onChange={(e) => handleTargetChange('oneBed', e.target.value)}
-                style={{ textAlign: 'center', fontSize: '18px', fontWeight: 600, padding: '8px' }}
-              />
-            </div>
-            <div className="unit-input-container">
-              <label>2 Bed</label>
-              <input
-                type="number"
-                value={projectData.targets.twoBed}
-                min="0"
-                onFocus={(e) => e.target.select()}
-                onChange={(e) => handleTargetChange('twoBed', e.target.value)}
-                style={{ textAlign: 'center', fontSize: '18px', fontWeight: 600, padding: '8px' }}
-              />
-            </div>
-            <div className="unit-input-container">
-              <label>3 Bed</label>
-              <input
-                type="number"
-                value={projectData.targets.threeBed}
-                min="0"
-                onFocus={(e) => e.target.select()}
-                onChange={(e) => handleTargetChange('threeBed', e.target.value)}
+                onChange={(e) => handleTargetChange('fourBedroom', e.target.value)}
                 style={{ textAlign: 'center', fontSize: '18px', fontWeight: 600, padding: '8px' }}
               />
             </div>
