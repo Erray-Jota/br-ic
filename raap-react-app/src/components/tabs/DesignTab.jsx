@@ -134,7 +134,7 @@ const DesignTab = () => {
               <div style={{ marginBottom: '12px' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
                   <label className="form-label" style={{ marginBottom: 0 }}>Building Length: {projectData.targetLength} ft</label>
-                  <span style={{ fontSize: '14px', fontWeight: 600, color: '#6b7280' }}>Required Length: {Math.round(calculations.requiredLength)} ft</span>
+                  <span style={{ fontSize: '14px', fontWeight: 700, color: '#111827' }}>Required Length: {Math.round(calculations.requiredLength)} ft</span>
                 </div>
                 <input
                   type="range"
@@ -188,7 +188,7 @@ const DesignTab = () => {
                   <h2 style={{ marginBottom: 0 }}>
                     📊 Proposed Unit Mix ({calculations.totalOptimized} Total)
                   </h2>
-                  <span style={{ fontSize: '14px', fontWeight: 600, color: '#6b7280' }}>Total GSF: {Math.round(calculations.totalGSF).toLocaleString()}</span>
+                  <span style={{ fontSize: '14px', fontWeight: 700, color: '#111827' }}>Total GSF: {Math.round(calculations.totalGSF).toLocaleString()}</span>
                 </div>
                 <p className="small-text" style={{ marginBottom: '8px' }}>Optimized mix based on your target inputs and building length.</p>
 
