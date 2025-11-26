@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useCallback } from 'react';
+import { createContext, useContext, useState, useCallback, useEffect } from 'react';
 
 const ProjectContext = createContext();
 
@@ -72,14 +72,49 @@ export const ProjectProvider = ({ children }) => {
 
   const currentProject = projects.find((p) => p.id === currentProjectId) || projects[0];
 
-  const [activeTab, setActiveTab] = useState(1); // Start with Introduction tab
-  const [activeSubtabs, setActiveSubtabs] = useState({
-    design: 1,
-    cost: 1,
-    factors: 1,
-    smartstart: 1,
-    archive: 1,
-  });
+  // Initialize tab from URL or default to Intro (tab 1)
+  const getInitialTab = () => {
+    const params = new URLSearchParams(window.location.search);
+    const tabParam = params.get('tab');
+    return tabParam ? parseInt(tabParam, 10) : 1;
+  };
+
+  const getInitialSubtabs = () => {
+    const params = new URLSearchParams(window.location.search);
+    const defaults = { design: 1, cost: 1, factors: 1, smartstart: 1, archive: 1 };
+    const designParam = params.get('design');
+    const costParam = params.get('cost');
+    const factorsParam = params.get('factors');
+    const smartstartParam = params.get('smartstart');
+    const archiveParam = params.get('archive');
+    
+    return {
+      design: designParam ? parseInt(designParam, 10) : defaults.design,
+      cost: costParam ? parseInt(costParam, 10) : defaults.cost,
+      factors: factorsParam ? parseInt(factorsParam, 10) : defaults.factors,
+      smartstart: smartstartParam ? parseInt(smartstartParam, 10) : defaults.smartstart,
+      archive: archiveParam ? parseInt(archiveParam, 10) : defaults.archive,
+    };
+  };
+
+  const [activeTab, setActiveTab] = useState(getInitialTab());
+  const [activeSubtabs, setActiveSubtabs] = useState(getInitialSubtabs());
+
+  // Update URL whenever tab or subtabs change
+  useEffect(() => {
+    const params = new URLSearchParams();
+    params.set('tab', activeTab.toString());
+    if (activeSubtabs.design !== 1) params.set('design', activeSubtabs.design.toString());
+    if (activeSubtabs.cost !== 1) params.set('cost', activeSubtabs.cost.toString());
+    if (activeSubtabs.factors !== 1) params.set('factors', activeSubtabs.factors.toString());
+    if (activeSubtabs.smartstart !== 1) params.set('smartstart', activeSubtabs.smartstart.toString());
+    if (activeSubtabs.archive !== 1) params.set('archive', activeSubtabs.archive.toString());
+    
+    const newUrl = `${window.location.pathname}?${params.toString()}`;
+    if (newUrl !== window.location.pathname + window.location.search) {
+      window.history.replaceState({}, '', newUrl);
+    }
+  }, [activeTab, activeSubtabs]);
 
   const updateProjectData = useCallback((updates) => {
     setProjects((prevProjects) =>
