@@ -32,7 +32,7 @@ const LocationInput = ({ value, onChange, label, placeholder = 'Enter city or zi
     setInputValue(value || '');
   }, [value, setInputValue]);
 
-  // Search using Nominatim (OpenStreetMap) - Free, no API key required
+  // Search using Google Geocoding API - Reliable and handles military bases well
   const searchLocations = async (query) => {
     if (query.length < 2) {
       setSuggestions([]);
@@ -40,79 +40,51 @@ const LocationInput = ({ value, onChange, label, placeholder = 'Enter city or zi
     }
 
     try {
-      // Detect if query is a zip code (5 digits)
-      const isZipCode = /^\d{5}$/.test(query);
-      console.log('Search query:', query, 'Is zip code:', isZipCode);
-      
-      // Use Nominatim API with flexible 'q' parameter for better results
-      // This works better for US cities, military bases, and zip codes
-      const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&country=us&limit=20&addressdetails=1&extratags=1`;
-      
-      const response = await fetch(url, { headers: { 'Accept': 'application/json' } });
+      const apiKey = import.meta.env.VITE_GOOGLE_API_KEY;
+      if (!apiKey) {
+        console.error('Google API key not found');
+        setSuggestions([]);
+        return;
+      }
 
+      // Use Google Places API for autocomplete (more reliable than geocoding alone)
+      const url = `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${encodeURIComponent(query)}&key=${apiKey}&components=country:us`;
+      
+      const response = await fetch(url);
       const data = await response.json();
-      console.log('Nominatim response:', data.length, 'results');
+      console.log('Google Places response:', data.predictions?.length || 0, 'results');
 
-      if (data && Array.isArray(data) && data.length > 0) {
-        // Keep results that are likely cities or military locations
-        // Filter OUT: streets, restaurants, shops, etc.
-        const filteredResults = data.filter(result => {
-          const type = result.type || '';
-          const className = result.class || '';
-          const displayName = (result.display_name || '').toLowerCase();
-          
-          // EXCLUDE problematic types
-          const excludeTypes = ['street', 'road', 'building', 'restaurant', 'shop', 'office', 'house', 'parking'];
-          const excludeClasses = ['building', 'shop', 'tourism', 'amenity'];
-          
-          if (excludeTypes.includes(type) || excludeClasses.includes(className)) {
-            return false;
-          }
-          
-          // INCLUDE: cities, towns, military, postal codes, counties, states
-          return displayName.length > 0 && 
-                 (displayName.includes(', ') || // Has a comma (likely has city, state)
-                  className === 'postal_code' ||
-                  className === 'military' ||
-                  className === 'place' ||
-                  className === 'admin' ||
-                  displayName.includes('air force') || 
-                  displayName.includes('fort ') || 
-                  displayName.includes('naval ') ||
-                  displayName.includes('base') || 
-                  displayName.includes('barracks'));
-        });
+      if (data.predictions && data.predictions.length > 0) {
+        const results = await Promise.all(
+          data.predictions.slice(0, 8).map(async (prediction) => {
+            try {
+              // Get detailed information including lat/lng using Place ID
+              const detailsUrl = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${prediction.place_id}&key=${apiKey}&fields=geometry,formatted_address`;
+              const detailsResponse = await fetch(detailsUrl);
+              const detailsData = await detailsResponse.json();
+              
+              if (detailsData.result && detailsData.result.geometry) {
+                const lat = detailsData.result.geometry.location.lat;
+                const lng = detailsData.result.geometry.location.lng;
+                return {
+                  display: prediction.description,
+                  fullDisplay: detailsData.result.formatted_address || prediction.description,
+                  lat,
+                  lng,
+                  zip: ''
+                };
+              }
+            } catch (err) {
+              console.error('Error fetching place details:', err);
+            }
+            return null;
+          })
+        );
 
-        console.log('Filtered results:', filteredResults.length);
-
-        const results = filteredResults.slice(0, 8).map((result) => {
-          const lat = parseFloat(result.lat);
-          const lng = parseFloat(result.lon);
-          const address = result.address || {};
-          
-          // Extract city and state
-          const city = address.city || address.town || address.village || address.hamlet || '';
-          const state = address.state || '';
-          const postcode = address.postcode || '';
-
-          // Format display: "City, State ZIP"
-          const displayText = postcode && city
-            ? `${city}, ${state} ${postcode}`
-            : city && state
-              ? `${city}, ${state}`
-              : result.display_name || '';
-
-          return {
-            display: displayText,
-            fullDisplay: result.display_name,
-            lat,
-            lng,
-            zip: postcode
-          };
-        });
-
-        setSuggestions(results);
-        setShowSuggestions(results.length > 0);
+        const validResults = results.filter(r => r !== null);
+        setSuggestions(validResults);
+        setShowSuggestions(validResults.length > 0);
+        console.log('Filtered results:', validResults.length);
       } else {
         console.log('No results found');
         setSuggestions([]);
