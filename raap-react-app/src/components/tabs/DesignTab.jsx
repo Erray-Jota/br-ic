@@ -56,12 +56,9 @@ const DesignTab = () => {
               🏠 Units
             </button>
             <button onClick={() => switchSubtab('design', 3)} className={`subtab-btn ${activeSubtabs.design === 3 ? 'active-subtab' : ''}`}>
-              🗺️ Floorplan
-            </button>
-            <button onClick={() => switchSubtab('design', 4)} className={`subtab-btn ${activeSubtabs.design === 4 ? 'active-subtab' : ''}`}>
               🏗️ Building
             </button>
-            <button onClick={() => switchSubtab('design', 5)} className={`subtab-btn ${activeSubtabs.design === 5 ? 'active-subtab' : ''}`}>
+            <button onClick={() => switchSubtab('design', 4)} className={`subtab-btn ${activeSubtabs.design === 4 ? 'active-subtab' : ''}`}>
               🌎 Sustainability
             </button>
           </div>

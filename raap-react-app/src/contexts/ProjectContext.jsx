@@ -77,12 +77,12 @@ export const ProjectProvider = ({ children }) => {
   
   // Subtab name to ID mapping (lowercase for URLs)
   const SUBTAB_NAMES = {
-    design: { summary: 1, units: 2, floorplan: 3, building: 4 },
+    design: { summary: 1, units: 2, building: 3, sustainability: 4 },
     cost: { summary: 1, 'build-time': 2, assemblies: 3 },
     factors: { marketplace: 1, architect: 2, fabricator: 3, logistics: 4, construction: 5 },
   };
   const SUBTAB_IDS = {
-    design: { 1: 'summary', 2: 'units', 3: 'floorplan', 4: 'building' },
+    design: { 1: 'summary', 2: 'units', 3: 'building', 4: 'sustainability' },
     cost: { 1: 'summary', 2: 'build-time', 3: 'assemblies' },
     factors: { 1: 'marketplace', 2: 'architect', 3: 'fabricator', 4: 'logistics', 5: 'construction' },
   };
