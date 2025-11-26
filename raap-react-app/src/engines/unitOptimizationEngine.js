@@ -125,7 +125,7 @@ export const optimizeUnits = (targets, buildingLength, commonAreaType, floors = 
   // Available length on one side for units
   const availableSide = buildingLength - commonAreaWidth - stairWidth;
 
-  // ------------- STAGE 1: Threshold-based shortening -------------
+  // ------------- STAGE 1: Remove units if too long (remove 4BR first, then 2BR) -------------
   let safetyCounter = 0;
   while (safetyCounter++ < 1000) {
     let requiredSide = computeRequiredSide();
@@ -133,143 +133,33 @@ export const optimizeUnits = (targets, buildingLength, commonAreaType, floors = 
 
     if (diff <= 0) break; // fits or is short enough
 
-    // Small overage: prefer removing a Studio bay
-    if (diff > 0 && diff < 10) {
-      if (sku_studio > 0) {
-        sku_studio -= 1;
-        continue;
-      }
-      // Fall through to next options if no studios
-    }
-
-    // Medium overage: remove 1-bed inline bay if any
-    if (diff >= 10 && diff < 20) {
-      if (sku_1_inline > 0) {
-        sku_1_inline -= 1;
-        continue;
-      }
-      // Fall through if none
-    }
-
-    // Large overage: remove 3-bed corner or 2-bed inline
-    if (diff >= 20) {
-      if (sku_3_corner > 0) {
-        sku_3_corner -= 1;
-        continue;
-      } else if (sku_2_inline > 0) {
-        sku_2_inline -= 1;
-        continue;
-      }
-      // Fall back if neither available
-    }
-
-    // Fallback if none of the above applied but diff still positive:
-    if (sku_1_inline > 0) {
-      sku_1_inline -= 1;
-    } else if (sku_studio > 0) {
-      sku_studio -= 1;
+    // Remove 4-bedroom first (larger units free up more space)
+    if (units_4br > 0) {
+      units_4br -= 1;
+    } else if (units_2br > 0) {
+      units_2br -= 1;
     } else {
-      // No more SKUs to cut meaningfully
+      // No more units to remove
       break;
     }
   }
 
-  // ------------- STAGE 2: Mix adjustments if still too long -------------
-  let requiredSideAfterStage1 = computeRequiredSide();
-  let diffAfterStage1 = requiredSideAfterStage1 - availableSide;
-
-  if (diffAfterStage1 > 0) {
-    safetyCounter = 0;
-
-    // 2.1 Convert 2-bed Corner -> 1-bed Corner bays
-    while (safetyCounter++ < 1000 && diffAfterStage1 > 0 && sku_2_corner > 0) {
-      sku_2_corner -= 1;
-      sku_1_corner += 1;
-      requiredSideAfterStage1 = computeRequiredSide();
-      diffAfterStage1 = requiredSideAfterStage1 - availableSide;
-    }
-
-    // 2.2 Swap 1-bed Inline -> Studio to move toward ~50-50 Studio:1BR mix
-    const studioOneShare = () => {
-      const oneBeds = sku_1_corner + sku_1_inline;
-      const totalSmall = oneBeds + sku_studio;
-      if (totalSmall <= 0) return 0;
-      return sku_studio / totalSmall;
-    };
-
-    safetyCounter = 0;
-    while (safetyCounter++ < 1000 && diffAfterStage1 > 0 && sku_1_inline > 0) {
-      // Swap one inline 1BR for one Studio
-      sku_1_inline -= 1;
-      sku_studio += 1;
-
-      requiredSideAfterStage1 = computeRequiredSide();
-      diffAfterStage1 = requiredSideAfterStage1 - availableSide;
-
-      const share = studioOneShare();
-      // Stop swapping once Studio share is within ~40-60% range
-      if (share >= 0.4 && share <= 0.6) break;
-    }
-
-    // 2.3 If still long: remove full bays alternating Studios and 1-bed Inlines
-    safetyCounter = 0;
-    let removeStudioNext = true;
-    while (safetyCounter++ < 1000 && diffAfterStage1 > 0) {
-      let changed = false;
-
-      if (removeStudioNext && sku_studio > 0) {
-        sku_studio -= 1;
-        changed = true;
-      } else if (!removeStudioNext && sku_1_inline > 0) {
-        sku_1_inline -= 1;
-        changed = true;
-      } else if (sku_studio > 0) {
-        // Fallback if one type is gone
-        sku_studio -= 1;
-        changed = true;
-      } else if (sku_1_inline > 0) {
-        sku_1_inline -= 1;
-        changed = true;
-      } else {
-        // As a last resort we could touch 1-bed corners, but per spec we avoid this if possible
-        break;
-      }
-
-      if (!changed) break;
-
-      removeStudioNext = !removeStudioNext;
-      requiredSideAfterStage1 = computeRequiredSide();
-      diffAfterStage1 = requiredSideAfterStage1 - availableSide;
-    }
-  }
-
-  // ------------- STAGE 3: ADD-BACK - restore small units toward targets if slack -------------
+  // ------------- STAGE 2: Add-back - restore units toward targets if slack available -------------
   let finalRequiredSide = computeRequiredSide();
   let slackSide = availableSide - finalRequiredSide;
 
-  // Helper to compute current per-side type counts from SKUs
-  const computePerSideTypeCounts = () => {
-    const studios = sku_studio;
-    const oneBeds = sku_1_corner + sku_1_inline;
-    const twoBeds = sku_2_corner + sku_2_inline;
-    const threeBeds = sku_3_corner;
-    return { studios, oneBeds, twoBeds, threeBeds };
-  };
-
   safetyCounter = 0;
   while (safetyCounter++ < 200 && slackSide > 0.1) {
-    const typeCounts = computePerSideTypeCounts();
-
     let added = false;
 
-    // Prefer adding Studios up to their per-side target
-    if (typeCounts.studios < perSideTypeTargets.studio && slackSide >= SKU_WIDTHS.studio) {
-      sku_studio += 1;
+    // Prefer adding 4BR up to target
+    if (units_4br < perSideTypeTargets.fourBedroom && slackSide >= SKU_WIDTHS.fourBedroom) {
+      units_4br += 1;
       added = true;
     }
-    // Then prefer adding 1-bed Inline up to its per-side target
-    else if (typeCounts.oneBeds < perSideTypeTargets.oneBed && slackSide >= SKU_WIDTHS.oneInline) {
-      sku_1_inline += 1;
+    // Then prefer adding 2BR up to target
+    else if (units_2br < perSideTypeTargets.twoBedroom && slackSide >= SKU_WIDTHS.twoBedroom) {
+      units_2br += 1;
       added = true;
     }
 
@@ -277,12 +167,13 @@ export const optimizeUnits = (targets, buildingLength, commonAreaType, floors = 
 
     finalRequiredSide = computeRequiredSide();
     slackSide = availableSide - finalRequiredSide;
+
     if (slackSide < 0) {
       // Undo last add if we overshot
-      if (added && typeCounts.studios < perSideTypeTargets.studio && sku_studio > 0) {
-        sku_studio -= 1;
-      } else if (added && typeCounts.oneBeds < perSideTypeTargets.oneBed && sku_1_inline > 0) {
-        sku_1_inline -= 1;
+      if (added && units_4br > perSideTypeTargets.fourBedroom) {
+        units_4br -= 1;
+      } else if (added && units_2br > perSideTypeTargets.twoBedroom) {
+        units_2br -= 1;
       }
       finalRequiredSide = computeRequiredSide();
       slackSide = availableSide - finalRequiredSide;
@@ -291,52 +182,26 @@ export const optimizeUnits = (targets, buildingLength, commonAreaType, floors = 
   }
 
   // ------------- Finalize optimized mix (convert back to building-wide unit counts) -------------
-  const finalTypeCountsSide = computePerSideTypeCounts();
-
-  // Calculate bonus units across from lobby
-  // 1-Bay lobby (13.5 ft) can fit a studio (13.5 ft) = floors bonus studios
-  // 2-Bay lobby (24.5 ft) can fit a 1-bed inline (24.5 ft) = floors bonus 1-beds
-  // 4-Bay lobby (49.0 ft) can fit units on both sides = no bonus units
-  let bonusUnits = 0;
-  let bonusUnitType = null; // 'studio' or 'oneBed' or null
-  if (lobbyType === 1) {
-    bonusUnits = floors; // floors bonus studio units (one per floor)
-    bonusUnitType = 'studio';
-  } else if (lobbyType === 2) {
-    bonusUnits = floors; // floors bonus 1-bed inline units (one per floor)
-    bonusUnitType = 'oneBed';
-  }
-  // 4-Bay: no bonus units
-
   let optimizedTotals = {
-    studio: finalTypeCountsSide.studios * 2 * floors,
-    oneBed: finalTypeCountsSide.oneBeds * 2 * floors,
-    twoBed: finalTypeCountsSide.twoBeds * 2 * floors,
-    threeBed: finalTypeCountsSide.threeBeds * 2 * floors,
+    twoBedroom: units_2br * 2 * floors,
+    fourBedroom: units_4br * 2 * floors,
   };
 
-  // Add bonus units to appropriate unit type
-  if (bonusUnits > 0 && bonusUnitType) {
-    optimizedTotals[bonusUnitType] += bonusUnits;
-  }
-
-  const totalOptimized = optimizedTotals.studio + optimizedTotals.oneBed + optimizedTotals.twoBed + optimizedTotals.threeBed;
+  const totalOptimized = optimizedTotals.twoBedroom + optimizedTotals.fourBedroom;
 
   // Required building length based on final per-side units
-  const finalRequiredBuildingLength = finalRequiredSide + lobbyWidth + stairWidth;
+  const finalRequiredBuildingLength = finalRequiredSide + commonAreaWidth + stairWidth;
 
   // Calculate utilization
   const utilizationPct = (finalRequiredSide / availableSide) * 100;
 
   // Calculate GSF by type
   const gsfByType = {
-    studio: optimizedTotals.studio * UNIT_SIZES_GSF.studio,
-    oneBed: optimizedTotals.oneBed * UNIT_SIZES_GSF.oneBed,
-    twoBed: optimizedTotals.twoBed * UNIT_SIZES_GSF.twoBed,
-    threeBed: optimizedTotals.threeBed * UNIT_SIZES_GSF.threeBed,
+    twoBedroom: optimizedTotals.twoBedroom * UNIT_SIZES_GSF.twoBedroom,
+    fourBedroom: optimizedTotals.fourBedroom * UNIT_SIZES_GSF.fourBedroom,
   };
 
-  const totalUnitGSF = gsfByType.studio + gsfByType.oneBed + gsfByType.twoBed + gsfByType.threeBed;
+  const totalUnitGSF = gsfByType.twoBedroom + gsfByType.fourBedroom;
 
   return {
     optimized: optimizedTotals,
@@ -346,22 +211,11 @@ export const optimizeUnits = (targets, buildingLength, commonAreaType, floors = 
     utilizationPct,
     gsfByType,
     totalUnitGSF,
-    lobbyWidth,
+    commonAreaWidth,
     stairWidth,
-    bonusUnits,
-    bonusUnitType,
-    // SKU breakdown for advanced use
-    skus: {
-      sku_studio,
-      sku_1_corner,
-      sku_1_inline,
-      sku_2_corner,
-      sku_2_inline,
-      sku_3_corner,
-    },
-    perSideTypeCounts: finalTypeCountsSide,
+    perSideTypeCounts: { twoBedroom: units_2br, fourBedroom: units_4br },
     // Ideal required length based on ORIGINAL targets (before space constraints)
-    idealRequiredLength: calculateIdealRequiredLength(targets, lobbyType, floors),
+    idealRequiredLength: calculateIdealRequiredLength(targets, commonAreaType, floors),
   };
 };
 
@@ -370,8 +224,8 @@ export const optimizeUnits = (targets, buildingLength, commonAreaType, floors = 
  * This is independent of any space constraints and represents the length needed
  * to accommodate the requested unit mix without modifications.
  */
-export const calculateIdealRequiredLength = (targets, lobbyType, floors = 5) => {
-  const lobbyWidth = LOBBY_WIDTHS[lobbyType] || LOBBY_WIDTHS[2];
+export const calculateIdealRequiredLength = (targets, commonAreaType, floors = 5) => {
+  const commonAreaWidth = COMMON_AREA_WIDTHS[commonAreaType] || COMMON_AREA_WIDTHS[2];
   const stairWidth = STAIR_WIDTH;
 
   // Convert building-wide targets to per-side targets
@@ -382,40 +236,16 @@ export const calculateIdealRequiredLength = (targets, lobbyType, floors = 5) => 
   };
 
   const perSideTargets = {
-    studio: perSideFromTotal(targets.studio || 0),
-    oneBed: perSideFromTotal(targets.oneBed || 0),
-    twoBed: perSideFromTotal(targets.twoBed || 0),
-    threeBed: perSideFromTotal(targets.threeBed || 0),
+    twoBedroom: perSideFromTotal(targets.twoBedroom || 0),
+    fourBedroom: perSideFromTotal(targets.fourBedroom || 0),
   };
-
-  // Map to SKUs (no space constraints, just pure mapping)
-  let remainingCornerSlots = CORNER_SLOTS_PER_SIDE;
-
-  let sku_3_corner = perSideTargets.threeBed || 0;
-  const used3ForCorners = Math.min(sku_3_corner, remainingCornerSlots);
-  remainingCornerSlots -= used3ForCorners;
-
-  let sku_2_corner = Math.min(perSideTargets.twoBed || 0, remainingCornerSlots);
-  let sku_2_inline = Math.max(0, (perSideTargets.twoBed || 0) - sku_2_corner);
-  remainingCornerSlots -= sku_2_corner;
-
-  let sku_1_corner = Math.min(perSideTargets.oneBed || 0, remainingCornerSlots);
-  let sku_1_inline = Math.max(0, (perSideTargets.oneBed || 0) - sku_1_corner);
-
-  let sku_studio = perSideTargets.studio || 0;
 
   // Calculate required side without any space constraints
   const requiredSide =
-    sku_studio * SKU_WIDTHS.studio +
-    sku_1_corner * SKU_WIDTHS.oneCorner +
-    sku_1_inline * SKU_WIDTHS.oneInline +
-    sku_2_corner * SKU_WIDTHS.twoCorner +
-    sku_2_inline * SKU_WIDTHS.twoInline +
-    sku_3_corner * SKU_WIDTHS.threeCorner;
+    perSideTargets.twoBedroom * SKU_WIDTHS.twoBedroom +
+    perSideTargets.fourBedroom * SKU_WIDTHS.fourBedroom;
 
-  // Note: bonus units across from lobby fit within lobby width, so they don't add to requiredSide
-  // They're just a calculation benefit, not a width requirement
-  return requiredSide + lobbyWidth + stairWidth;
+  return requiredSide + commonAreaWidth + stairWidth;
 };
 
 /**
