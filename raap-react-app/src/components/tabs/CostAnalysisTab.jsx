@@ -176,6 +176,9 @@ const CostAnalysisTab = () => {
       {/* SUMMARY SUB TAB */}
       {activeSubtabs.cost === 1 && (
         <div>
+          {/* Project Info Banner */}
+          <ProjectInfoBanner calculations={calculations} />
+
           {/* COST SUMMARY BOX (3 Horizontal Boxes) */}
           <div className="grid-3-mobile" style={{ gap: isEffectivelyMobile ? '8px' : '12px', marginBottom: '12px' }}>
             {/* Box 1: Site Build Costs */}
@@ -250,17 +253,10 @@ const CostAnalysisTab = () => {
 
                   {/* Building Length Slider */}
                   <div className="form-group">
-                    <label className="form-label">
-                      Building Length: {projectData.targetLength} ft
-                      <span style={{
-                        marginLeft: '8px',
-                        fontSize: '11px',
-                        color: projectData.targetLength >= calculations.requiredLength ? '#0051BA' : '#dc2626',
-                        fontWeight: 600
-                      }}>
-                        {projectData.targetLength >= calculations.requiredLength ? '✓ Adequate' : '⚠ Too Short'}
-                      </span>
-                    </label>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                      <label className="form-label" style={{ marginBottom: 0 }}>Building Length: {projectData.targetLength} ft</label>
+                      <span style={{ fontSize: '14px', fontWeight: 700, color: '#111827' }}>Required Length: {Math.round(calculations.requiredLength)} ft</span>
+                    </div>
                     <input
                       type="range"
                       min="300"
@@ -319,17 +315,15 @@ const CostAnalysisTab = () => {
                       {['2 Bedroom', '4 Bedroom'].map((label, i) => {
                         const key = ['twoBedroom', 'fourBedroom'][i];
                         return (
-                          <div key={key} className="form-group" style={{ marginBottom: 0 }}>
-                            <label className="form-label" style={{ fontSize: '11px' }}>{label}</label>
+                          <div key={key} className="unit-input-container">
+                            <label>{label}</label>
                             <input
                               type="number"
-                              className="form-input"
                               value={projectData.targets[key]}
                               min="0"
                               onChange={(e) => updateProjectData({
                                 targets: { ...projectData.targets, [key]: parseInt(e.target.value) || 0 }
                               })}
-                              style={{ padding: '6px', textAlign: 'center', fontWeight: 700 }}
                             />
                           </div>
                         );
@@ -339,14 +333,14 @@ const CostAnalysisTab = () => {
                     {/* Actual Unit Mix (2 Display Boxes) */}
                     <div style={{ marginBottom: 0 }}>
                       <label className="form-label" style={{ marginBottom: '6px' }}>Actual Unit Mix</label>
-                      <div className="grid-2" style={{ gap: '6px', marginBottom: 0 }}>
+                      <div className="grid-2" style={{ gap: '8px', marginBottom: 0 }}>
                         {['2 Bedroom', '4 Bedroom'].map((label, i) => {
                           const key = ['twoBedroom', 'fourBedroom'][i];
                           const actual = calculations.optimized[key];
                           return (
-                            <div key={key} style={{ padding: '4px 6px', background: '#f0fdf4', borderRadius: '4px', textAlign: 'center', border: '1px solid #86efac' }}>
-                              <div style={{ fontSize: '9px', fontWeight: 600, color: '#003F87', marginBottom: '2px' }}>{label}</div>
-                              <div style={{ fontSize: '14px', fontWeight: 700, color: '#111827' }}>{actual}</div>
+                            <div key={key} className="proposed-unit-mix-item">
+                              <div className="small-text">{label}</div>
+                              <div className="proposed-unit-count">{actual}</div>
                             </div>
                           );
                         })}
