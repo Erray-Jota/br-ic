@@ -52,7 +52,7 @@ const PortfolioTab = () => {
       gradient: 'linear-gradient(135deg, #EBF8EE 0%, #F0FDF4 100%)',
       headerBg: '#16A34A',
       borderColor: '#16A34A',
-      textColor: '#065F46',
+      textColor: '#003F87',
       benefits: [
         { label: 'Partners', smart: 'Pre-approved Fabs, GCs, Architects & consultants.', traditional: 'Poor partner coordination is the #1 reason for failure of modular.' },
         { label: 'Details', smart: 'Assembly details for design alignment with fabs.', traditional: 'On-the-fly design changes are very common.' },
@@ -81,7 +81,7 @@ const PortfolioTab = () => {
           <source src={ASSET_PATHS.INTRO_VIDEO_URL} type="video/mp4" />
           Your browser does not support the video tag.
         </video>
-        <div style={{ background: '#15803D', color: 'white', padding: '6px', textAlign: 'center' }}>
+        <div style={{ background: '#003F87', color: 'white', padding: '6px', textAlign: 'center' }}>
           <p style={{ fontWeight: 600, fontSize: '12px', margin: 0 }}>
             Your project, factory-ready — before you spend months on design.
           </p>

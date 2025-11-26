@@ -266,11 +266,11 @@ const CoordinationTab = () => {
         {activeSubtabs.factors === 2 && (
           <div style={{ padding: '0 8px' }}>
             {/* Main Hero Section */}
-            <div style={{ background: 'linear-gradient(135deg, #f0fdf4 0%, #e8f5e9 100%)', padding: '28px', borderRadius: '12px', border: '4px solid #065F46', marginBottom: '28px', boxShadow: '0 8px 24px rgba(6, 95, 70, 0.2)' }}>
+            <div style={{ background: 'linear-gradient(135deg, #f0fdf4 0%, #e8f5e9 100%)', padding: '28px', borderRadius: '12px', border: '4px solid #003F87', marginBottom: '28px', boxShadow: '0 8px 24px rgba(6, 95, 70, 0.2)' }}>
               <h2 style={{ fontSize: '38px', color: COLORS.green.dark, fontWeight: 900, marginBottom: SPACING.lg, textAlign: 'center', lineHeight: '1.3', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>
                 🔒 FabAssure Eliminates Hidden Partner Risks
               </h2>
-              <p style={{ fontSize: FONTS.sizes.xl, color: '#047857', marginBottom: '0px', lineHeight: '1.8', textAlign: 'center', fontWeight: 600, fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>
+              <p style={{ fontSize: FONTS.sizes.xl, color: '#0051BA', marginBottom: '0px', lineHeight: '1.8', textAlign: 'center', fontWeight: 600, fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>
                 Traditional projects pick fabricators based on incomplete proposals. RaaP scores every fabricator across the four failure points that ruin modular projects—surfacing the true best partner.
               </p>
             </div>
@@ -278,7 +278,7 @@ const CoordinationTab = () => {
             {/* What RaaP Does */}
             <div style={{ background: 'linear-gradient(135deg, #f0fdf4 0%, #ffffff 100%)', padding: '24px', borderRadius: '12px', border: '3px solid #16A34A', marginBottom: '28px', boxShadow: '0 6px 18px rgba(22, 163, 74, 0.15)' }}>
               <p style={{ fontSize: '22px', fontWeight: 900, color: COLORS.green.dark, marginBottom: '18px', textAlign: 'center', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>How RaaP Protects Your Project:</p>
-              <ul style={{ listStyle: 'none', paddingLeft: 0, fontSize: FONTS.sizes.lg, color: '#047857', margin: 0, lineHeight: '2.2', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>
+              <ul style={{ listStyle: 'none', paddingLeft: 0, fontSize: FONTS.sizes.lg, color: '#0051BA', margin: 0, lineHeight: '2.2', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>
                 <li style={{ marginBottom: SPACING.md, fontWeight: FONTS.weight.bold }}>✓ Normalizes all bids so developers see real cost vs scope</li>
                 <li style={{ marginBottom: SPACING.md, fontWeight: FONTS.weight.bold }}>✓ Verifies design fit to prevent late-stage redesign</li>
                 <li style={{ marginBottom: SPACING.md, fontWeight: FONTS.weight.bold }}>✓ Evaluates factory quality systems to ensure repeatable performance</li>
@@ -293,16 +293,16 @@ const CoordinationTab = () => {
                 <div style={{ textAlign: 'center', padding: SPACING.lg, background: '#FFFFFF', borderRadius: BORDERS.radius.md, border: '3px solid #D97706' }}>🚫 No Surprises</div>
                 <div style={{ textAlign: 'center', padding: SPACING.lg, background: '#FFFFFF', borderRadius: BORDERS.radius.md, border: '3px solid #D97706' }}>🚫 No Missing Scope</div>
                 <div style={{ textAlign: 'center', padding: SPACING.lg, background: '#FFFFFF', borderRadius: BORDERS.radius.md, border: '3px solid #D97706' }}>🚫 No Weak Partners</div>
-                <div style={{ textAlign: 'center', padding: SPACING.lg, background: '#FFFFFF', borderRadius: BORDERS.radius.md, border: '4px solid #065F46', fontWeight: 900 }}>✅ A Fabricator Who Can Deliver</div>
+                <div style={{ textAlign: 'center', padding: SPACING.lg, background: '#FFFFFF', borderRadius: BORDERS.radius.md, border: '4px solid #003F87', fontWeight: 900 }}>✅ A Fabricator Who Can Deliver</div>
               </div>
             </div>
 
             {/* 4-Pillar Risk Reduction Table */}
-            <div style={{ background: '#FFFFFF', padding: '24px', borderRadius: '12px', border: '3px solid #065F46', marginBottom: '28px', boxShadow: '0 6px 18px rgba(0,0,0,0.1)', overflowX: 'auto' }}>
+            <div style={{ background: '#FFFFFF', padding: '24px', borderRadius: '12px', border: '3px solid #003F87', marginBottom: '28px', boxShadow: '0 6px 18px rgba(0,0,0,0.1)', overflowX: 'auto' }}>
               <h3 style={{ fontSize: '24px', marginBottom: SPACING['2xl'], fontWeight: 900, color: COLORS.green.dark, textAlign: 'center', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>FabAssure 4-Pillar Risk Reduction</h3>
               <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: FONTS.sizes.md, fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>
                 <thead>
-                  <tr style={{ background: '#065F46', borderBottom: '4px solid #047857' }}>
+                  <tr style={{ background: '#003F87', borderBottom: '4px solid #0051BA' }}>
                     <th style={{ padding: SPACING.lg, textAlign: 'left', fontWeight: 900, color: '#FFFFFF', fontSize: FONTS.sizes.md }}>Pillar</th>
                     <th style={{ padding: SPACING.lg, textAlign: 'left', fontWeight: 900, color: '#FFFFFF', fontSize: FONTS.sizes.md }}>What Goes Wrong</th>
                     <th style={{ padding: SPACING.lg, textAlign: 'left', fontWeight: 900, color: '#FFFFFF', fontSize: FONTS.sizes.md }}>What FabAssure Catches</th>
@@ -339,7 +339,7 @@ const CoordinationTab = () => {
             </div>
 
             {/* 4-Quadrant Risk Wheel */}
-            <div style={{ background: 'linear-gradient(135deg, #f0fdf4 0%, #ffffff 100%)', padding: '32px', borderRadius: '12px', border: '4px solid #065F46', marginBottom: '24px', boxShadow: '0 8px 24px rgba(6, 95, 70, 0.2)' }}>
+            <div style={{ background: 'linear-gradient(135deg, #f0fdf4 0%, #ffffff 100%)', padding: '32px', borderRadius: '12px', border: '4px solid #003F87', marginBottom: '24px', boxShadow: '0 8px 24px rgba(6, 95, 70, 0.2)' }}>
               <h3 style={{ fontSize: '26px', marginBottom: '24px', fontWeight: 900, color: COLORS.green.dark, textAlign: 'center', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>RaaP FabAssure: Verified Partner Reliability</h3>
 
               {/* 4-Quadrant Grid */}
@@ -357,7 +357,7 @@ const CoordinationTab = () => {
                 {/* Top Right: Cost */}
                 <div style={{ background: '#F0FDF4', padding: '22px', borderRadius: '10px', border: '4px solid #16A34A', textAlign: 'center', boxShadow: '0 4px 12px rgba(22, 163, 74, 0.15)' }}>
                   <div style={{ fontSize: FONTS.sizes.xl, fontWeight: 900, color: COLORS.green.dark, marginBottom: '14px', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>💰 Cost</div>
-                  <div style={{ fontSize: FONTS.sizes.md, color: '#047857', lineHeight: '2', fontWeight: FONTS.weight.bold, fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>
+                  <div style={{ fontSize: FONTS.sizes.md, color: '#0051BA', lineHeight: '2', fontWeight: FONTS.weight.bold, fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>
                     <div>📊 Bid Normalization</div>
                     <div>📈 Scope Crosswalk</div>
                     <div>✓ Real Cost Visibility</div>
@@ -386,7 +386,7 @@ const CoordinationTab = () => {
               </div>
 
               {/* Closing Statement */}
-              <div style={{ marginTop: '22px', padding: SPACING.lg, background: '#065F46', borderRadius: BORDERS.radius.md, textAlign: 'center', fontSize: FONTS.sizes.md, fontWeight: 900, color: '#FFFFFF', border: '2px solid #047857', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>
+              <div style={{ marginTop: '22px', padding: SPACING.lg, background: '#003F87', borderRadius: BORDERS.radius.md, textAlign: 'center', fontSize: FONTS.sizes.md, fontWeight: 900, color: '#FFFFFF', border: '2px solid #0051BA', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>
                 Only partners who score green in all four areas advance to bidding.
               </div>
             </div>
@@ -529,20 +529,20 @@ const CoordinationTab = () => {
             `}</style>
 
             {/* Main Hero Section */}
-            <div style={{ background: 'linear-gradient(135deg, #f0fdf4 0%, #e8f5e9 100%)', padding: '28px', borderRadius: '12px', border: '4px solid #065F46', marginBottom: '28px', boxShadow: '0 8px 24px rgba(6, 95, 70, 0.2)' }}>
+            <div style={{ background: 'linear-gradient(135deg, #f0fdf4 0%, #e8f5e9 100%)', padding: '28px', borderRadius: '12px', border: '4px solid #003F87', marginBottom: '28px', boxShadow: '0 8px 24px rgba(6, 95, 70, 0.2)' }}>
               <h2 style={{ fontSize: '38px', color: COLORS.green.dark, fontWeight: 900, marginBottom: SPACING.lg, textAlign: 'center', lineHeight: '1.3', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>
                 Modular Only Works When Everything Connects.<br />RaaP Makes That Coordination Repeatable.
               </h2>
-              <p style={{ fontSize: FONTS.sizes.lg, color: '#047857', marginBottom: '0px', lineHeight: '1.8', textAlign: 'center', fontWeight: 600, fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>
+              <p style={{ fontSize: FONTS.sizes.lg, color: '#0051BA', marginBottom: '0px', lineHeight: '1.8', textAlign: 'center', fontWeight: 600, fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>
                 From structure to plumbing, every interface in a modular building must align across companies, crews, drawings, and jurisdictions.
               </p>
-              <p style={{ fontSize: FONTS.sizes.lg, color: '#047857', marginBottom: '0px', lineHeight: '1.8', textAlign: 'center', fontWeight: 600, fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif', marginTop: SPACING.sm }}>
+              <p style={{ fontSize: FONTS.sizes.lg, color: '#0051BA', marginBottom: '0px', lineHeight: '1.8', textAlign: 'center', fontWeight: 600, fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif', marginTop: SPACING.sm }}>
                 RaaP standardizes these touchpoints so your project runs smoothly — before design even begins.
               </p>
             </div>
 
             {/* Hero Visual with Clickable Systems */}
-            <div style={{ background: '#FFFFFF', padding: '24px', borderRadius: '12px', border: '3px solid #065F46', marginBottom: '28px', boxShadow: '0 6px 18px rgba(0,0,0,0.1)' }}>
+            <div style={{ background: '#FFFFFF', padding: '24px', borderRadius: '12px', border: '3px solid #003F87', marginBottom: '28px', boxShadow: '0 6px 18px rgba(0,0,0,0.1)' }}>
               {/* Construction Hero Image with Overlaid Clickable Labels */}
               <div style={{ position: 'relative', textAlign: 'center', maxWidth: '1200px', margin: '0 auto' }}>
                 <>
@@ -587,13 +587,13 @@ const CoordinationTab = () => {
                         background: 'rgba(255, 255, 255, 0.9)',
                         borderRadius: '6px',
                         padding: '6px 10px',
-                        border: '2px solid #065F46',
+                        border: '2px solid #003F87',
                         boxShadow: '0 2px 8px rgba(0,0,0,0.2)',
                         cursor: 'pointer',
                         zIndex: 10,
                         fontWeight: 700,
                         fontSize: '13px',
-                        color: '#065F46'
+                        color: '#003F87'
                       }}
                       title={`Click to view ${system.label} details`}
                     >
@@ -626,7 +626,7 @@ const CoordinationTab = () => {
                         bottom: 0,
                         background: '#FFFFFF',
                         borderRadius: '8px',
-                        border: '4px solid #065F46',
+                        border: '4px solid #003F87',
                         padding: '16px',
                         zIndex: 20,
                         display: 'flex',
@@ -674,7 +674,7 @@ const CoordinationTab = () => {
                           </div>
                           <div>
                             <span style={{ fontWeight: FONTS.weight.black, color: '#16A34A' }}>RaaP Fix: </span>
-                            <span style={{ color: '#065F46', fontWeight: FONTS.weight.normal }}>{system.fix}</span>
+                            <span style={{ color: '#003F87', fontWeight: FONTS.weight.normal }}>{system.fix}</span>
                           </div>
                         </div>
 
@@ -700,9 +700,9 @@ const CoordinationTab = () => {
                               key={btn}
                               style={{
                                 padding: '6px 12px',
-                                background: 'linear-gradient(135deg, #16A34A 0%, #065F46 100%)',
+                                background: 'linear-gradient(135deg, #16A34A 0%, #003F87 100%)',
                                 color: '#FFFFFF',
-                                border: '2px solid #065F46',
+                                border: '2px solid #003F87',
                                 borderRadius: BORDERS.radius.sm,
                                 fontSize: FONTS.sizes.xs,
                                 fontWeight: FONTS.weight.bold,

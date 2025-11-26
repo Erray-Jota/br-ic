@@ -24,7 +24,7 @@ const IntroductionTab = () => {
           <source src={ASSET_PATHS.INTRO_VIDEO_URL} type="video/mp4" />
           Your browser does not support the video tag.
         </video>
-        <div style={{ background: '#15803D', color: 'white', padding: '6px', textAlign: 'center' }}>
+        <div style={{ background: '#003F87', color: 'white', padding: '6px', textAlign: 'center' }}>
           <p style={{ fontWeight: 600, fontSize: '12px', margin: 0 }}>
             Your project, factory-ready — before you spend months on design.
           </p>

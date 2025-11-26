@@ -54,7 +54,7 @@ const ProjectInfoBanner = ({ calculations }) => {
           textAlign: 'center',
         }}>
           <div style={{ fontSize: '10px', fontWeight: 700, color: '#6b7280', marginBottom: '2px' }}>MODULAR COST</div>
-          <div style={{ fontSize: '18px', fontWeight: 900, color: isSavings ? '#16a34a' : '#dc2626', marginBottom: '4px' }}>
+          <div style={{ fontSize: '18px', fontWeight: 900, color: isSavings ? '#0051BA' : '#dc2626', marginBottom: '4px' }}>
             {formatMega(modularCost)}
           </div>
           <div style={{ fontSize: '9px', color: '#6b7280', lineHeight: 1.2 }}>
@@ -88,7 +88,7 @@ const ProjectInfoBanner = ({ calculations }) => {
           <div style={{ fontSize: '18px', fontWeight: 900, color: '#111827', marginBottom: '4px' }}>
             {formatTime(modularBuildTimeMonths)}
           </div>
-          <div style={{ fontSize: '9px', color: '#16a34a', fontWeight: 600, lineHeight: 1.2 }}>
+          <div style={{ fontSize: '9px', color: '#0051BA', fontWeight: 600, lineHeight: 1.2 }}>
             Save {formatTime(timeSavings)}
           </div>
         </div>

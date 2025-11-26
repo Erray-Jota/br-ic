@@ -147,7 +147,7 @@ const DesignTab = () => {
                     style={{
                       width: '100%',
                       height: '8px',
-                      accentColor: isConstraintMet ? '#16a34a' : '#dc2626'
+                      accentColor: isConstraintMet ? '#0051BA' : '#dc2626'
                     }}
                   />
                 </div>
@@ -205,19 +205,19 @@ const DesignTab = () => {
               {/* Total GSF Box */}
               <div style={{
                 background: '#f0fdf4',
-                border: '2px solid #16a34a',
+                border: '2px solid #0051BA',
                 borderRadius: '8px',
                 padding: '16px',
                 marginTop: '16px',
                 textAlign: 'center'
               }}>
-                <div style={{ fontSize: '13px', fontWeight: 600, color: '#15803D', marginBottom: '6px' }}>
+                <div style={{ fontSize: '13px', fontWeight: 600, color: '#003F87', marginBottom: '6px' }}>
                   TOTAL GROSS SQUARE FEET
                 </div>
                 <div style={{ fontSize: '32px', fontWeight: 700, color: '#111827' }}>
                   {Math.round(calculations.totalGSF).toLocaleString()} SF
                 </div>
-                <div className="small-text" style={{ marginTop: '4px', color: '#15803D' }}>
+                <div className="small-text" style={{ marginTop: '4px', color: '#003F87' }}>
                   {(calculations.totalOptimized / projectData.floors).toFixed(0)} units/floor × {projectData.floors} floors
                 </div>
               </div>
@@ -238,15 +238,15 @@ const DesignTab = () => {
             <h2 style={{ fontSize: isEffectivelyMobile ? '14px' : '22px' }}>💡 RaaP DfMA Benefits</h2>
             <ul style={{ listStyle: 'none', paddingLeft: 0, margin: 0, fontSize: isEffectivelyMobile ? '12px' : '16px', color: '#374151' }}>
               <li style={{ marginBottom: '4px', display: 'flex', alignItems: 'flex-start', gap: '6px' }}>
-                <span style={{ color: '#16a34a', fontWeight: 'bold', fontSize: isEffectivelyMobile ? '14px' : '18px', flexShrink: 0 }}>✓</span>
+                <span style={{ color: '#0051BA', fontWeight: 'bold', fontSize: isEffectivelyMobile ? '14px' : '18px', flexShrink: 0 }}>✓</span>
                 <span>{isEffectivelyMobile ? '2X factory throughput.' : "Reduced factory costs: RaaP's designs can increase factory throughput by as much as 2X ($$ millions in factory savings)."}</span>
               </li>
               <li style={{ marginBottom: '4px', display: 'flex', alignItems: 'flex-start', gap: '6px' }}>
-                <span style={{ color: '#16a34a', fontWeight: 'bold', fontSize: isEffectivelyMobile ? '14px' : '18px', flexShrink: 0 }}>✓</span>
+                <span style={{ color: '#0051BA', fontWeight: 'bold', fontSize: isEffectivelyMobile ? '14px' : '18px', flexShrink: 0 }}>✓</span>
                 <span>{isEffectivelyMobile ? '1/3 less design fees.' : 'Reduce design & engineering fees: Our conceptual designs and factory permit sets can reduce AoR scope & effort by as much as 1/3.'}</span>
               </li>
               <li style={{ marginBottom: 0, display: 'flex', alignItems: 'flex-start', gap: '6px' }}>
-                <span style={{ color: '#16a34a', fontWeight: 'bold', fontSize: isEffectivelyMobile ? '14px' : '18px', flexShrink: 0 }}>✓</span>
+                <span style={{ color: '#0051BA', fontWeight: 'bold', fontSize: isEffectivelyMobile ? '14px' : '18px', flexShrink: 0 }}>✓</span>
                 <span>{isEffectivelyMobile ? 'Fewer RFIs & Submittals.' : 'Productized designs increase the efficiency of coordination minimize RFIs & Submittals.'}</span>
               </li>
             </ul>
@@ -368,7 +368,7 @@ const DesignTab = () => {
                     onMouseEnter={(e) => {
                       e.currentTarget.style.transform = 'translateY(-4px)';
                       e.currentTarget.style.boxShadow = '0 8px 20px rgba(0,0,0,0.12)';
-                      e.currentTarget.style.borderColor = '#15803D';
+                      e.currentTarget.style.borderColor = '#003F87';
                     }}
                     onMouseLeave={(e) => {
                       e.currentTarget.style.transform = 'translateY(0)';
@@ -412,10 +412,10 @@ const DesignTab = () => {
                       {/* Unit Stats */}
                       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '12px' }}>
                         <div style={{ padding: '8px', background: '#f0fdf4', borderRadius: '6px', textAlign: 'center' }}>
-                          <div style={{ fontSize: '12px', fontWeight: 600, color: '#15803D', marginBottom: '2px' }}>
+                          <div style={{ fontSize: '12px', fontWeight: 600, color: '#003F87', marginBottom: '2px' }}>
                             Per Floor
                           </div>
-                          <div style={{ fontSize: '20px', fontWeight: 700, color: '#15803D' }}>
+                          <div style={{ fontSize: '20px', fontWeight: 700, color: '#003F87' }}>
                             {count}
                           </div>
                         </div>
@@ -452,17 +452,17 @@ const DesignTab = () => {
             marginTop: '24px',
             padding: '16px',
             background: '#f0fdf4',
-            border: '2px solid #16a34a',
+            border: '2px solid #0051BA',
             borderRadius: '8px',
             textAlign: 'center'
           }}>
-            <div style={{ fontSize: '13px', fontWeight: 600, color: '#15803D', marginBottom: '4px' }}>
+            <div style={{ fontSize: '13px', fontWeight: 600, color: '#003F87', marginBottom: '4px' }}>
               TOTAL UNITS IN DESIGN
             </div>
             <div style={{ fontSize: '28px', fontWeight: 700, color: '#111827' }}>
               {calculations.totalOptimized} units
             </div>
-            <div style={{ fontSize: '12px', color: '#15803D', marginTop: '4px' }}>
+            <div style={{ fontSize: '12px', color: '#003F87', marginTop: '4px' }}>
               {(calculations.totalOptimized / projectData.floors).toFixed(0)} units/floor + {(calculations.bonusUnits || 0)} bonus
             </div>
           </div>
@@ -480,21 +480,21 @@ const DesignTab = () => {
           <div style={{ background: '#f0fdf4', padding: '12px', borderRadius: '6px', marginBottom: '12px', border: '1px solid #86efac' }}>
             <div className="grid-4" style={{ gap: '12px', textAlign: 'center' }}>
               <div>
-                <div style={{ fontSize: '12px', fontWeight: 600, color: '#15803D', marginBottom: '4px' }}>Building Length</div>
+                <div style={{ fontSize: '12px', fontWeight: 600, color: '#003F87', marginBottom: '4px' }}>Building Length</div>
                 <div style={{ fontSize: '18px', fontWeight: 700, color: '#111827' }}>{projectData.targetLength} ft</div>
               </div>
               <div>
-                <div style={{ fontSize: '12px', fontWeight: 600, color: '#15803D', marginBottom: '4px' }}>Layout Type</div>
+                <div style={{ fontSize: '12px', fontWeight: 600, color: '#003F87', marginBottom: '4px' }}>Layout Type</div>
                 <div style={{ fontSize: '18px', fontWeight: 700, color: '#111827' }}>
                   {projectData.lobbyType === 1 ? 'Single-Loaded' : projectData.lobbyType === 3 ? 'Wrap' : 'Double-Loaded'}
                 </div>
               </div>
               <div>
-                <div style={{ fontSize: '12px', fontWeight: 600, color: '#15803D', marginBottom: '4px' }}>Units Per Floor</div>
+                <div style={{ fontSize: '12px', fontWeight: 600, color: '#003F87', marginBottom: '4px' }}>Units Per Floor</div>
                 <div style={{ fontSize: '18px', fontWeight: 700, color: '#111827' }}>{(calculations.totalOptimized / projectData.floors).toFixed(0)}</div>
               </div>
               <div>
-                <div style={{ fontSize: '12px', fontWeight: 600, color: '#15803D', marginBottom: '4px' }}>Total Units</div>
+                <div style={{ fontSize: '12px', fontWeight: 600, color: '#003F87', marginBottom: '4px' }}>Total Units</div>
                 <div style={{ fontSize: '18px', fontWeight: 700, color: '#111827' }}>{calculations.totalOptimized}</div>
               </div>
             </div>
@@ -685,7 +685,7 @@ const DesignTab = () => {
             {/* Building Stats - Reduced size on mobile */}
             <div className="grid-4" style={{ gap: isEffectivelyMobile ? '6px' : '12px', textAlign: 'center' }}>
               <div style={{ padding: isEffectivelyMobile ? '8px' : '12px', background: '#f0fdf4', borderRadius: '6px' }}>
-                <div style={{ fontSize: isEffectivelyMobile ? '10px' : '12px', fontWeight: 600, color: '#15803D', marginBottom: '2px' }}>STORIES</div>
+                <div style={{ fontSize: isEffectivelyMobile ? '10px' : '12px', fontWeight: 600, color: '#003F87', marginBottom: '2px' }}>STORIES</div>
                 <div style={{ fontSize: isEffectivelyMobile ? '16px' : '20px', fontWeight: 700, color: '#111827' }}>{projectData.floors}</div>
               </div>
               <div style={{ padding: isEffectivelyMobile ? '8px' : '12px', background: '#eff6ff', borderRadius: '6px' }}>
@@ -693,7 +693,7 @@ const DesignTab = () => {
                 <div style={{ fontSize: isEffectivelyMobile ? '16px' : '20px', fontWeight: 700, color: '#111827' }}>{calculations.totalOptimized}</div>
               </div>
               <div style={{ padding: isEffectivelyMobile ? '8px' : '12px', background: '#fef3c7', borderRadius: '6px' }}>
-                <div style={{ fontSize: isEffectivelyMobile ? '10px' : '12px', fontWeight: 600, color: '#d97706', marginBottom: '2px' }}>LENGTH</div>
+                <div style={{ fontSize: isEffectivelyMobile ? '10px' : '12px', fontWeight: 600, color: '#DC2626', marginBottom: '2px' }}>LENGTH</div>
                 <div style={{ fontSize: isEffectivelyMobile ? '16px' : '20px', fontWeight: 700, color: '#111827' }}>{projectData.targetLength} ft</div>
               </div>
               <div style={{ padding: isEffectivelyMobile ? '8px' : '12px', background: '#f5f3ff', borderRadius: '6px' }}>
@@ -752,21 +752,21 @@ const DesignTab = () => {
       {activeSubtabs.design === 5 && (
         <div style={{ padding: '0 8px' }}>
           {/* Main Hero Section */}
-          <div style={{ background: 'linear-gradient(135deg, #f0fdf4 0%, #e8f5e9 100%)', padding: '28px', borderRadius: '12px', border: '4px solid #065F46', marginBottom: '28px', boxShadow: '0 8px 24px rgba(6, 95, 70, 0.2)' }}>
+          <div style={{ background: 'linear-gradient(135deg, #f0fdf4 0%, #e8f5e9 100%)', padding: '28px', borderRadius: '12px', border: '4px solid #003F87', marginBottom: '28px', boxShadow: '0 8px 24px rgba(6, 95, 70, 0.2)' }}>
             <h2 style={{ fontSize: '38px', color: COLORS.green.dark, fontWeight: 900, marginBottom: SPACING.lg, textAlign: 'center', lineHeight: '1.3', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>
               🌱 Modular = High-Performance by Default
             </h2>
-            <p style={{ fontSize: FONTS.sizes.xl, color: '#047857', marginBottom: '0px', lineHeight: '1.8', textAlign: 'center', fontWeight: 600, fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>
+            <p style={{ fontSize: FONTS.sizes.xl, color: '#0051BA', marginBottom: '0px', lineHeight: '1.8', textAlign: 'center', fontWeight: 600, fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>
               Factory precision, quality control, and thermal optimization deliver Net Zero Energy standards inherently. Minimal, predictable upgrades get you to full certification.
             </p>
           </div>
 
           {/* What Modular Gives You For Free */}
-          <div style={{ background: '#FFFFFF', padding: '24px', borderRadius: '12px', border: '3px solid #065F46', marginBottom: '28px', boxShadow: '0 6px 18px rgba(0,0,0,0.1)', overflowX: 'auto' }}>
+          <div style={{ background: '#FFFFFF', padding: '24px', borderRadius: '12px', border: '3px solid #003F87', marginBottom: '28px', boxShadow: '0 6px 18px rgba(0,0,0,0.1)', overflowX: 'auto' }}>
             <h3 style={{ fontSize: '24px', marginBottom: '18px', fontWeight: 900, color: COLORS.green.dark, textAlign: 'center', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>What Modular Gives You For Free</h3>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: FONTS.sizes.md, fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>
               <thead>
-                <tr style={{ background: '#065F46', borderBottom: '4px solid #047857' }}>
+                <tr style={{ background: '#003F87', borderBottom: '4px solid #0051BA' }}>
                   <th style={{ padding: SPACING.lg, textAlign: 'left', fontWeight: 900, color: '#FFFFFF', fontSize: FONTS.sizes.md }}>Feature</th>
                   <th style={{ padding: SPACING.lg, textAlign: 'left', fontWeight: 900, color: '#FFFFFF', fontSize: FONTS.sizes.md }}>Status</th>
                   <th style={{ padding: SPACING.lg, textAlign: 'left', fontWeight: 900, color: '#FFFFFF', fontSize: FONTS.sizes.md }}>Why It Matters</th>
@@ -775,37 +775,37 @@ const DesignTab = () => {
               <tbody>
                 <tr style={{ borderBottom: '2px solid #e5e7eb' }}>
                   <td style={{ padding: SPACING.lg, fontWeight: 800, color: COLORS.green.dark, fontSize: FONTS.sizes.md }}>🏢 Solar-Ready Roof</td>
-                  <td style={{ padding: SPACING.lg, color: '#047857', fontWeight: FONTS.weight.bold, fontSize: FONTS.sizes.base }}>Ready</td>
+                  <td style={{ padding: SPACING.lg, color: '#0051BA', fontWeight: FONTS.weight.bold, fontSize: FONTS.sizes.base }}>Ready</td>
                   <td style={{ padding: SPACING.lg, color: '#1F2937', fontWeight: 600, fontSize: FONTS.sizes.base }}>No structural redesign needed later</td>
                 </tr>
                 <tr style={{ borderBottom: '2px solid #e5e7eb', background: '#f9fafb' }}>
                   <td style={{ padding: SPACING.lg, fontWeight: 800, color: COLORS.green.dark, fontSize: FONTS.sizes.md }}>🔋 Battery Prep</td>
-                  <td style={{ padding: SPACING.lg, color: '#047857', fontWeight: FONTS.weight.bold, fontSize: FONTS.sizes.base }}>Included</td>
+                  <td style={{ padding: SPACING.lg, color: '#0051BA', fontWeight: FONTS.weight.bold, fontSize: FONTS.sizes.base }}>Included</td>
                   <td style={{ padding: SPACING.lg, color: '#1F2937', fontWeight: 600, fontSize: FONTS.sizes.base }}>Pre-wired for future microgrid / resilience</td>
                 </tr>
                 <tr style={{ borderBottom: '2px solid #e5e7eb' }}>
                   <td style={{ padding: SPACING.lg, fontWeight: 800, color: COLORS.green.dark, fontSize: FONTS.sizes.md }}>💡 LED Lighting</td>
-                  <td style={{ padding: SPACING.lg, color: '#047857', fontWeight: FONTS.weight.bold, fontSize: FONTS.sizes.base }}>Standard</td>
+                  <td style={{ padding: SPACING.lg, color: '#0051BA', fontWeight: FONTS.weight.bold, fontSize: FONTS.sizes.base }}>Standard</td>
                   <td style={{ padding: SPACING.lg, color: '#1F2937', fontWeight: 600, fontSize: FONTS.sizes.base }}>Lower energy use, lower OPEX</td>
                 </tr>
                 <tr style={{ borderBottom: '2px solid #e5e7eb', background: '#f9fafb' }}>
                   <td style={{ padding: SPACING.lg, fontWeight: 800, color: COLORS.green.dark, fontSize: FONTS.sizes.md }}>🔒 Factory Air-Tightness</td>
-                  <td style={{ padding: SPACING.lg, color: '#047857', fontWeight: FONTS.weight.bold, fontSize: FONTS.sizes.base }}>Factory Controlled</td>
+                  <td style={{ padding: SPACING.lg, color: '#0051BA', fontWeight: FONTS.weight.bold, fontSize: FONTS.sizes.base }}>Factory Controlled</td>
                   <td style={{ padding: SPACING.lg, color: '#1F2937', fontWeight: 600, fontSize: FONTS.sizes.base }}>Consistent, verifiable air sealing</td>
                 </tr>
                 <tr style={{ borderBottom: '2px solid #e5e7eb' }}>
                   <td style={{ padding: SPACING.lg, fontWeight: 800, color: COLORS.green.dark, fontSize: FONTS.sizes.md }}>🌡️ Thermal Bridging Reduction</td>
-                  <td style={{ padding: SPACING.lg, color: '#047857', fontWeight: FONTS.weight.bold, fontSize: FONTS.sizes.base }}>Optimized</td>
+                  <td style={{ padding: SPACING.lg, color: '#0051BA', fontWeight: FONTS.weight.bold, fontSize: FONTS.sizes.base }}>Optimized</td>
                   <td style={{ padding: SPACING.lg, color: '#1F2937', fontWeight: 600, fontSize: FONTS.sizes.base }}>Better comfort + lower HVAC loads</td>
                 </tr>
                 <tr style={{ borderBottom: '2px solid #e5e7eb', background: '#f9fafb' }}>
                   <td style={{ padding: SPACING.lg, fontWeight: 800, color: COLORS.green.dark, fontSize: FONTS.sizes.md }}>✓ Factory QC</td>
-                  <td style={{ padding: SPACING.lg, color: '#047857', fontWeight: FONTS.weight.bold, fontSize: FONTS.sizes.base }}>Included</td>
+                  <td style={{ padding: SPACING.lg, color: '#0051BA', fontWeight: FONTS.weight.bold, fontSize: FONTS.sizes.base }}>Included</td>
                   <td style={{ padding: SPACING.lg, color: '#1F2937', fontWeight: 600, fontSize: FONTS.sizes.base }}>Higher performance + fewer field failures</td>
                 </tr>
                 <tr style={{ background: '#f0fdf4' }}>
                   <td style={{ padding: SPACING.lg, fontWeight: 800, color: COLORS.green.dark, fontSize: FONTS.sizes.md }}>♻️ Low Construction Waste</td>
-                  <td style={{ padding: SPACING.lg, color: '#047857', fontWeight: FONTS.weight.bold, fontSize: FONTS.sizes.base }}>Up to 50% Less</td>
+                  <td style={{ padding: SPACING.lg, color: '#0051BA', fontWeight: FONTS.weight.bold, fontSize: FONTS.sizes.base }}>Up to 50% Less</td>
                   <td style={{ padding: SPACING.lg, color: '#1F2937', fontWeight: 600, fontSize: FONTS.sizes.base }}>Lower landfill fees + LEED points</td>
                 </tr>
               </tbody>
@@ -857,14 +857,14 @@ const DesignTab = () => {
           </div>
 
           {/* Three-Pillar Result */}
-          <div style={{ background: 'linear-gradient(135deg, #f0fdf4 0%, #ffffff 100%)', padding: '32px', borderRadius: '12px', border: '4px solid #065F46', marginBottom: '24px', boxShadow: '0 8px 24px rgba(6, 95, 70, 0.2)' }}>
+          <div style={{ background: 'linear-gradient(135deg, #f0fdf4 0%, #ffffff 100%)', padding: '32px', borderRadius: '12px', border: '4px solid #003F87', marginBottom: '24px', boxShadow: '0 8px 24px rgba(6, 95, 70, 0.2)' }}>
             <h3 style={{ fontSize: '26px', marginBottom: '24px', fontWeight: 900, color: COLORS.green.dark, textAlign: 'center', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>The RaaP Sustainability Advantage</h3>
 
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '20px' }}>
               {/* Left: Built In by Modular */}
               <div style={{ background: '#F0FDF4', padding: '22px', borderRadius: '10px', border: '4px solid #16A34A', textAlign: 'center', boxShadow: '0 4px 12px rgba(22, 163, 74, 0.15)' }}>
                 <div style={{ fontSize: FONTS.sizes.xl, fontWeight: 900, color: COLORS.green.dark, marginBottom: '14px', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>✓ Built In by Modular</div>
-                <div style={{ fontSize: FONTS.sizes.md, color: '#047857', lineHeight: '2', fontWeight: FONTS.weight.bold, fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>
+                <div style={{ fontSize: FONTS.sizes.md, color: '#0051BA', lineHeight: '2', fontWeight: FONTS.weight.bold, fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>
                   <div>🏭 Factory Precision</div>
                   <div>🔒 Air Sealing</div>
                   <div>🌡️ Thermal Bridging</div>
@@ -888,7 +888,7 @@ const DesignTab = () => {
               {/* Right: Outcome */}
               <div style={{ background: '#F0FDF4', padding: '22px', borderRadius: '10px', border: '4px solid #16A34A', textAlign: 'center', boxShadow: '0 4px 12px rgba(22, 163, 74, 0.15)' }}>
                 <div style={{ fontSize: FONTS.sizes.xl, fontWeight: 900, color: COLORS.green.dark, marginBottom: '14px', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>🌿 Outcome: Net Zero Ready</div>
-                <div style={{ fontSize: FONTS.sizes.md, color: '#047857', lineHeight: '2', fontWeight: FONTS.weight.bold, fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>
+                <div style={{ fontSize: FONTS.sizes.md, color: '#0051BA', lineHeight: '2', fontWeight: FONTS.weight.bold, fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>
                   <div>📉 Lower OPEX</div>
                   <div>✅ 5.0/5 Score</div>
                   <div>🏆 Higher Value</div>

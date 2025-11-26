@@ -2,21 +2,21 @@
 // Eliminates 600+ lines of inline style repetition across tabs
 
 export const COLORS = {
-  // Brand Colors (Forest Green & Gold)
+  // Brand Colors (Navy Blue & Red - DIU Government Branding)
   green: {
-    dark: '#065F46',
-    medium: '#047857',
-    light: '#16A34A',
-    bg: '#F0FDF4',
+    dark: '#0051BA',
+    medium: '#003F87',
+    light: '#0051BA',
+    bg: '#E8F0F9',
     text: '#0c4a6e',
-    darkText: '#2D5A3D'
+    darkText: '#003F87'
   },
   gold: {
-    dark: '#92400E',
-    main: '#D97706',
-    light: '#F5A623',
-    bg: '#FEF3C7',
-    text: '#78350F'
+    dark: '#0051BA',
+    main: '#DC2626',
+    light: '#DC2626',
+    bg: '#FEE2E2',
+    text: '#991B1B'
   },
   blue: {
     dark: '#0369A1',

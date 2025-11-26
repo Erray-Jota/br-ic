@@ -203,15 +203,15 @@ const ProjectTab = () => {
           <h2>💡 RaaP Benefits</h2>
           <ul style={{ listStyle: 'none', paddingLeft: 0, margin: 0, fontSize: '13px', color: '#374151' }}>
             <li style={{ marginBottom: '6px', display: 'flex', alignItems: 'flex-start' }}>
-              <span style={{ color: '#16a34a', fontWeight: 'bold', marginRight: '6px', fontSize: '16px', flexShrink: 0 }}>✓</span>
+              <span style={{ color: '#0051BA', fontWeight: 'bold', marginRight: '6px', fontSize: '16px', flexShrink: 0 }}>✓</span>
               <span>2X factory throughput & millions in savings</span>
             </li>
             <li style={{ marginBottom: '6px', display: 'flex', alignItems: 'flex-start' }}>
-              <span style={{ color: '#16a34a', fontWeight: 'bold', marginRight: '6px', fontSize: '16px', flexShrink: 0 }}>✓</span>
+              <span style={{ color: '#0051BA', fontWeight: 'bold', marginRight: '6px', fontSize: '16px', flexShrink: 0 }}>✓</span>
               <span>Clear scope, pricing & fewer change orders</span>
             </li>
             <li style={{ marginBottom: 0, display: 'flex', alignItems: 'flex-start' }}>
-              <span style={{ color: '#16a34a', fontWeight: 'bold', marginRight: '6px', fontSize: '16px', flexShrink: 0 }}>✓</span>
+              <span style={{ color: '#0051BA', fontWeight: 'bold', marginRight: '6px', fontSize: '16px', flexShrink: 0 }}>✓</span>
               <span>De-risked construction & reduced RFIs</span>
             </li>
           </ul>
@@ -221,19 +221,19 @@ const ProjectTab = () => {
           <h2>💡 RaaP Benefits</h2>
           <ul style={{ listStyle: 'none', paddingLeft: 0, margin: 0, fontSize: '16px', color: '#374151' }}>
             <li style={{ marginBottom: '6px', display: 'flex', alignItems: 'flex-start' }}>
-              <span style={{ color: '#16a34a', fontWeight: 'bold', marginRight: '8px', fontSize: '18px' }}>✓</span>
+              <span style={{ color: '#0051BA', fontWeight: 'bold', marginRight: '8px', fontSize: '18px' }}>✓</span>
               <span className="raap-benefit-text">
                 Our DfMA-optimized designs can increase factory throughput by as much as 2X ($$ millions in factory savings).
               </span>
             </li>
             <li style={{ marginBottom: '6px', display: 'flex', alignItems: 'flex-start' }}>
-              <span style={{ color: '#16a34a', fontWeight: 'bold', marginRight: '8px', fontSize: '18px' }}>✓</span>
+              <span style={{ color: '#0051BA', fontWeight: 'bold', marginRight: '8px', fontSize: '18px' }}>✓</span>
               <span className="raap-benefit-text">
                 Our Pre-con process clarifies GC—Fab scope & pricing at the outset, resulting in greater pricing clarity, lower bids & fewer change orders.
               </span>
             </li>
             <li style={{ marginBottom: 0, display: 'flex', alignItems: 'flex-start' }}>
-              <span style={{ color: '#16a34a', fontWeight: 'bold', marginRight: '8px', fontSize: '18px' }}>✓</span>
+              <span style={{ color: '#0051BA', fontWeight: 'bold', marginRight: '8px', fontSize: '18px' }}>✓</span>
               <span className="raap-benefit-text">
                 Our design-centric fabricator co-ordination process de-risks modular construction and reduces RFIs & change orders.
               </span>

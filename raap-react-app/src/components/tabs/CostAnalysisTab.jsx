@@ -223,7 +223,7 @@ const CostAnalysisTab = () => {
                 <div style={{ fontSize: '18px', fontWeight: 700, color: '#111827' }}>{projectData.floors}</div>
               </div>
               <div style={{ textAlign: 'center', padding: '12px', background: '#f0fdf4', borderRadius: '6px', border: '1px solid #86efac' }}>
-                <div style={{ fontSize: '10px', color: '#15803D', fontWeight: 600, marginBottom: '4px', textTransform: 'uppercase' }}>GSF</div>
+                <div style={{ fontSize: '10px', color: '#003F87', fontWeight: 600, marginBottom: '4px', textTransform: 'uppercase' }}>GSF</div>
                 <div style={{ fontSize: '18px', fontWeight: 700, color: '#111827' }}>{Math.round(calculations.totalGSF / 1000)}K</div>
               </div>
             </div>
@@ -256,7 +256,7 @@ const CostAnalysisTab = () => {
                       <span style={{
                         marginLeft: '8px',
                         fontSize: '11px',
-                        color: projectData.targetLength >= calculations.requiredLength ? '#16a34a' : '#dc2626',
+                        color: projectData.targetLength >= calculations.requiredLength ? '#0051BA' : '#dc2626',
                         fontWeight: 600
                       }}>
                         {projectData.targetLength >= calculations.requiredLength ? '✓ Adequate' : '⚠ Too Short'}
@@ -271,7 +271,7 @@ const CostAnalysisTab = () => {
                       onChange={(e) => updateProjectData({ targetLength: parseInt(e.target.value) })}
                       style={{
                         width: '100%',
-                        accentColor: projectData.targetLength >= calculations.requiredLength ? '#16a34a' : '#dc2626'
+                        accentColor: projectData.targetLength >= calculations.requiredLength ? '#0051BA' : '#dc2626'
                       }}
                     />
                     <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px', color: '#6b7280', marginTop: '4px' }}>
@@ -342,7 +342,7 @@ const CostAnalysisTab = () => {
                           const actual = calculations.optimized[key];
                           return (
                             <div key={key} style={{ padding: '4px 6px', background: '#f0fdf4', borderRadius: '4px', textAlign: 'center', border: '1px solid #86efac' }}>
-                              <div style={{ fontSize: '9px', fontWeight: 600, color: '#15803D', marginBottom: '2px' }}>{label}</div>
+                              <div style={{ fontSize: '9px', fontWeight: 600, color: '#003F87', marginBottom: '2px' }}>{label}</div>
                               <div style={{ fontSize: '14px', fontWeight: 700, color: '#111827' }}>{actual}</div>
                             </div>
                           );
@@ -480,7 +480,7 @@ const CostAnalysisTab = () => {
                   const actual = calculations.optimized[key];
                   return (
                     <div key={key} style={{ padding: '8px', background: '#f0fdf4', borderRadius: '6px', textAlign: 'center', border: '1px solid #86efac' }}>
-                      <div style={{ fontSize: '10px', fontWeight: 600, color: '#15803D', marginBottom: '4px' }}>{label}</div>
+                      <div style={{ fontSize: '10px', fontWeight: 600, color: '#003F87', marginBottom: '4px' }}>{label}</div>
                       <div style={{ fontSize: '16px', fontWeight: 700, color: '#111827' }}>{actual}</div>
                     </div>
                   );
@@ -806,7 +806,7 @@ const CostAnalysisTab = () => {
                   </div>
 
                   {/* GC Construction: 23-35 mo (8 months) */}
-                  <div style={{ position: 'absolute', top: '36px', left: 'calc(20px + 52.5%)', width: 'calc(38%)', background: 'linear-gradient(to right, #10B981, #047857)', height: '18px', borderRadius: '4px', border: '2.5px solid #047857', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: FONTS.sizes.base, fontWeight: 800, color: 'white', boxShadow: '0 2px 6px rgba(4, 120, 87, 0.3)', padding: '0 4px' }}>
+                  <div style={{ position: 'absolute', top: '36px', left: 'calc(20px + 52.5%)', width: 'calc(38%)', background: 'linear-gradient(to right, #10B981, #0051BA)', height: '18px', borderRadius: '4px', border: '2.5px solid #0051BA', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: FONTS.sizes.base, fontWeight: 800, color: 'white', boxShadow: '0 2px 6px rgba(4, 120, 87, 0.3)', padding: '0 4px' }}>
                     🏗️ GC (8mo)
                   </div>
 
@@ -825,7 +825,7 @@ const CostAnalysisTab = () => {
           {/* Insight Box */}
           <div style={{ marginTop: '12px', padding: SPACING.md, background: '#F0FDF4', borderRadius: BORDERS.radius.sm, border: '1px solid #86EFAC' }}>
             <p style={{ fontSize: FONTS.sizes.sm, fontWeight: 600, color: COLORS.green.dark, marginBottom: '6px' }}>💡 The Key Insight:</p>
-            <p style={{ fontSize: FONTS.sizes.sm, color: '#047857', lineHeight: '1.5', margin: 0 }}>
+            <p style={{ fontSize: FONTS.sizes.sm, color: '#0051BA', lineHeight: '1.5', margin: 0 }}>
               SmartStart delivers permit-ready prototypes upfront. EasyDesign leverages 80% standardized, factory-validated drawings. While entitlements proceed, FabAssure aligns your fabricator + GC. Modules fabricate in parallel—not waiting for permits.
             </p>
           </div>
@@ -866,10 +866,10 @@ const CostAnalysisTab = () => {
                       onClick={() => setSelectedCategory(category)}
                       style={{
                         padding: '8px 12px',
-                        border: selectedCategory === category ? '2px solid #16a34a' : '1px solid #e5e7eb',
+                        border: selectedCategory === category ? '2px solid #0051BA' : '1px solid #e5e7eb',
                         borderRadius: '4px',
                         background: selectedCategory === category ? '#f0fdf4' : '#ffffff',
-                        color: selectedCategory === category ? '#15803D' : '#374151',
+                        color: selectedCategory === category ? '#003F87' : '#374151',
                         fontWeight: selectedCategory === category ? 700 : 600,
                         fontSize: '13px',
                         cursor: 'pointer',
@@ -919,7 +919,7 @@ const CostAnalysisTab = () => {
                               <span style={{ color: '#DC2626', fontWeight: 600, fontSize: '11px' }}>GC</span>
                             </div>
                             <div>
-                              <span style={{ color: '#16a34a', fontWeight: 600, fontSize: '11px' }}>Fab</span>
+                              <span style={{ color: '#0051BA', fontWeight: 600, fontSize: '11px' }}>Fab</span>
                             </div>
                           </div>
                         </div>
