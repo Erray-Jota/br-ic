@@ -42,16 +42,21 @@ const LocationInput = ({ value, onChange, label, placeholder = 'Enter city or zi
     try {
       // Detect if query is a zip code (5 digits)
       const isZipCode = /^\d{5}$/.test(query);
+      console.log('Search query:', query, 'Is zip code:', isZipCode);
       
       // Use Nominatim API (free, no authentication required)
-      // Search by city or postal code
-      const searchParam = isZipCode ? `postalcode=${encodeURIComponent(query)}` : `city=${encodeURIComponent(query)}`;
-      const response = await fetch(
-        `https://nominatim.openstreetmap.org/search?format=json&country=us&${searchParam}&limit=15&addressdetails=1&extratags=1`,
-        { headers: { 'Accept': 'application/json' } }
-      );
+      // For zip codes, use postcode search; for cities, use city search
+      let url;
+      if (isZipCode) {
+        url = `https://nominatim.openstreetmap.org/search?format=json&country=us&postalcode=${encodeURIComponent(query)}&limit=15&addressdetails=1&extratags=1`;
+      } else {
+        url = `https://nominatim.openstreetmap.org/search?format=json&country=us&city=${encodeURIComponent(query)}&limit=15&addressdetails=1&extratags=1`;
+      }
+      
+      const response = await fetch(url, { headers: { 'Accept': 'application/json' } });
 
       const data = await response.json();
+      console.log('Nominatim response:', data.length, 'results');
 
       if (data && Array.isArray(data) && data.length > 0) {
         // Filter results to only show cities, towns, villages, and postal codes (exclude streets, places, etc.)
@@ -61,8 +66,11 @@ const LocationInput = ({ value, onChange, label, placeholder = 'Enter city or zi
           
           // Only include city-level results
           return (className === 'place' && (type === 'city' || type === 'town' || type === 'village' || type === 'hamlet')) ||
-                 (className === 'postal_code');
+                 (className === 'postal_code') ||
+                 (isZipCode && className === 'place'); // For zip codes, be more lenient
         });
+
+        console.log('Filtered results:', filteredResults.length);
 
         const results = filteredResults.slice(0, 8).map((result) => {
           const lat = parseFloat(result.lat);
@@ -93,6 +101,7 @@ const LocationInput = ({ value, onChange, label, placeholder = 'Enter city or zi
         setSuggestions(results);
         setShowSuggestions(results.length > 0);
       } else {
+        console.log('No results found');
         setSuggestions([]);
       }
     } catch (err) {
@@ -180,9 +189,12 @@ const LocationInput = ({ value, onChange, label, placeholder = 'Enter city or zi
         onChange={handleInputChange}
         onKeyDown={handleKeyDown}
         onBlur={handleBlur}
-        onFocus={() => {
-          if (suggestions.length > 0) {
-            setShowSuggestions(true);
+        onFocus={(e) => {
+          // Select all text when clicking on the box
+          e.target.select();
+          // Trigger search for current value
+          if (inputValue.length >= 2) {
+            searchLocations(inputValue);
           }
         }}
         placeholder={placeholder}
