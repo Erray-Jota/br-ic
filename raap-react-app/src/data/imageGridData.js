@@ -2,7 +2,7 @@ export const ENTITLEMENT_IMAGES = [
   {
     id: 'building',
     title: 'Building',
-    image: '/images/3 Medium-3D.png',
+    image: '/images/construction.png',
     raapScope: 'Provides modular building prototypes with standardized heights, widths, and depth constraints optimized for factory production',
     raapActivity: 'Delivers baseline massing logic within first 2 weeks',
     aorScope: 'Tests massing against site envelope, zoning height limits, and setback requirements; refines building placement and orientation',
@@ -15,7 +15,7 @@ export const ENTITLEMENT_IMAGES = [
   {
     id: 'zoning',
     title: 'Zoning',
-    image: '/images/1BD Corner.png',
+    image: '/images/zoning.png',
     raapScope: 'Delivers standardized module dimensions, bay widths, and circulation rules that comply with prototype IBC and zoning assumptions',
     raapActivity: 'Supplies zoning-relevant product constraints in Days 0–14',
     aorScope: 'Performs detailed zoning analysis (use, FAR, parking, setbacks, open space); leads community and agency presentations',
@@ -28,7 +28,7 @@ export const ENTITLEMENT_IMAGES = [
   {
     id: 'compliance',
     title: 'Compliance',
-    image: '/images/2 Bed Corner.png',
+    image: '/images/code.png',
     raapScope: 'Provides prototype IBC-based code matrix with egress logic, travel distances, and ADA compliance assumptions validated for modular assembly',
     raapActivity: 'Delivered as part of Product Kit in Days 0–14',
     aorScope: 'Localizes code interpretation for site-specific conditions; evaluates local amendments and overlays; establishes life-safety strategy',
@@ -41,7 +41,7 @@ export const ENTITLEMENT_IMAGES = [
   {
     id: 'cost',
     title: 'Cost',
-    image: '/images/1 Bed inline.png',
+    image: '/images/cost.png',
     raapScope: 'Provides modular vs site-built comparative costs with factory vs GC scope split; validates feasibility through DfMA constraints',
     raapActivity: 'Generates early cost and feasibility within first 1–2 weeks',
     aorScope: 'Confirms entitlement decisions align with modular feasibility; incorporates cost awareness into design and site planning',
@@ -57,7 +57,7 @@ export const PERMITTING_IMAGES = [
   {
     id: 'design',
     title: 'Design',
-    image: '/images/1BD Corner.png',
+    image: '/images/design.png',
     raapScope: 'Provides finalized modular specifications, assembly drawings, DfMA-optimized unit plans, and standardized construction details with tolerances',
     raapActivity: 'Finalizes detailed drawings Weeks 6–10 based on entitlement resolution',
     aorScope: 'Incorporates RaaP specifications into permit documents; develops site-specific assembly and connection details; coordinates agency feedback',
@@ -70,7 +70,7 @@ export const PERMITTING_IMAGES = [
   {
     id: 'compliance-perm',
     title: 'Compliance',
-    image: '/images/2 Bed In Line.png',
+    image: '/images/code.png',
     raapScope: 'Delivers final code matrix, compliance justifications, tested egress paths, fire-rating documentation, and product-specific code analysis',
     raapActivity: 'Finalizes compliance documentation Weeks 8–12 for permit submission',
     aorScope: 'Leads final code review with permitting authority; coordinates RaaP compliance with local amendments; prepares response documentation',
@@ -83,7 +83,7 @@ export const PERMITTING_IMAGES = [
   {
     id: 'logistics',
     title: 'Logistics',
-    image: '/images/3 Medium-3D.png',
+    image: '/images/logistics.png',
     raapScope: 'Provides module weight and dimensions, delivery sequencing logic, assembly sequence, on-site staging requirements, and factory-to-site coordination windows',
     raapActivity: 'Finalizes logistical planning Weeks 10–14 with AoR input',
     aorScope: 'Plans site access, crane placement, delivery coordination; coordinates with local authorities for permits; develops traffic management and safety plans',
@@ -96,7 +96,7 @@ export const PERMITTING_IMAGES = [
   {
     id: 'contracting',
     title: 'Contracting',
-    image: '/images/3 Short-3D.png',
+    image: '/images/aiacontract.png',
     raapScope: 'Provides factory pricing, manufacturing cost breakdowns, contingency analysis, change-order framework, and cost-impact protocols for design changes',
     raapActivity: 'Locks factory pricing Weeks 12–16 for contract negotiations',
     aorScope: 'Negotiates GC and trade contractor pricing; aligns contracts with RaaP requirements; establishes change-order process for adjustments',
