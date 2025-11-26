@@ -207,86 +207,50 @@ const ArchitectTab = () => {
         <table style={{ width: '100%', borderCollapse: 'collapse', background: 'white', border: `2px solid ${COLORS.gray.light}`, borderRadius: '12px', overflow: 'hidden' }}>
           <thead>
             <tr style={{ background: `linear-gradient(90deg, ${COLORS.green.bg} 0%, ${COLORS.blue.bg} 100%)`, borderBottom: `3px solid ${COLORS.green.dark}` }}>
-              <th style={{ padding: '16px', textAlign: 'left', fontWeight: FONTS.weight.bold, fontSize: FONTS.sizes.base, color: COLORS.green.dark }}></th>
-              <th style={{ padding: '16px', textAlign: 'left', fontWeight: FONTS.weight.bold, fontSize: FONTS.sizes.base, color: COLORS.green.dark }}>🏭 RaaP – Product Architect</th>
-              <th style={{ padding: '16px', textAlign: 'left', fontWeight: FONTS.weight.bold, fontSize: FONTS.sizes.base, color: COLORS.blue.dark }}>🏗️ AoR – Project Architect</th>
+              <th style={{ padding: '16px', textAlign: 'center', fontWeight: FONTS.weight.bold, fontSize: FONTS.sizes.base, color: COLORS.green.dark, width: '120px' }}></th>
+              <th style={{ padding: '16px', textAlign: 'center', fontWeight: FONTS.weight.bold, fontSize: FONTS.sizes.base, color: COLORS.green.dark }}>🏭 RaaP – Product Architect</th>
+              <th style={{ padding: '16px', textAlign: 'center', fontWeight: FONTS.weight.bold, fontSize: FONTS.sizes.base, color: COLORS.blue.dark }}>🏗️ AoR – Project Architect</th>
             </tr>
           </thead>
           <tbody>
             {/* Role Row */}
             <tr style={{ borderBottom: `2px solid ${COLORS.gray.light}`, background: '#f0f9ff' }}>
-              <td style={{ padding: '16px', fontWeight: FONTS.weight.bold, color: COLORS.blue.dark, fontSize: FONTS.sizes.base }}>Role</td>
-              <td style={{ padding: '16px', color: COLORS.gray.dark, fontSize: FONTS.sizes.sm, lineHeight: '1.8' }}>
-                <div style={{ color: COLORS.blue.dark, fontWeight: FONTS.weight.bold, marginBottom: '8px', fontSize: FONTS.sizes.base }}>Creates the standardized modular product</div>
-                <ul style={{ margin: 0, paddingLeft: '0', listStyle: 'none', color: COLORS.gray.dark }}>
-                  <li style={{ marginBottom: '6px' }}>✓ Unit prototypes, module assemblies, UL/GA walls, chassis, connection details, schedules, façade logic</li>
-                  <li style={{ marginBottom: '6px' }}>✓ Delivers 80% of the Factory Permit Set and ~40% of the AHJ Set</li>
-                  <li style={{ marginBottom: '6px' }}>✓ Ensures DfMA correctness so the factory and GC have zero ambiguity</li>
-                  <li>✓ Maintains product integrity—no project-specific drift, no redesign loops, no unplanned liability</li>
-                </ul>
+              <td style={{ padding: '16px', textAlign: 'center', fontWeight: FONTS.weight.bold, color: COLORS.blue.dark, fontSize: FONTS.sizes.base, verticalAlign: 'top' }}>Role</td>
+              <td style={{ padding: '16px', textAlign: 'left', color: COLORS.gray.dark, fontSize: FONTS.sizes.sm, lineHeight: '1.5', verticalAlign: 'top' }}>
+                <div style={{ color: COLORS.green.main, fontWeight: FONTS.weight.bold, marginBottom: '4px' }}>✓ Creates the standardized modular product: prototypes, assemblies, UL/GA walls, chassis, details, schedules</div>
               </td>
-              <td style={{ padding: '16px', color: COLORS.gray.dark, fontSize: FONTS.sizes.sm, lineHeight: '1.8' }}>
-                <div style={{ color: COLORS.green.dark, fontWeight: FONTS.weight.bold, marginBottom: '8px', fontSize: FONTS.sizes.base }}>Localizes the product to the site</div>
-                <ul style={{ margin: 0, paddingLeft: '0', listStyle: 'none', color: COLORS.gray.dark }}>
-                  <li style={{ marginBottom: '6px' }}>✓ Adapts product to exact site, codes, zoning, and AHJ requirements</li>
-                  <li style={{ marginBottom: '6px' }}>✓ Owns Title 24/energy, civil coordination, site plan, foundation/podium, wind/seismic, accessibility paths</li>
-                  <li>✓ Integrates RaaP's product kit into a complete, permit-ready building</li>
-                </ul>
-              </td>
-            </tr>
-            {/* Why Section Header Row */}
-            <tr style={{ borderBottom: `1px solid ${COLORS.gray.light}`, background: '#fafbfc' }}>
-              <td style={{ padding: '14px 16px', fontWeight: FONTS.weight.bold, color: COLORS.green.dark, fontSize: FONTS.sizes.base, verticalAlign: 'top' }}>Why</td>
-              <td colSpan="2" style={{ padding: '14px 16px', color: COLORS.gray.dark, fontSize: FONTS.sizes.xs }}>
-                <span style={{ fontWeight: FONTS.weight.bold, color: COLORS.gray.medium }}>Outcomes that drive the partnership</span>
+              <td style={{ padding: '16px', textAlign: 'left', color: COLORS.gray.dark, fontSize: FONTS.sizes.sm, lineHeight: '1.5', verticalAlign: 'top' }}>
+                <div style={{ color: COLORS.green.main, fontWeight: FONTS.weight.bold }}>✓ Localizes product to exact site, codes, zoning, and AHJ requirements</div>
               </td>
             </tr>
             {/* SPEED */}
             <tr style={{ borderBottom: `1px solid ${COLORS.gray.light}`, background: '#f9fafb' }}>
-              <td style={{ padding: '16px', fontWeight: FONTS.weight.bold, color: COLORS.green.main, fontSize: FONTS.sizes.base }}>⚡ SPEED</td>
-              <td style={{ padding: '16px', color: COLORS.gray.dark, fontSize: FONTS.sizes.sm, lineHeight: '1.7' }}>
-                <ul style={{ margin: 0, paddingLeft: '0', listStyle: 'none' }}>
-                  <li style={{ marginBottom: '8px', fontWeight: FONTS.weight.bold }}>✓ Pre-validated modules, assemblies, façade logic optimized for factory production</li>
-                  <li style={{ fontWeight: FONTS.weight.bold }}>✓ Eliminates concept-phase redesign cycles by starting from fixed product</li>
-                </ul>
+              <td style={{ padding: '16px', textAlign: 'center', fontWeight: FONTS.weight.bold, color: COLORS.green.main, fontSize: FONTS.sizes.base, verticalAlign: 'top' }}>⚡ SPEED</td>
+              <td style={{ padding: '16px', textAlign: 'left', color: COLORS.gray.dark, fontSize: FONTS.sizes.sm, verticalAlign: 'top' }}>
+                <span style={{ color: COLORS.green.main, fontWeight: FONTS.weight.bold }}>✓</span> Pre-validated modules, assemblies, and façade logic optimized for factory production
               </td>
-              <td style={{ padding: '16px', color: COLORS.gray.dark, fontSize: FONTS.sizes.sm, lineHeight: '1.7' }}>
-                <ul style={{ margin: 0, paddingLeft: '0', listStyle: 'none' }}>
-                  <li style={{ marginBottom: '8px', fontWeight: FONTS.weight.bold }}>✓ Accelerates entitlement/permitting by adapting ready-made product to site/zoning codes</li>
-                  <li style={{ fontWeight: FONTS.weight.bold }}>✓ Reduces agency review time—modules are already standardized</li>
-                </ul>
+              <td style={{ padding: '16px', textAlign: 'left', color: COLORS.gray.dark, fontSize: FONTS.sizes.sm, verticalAlign: 'top' }}>
+                <span style={{ color: COLORS.green.main, fontWeight: FONTS.weight.bold }}>✓</span> Accelerates entitlement/permitting by adapting ready-made product to site/zoning codes
               </td>
             </tr>
             {/* SAVINGS */}
             <tr style={{ borderBottom: `1px solid ${COLORS.gray.light}`, background: 'white' }}>
-              <td style={{ padding: '16px', fontWeight: FONTS.weight.bold, color: COLORS.green.main, fontSize: FONTS.sizes.base }}>💰 SAVINGS</td>
-              <td style={{ padding: '16px', color: COLORS.gray.dark, fontSize: FONTS.sizes.sm, lineHeight: '1.7' }}>
-                <ul style={{ margin: 0, paddingLeft: '0', listStyle: 'none' }}>
-                  <li style={{ marginBottom: '8px', fontWeight: FONTS.weight.bold }}>✓ Eliminates 70–90% of architectural effort (units, corridors, stairs, assemblies)</li>
-                  <li style={{ fontWeight: FONTS.weight.bold }}>✓ Reduces soft costs by standardizing drawings, assemblies, and schedules</li>
-                </ul>
+              <td style={{ padding: '16px', textAlign: 'center', fontWeight: FONTS.weight.bold, color: COLORS.green.main, fontSize: FONTS.sizes.base, verticalAlign: 'top' }}>💰 SAVINGS</td>
+              <td style={{ padding: '16px', textAlign: 'left', color: COLORS.gray.dark, fontSize: FONTS.sizes.sm, verticalAlign: 'top' }}>
+                <span style={{ color: COLORS.green.main, fontWeight: FONTS.weight.bold }}>✓</span> Eliminates 70–90% of architectural effort normally spent on units, corridors, and assemblies
               </td>
-              <td style={{ padding: '16px', color: COLORS.gray.dark, fontSize: FONTS.sizes.sm, lineHeight: '1.7' }}>
-                <ul style={{ margin: 0, paddingLeft: '0', listStyle: 'none' }}>
-                  <li style={{ marginBottom: '8px', fontWeight: FONTS.weight.bold }}>✓ Focuses on 30–50% project-specific work (site plans, energy, egress, utilities)</li>
-                  <li style={{ fontWeight: FONTS.weight.bold }}>✓ Avoids redesign cycles and costly scope drift—product architecture is fixed</li>
-                </ul>
+              <td style={{ padding: '16px', textAlign: 'left', color: COLORS.gray.dark, fontSize: FONTS.sizes.sm, verticalAlign: 'top' }}>
+                <span style={{ color: COLORS.green.main, fontWeight: FONTS.weight.bold }}>✓</span> Focuses on 30–50% project-specific work with fixed product architecture
               </td>
             </tr>
             {/* DE-RISK */}
             <tr style={{ background: '#f9fafb' }}>
-              <td style={{ padding: '16px', fontWeight: FONTS.weight.bold, color: COLORS.green.main, fontSize: FONTS.sizes.base }}>🛡️ DE-RISK</td>
-              <td style={{ padding: '16px', color: COLORS.gray.dark, fontSize: FONTS.sizes.sm, lineHeight: '1.7' }}>
-                <ul style={{ margin: 0, paddingLeft: '0', listStyle: 'none' }}>
-                  <li style={{ marginBottom: '8px', fontWeight: FONTS.weight.bold }}>✓ Factory-validated UL/GA assemblies, tolerances, MEP interfaces—zero manufacturing uncertainty</li>
-                  <li style={{ fontWeight: FONTS.weight.bold }}>✓ Prevents design drift and reduces RFIs with complete, repeatable kit of parts</li>
-                </ul>
+              <td style={{ padding: '16px', textAlign: 'center', fontWeight: FONTS.weight.bold, color: COLORS.green.main, fontSize: FONTS.sizes.base, verticalAlign: 'top' }}>🛡️ DE-RISK</td>
+              <td style={{ padding: '16px', textAlign: 'left', color: COLORS.gray.dark, fontSize: FONTS.sizes.sm, verticalAlign: 'top' }}>
+                <span style={{ color: COLORS.green.main, fontWeight: FONTS.weight.bold }}>✓</span> Factory-validated UL/GA assemblies, tolerances, and MEP interfaces eliminate manufacturing uncertainty
               </td>
-              <td style={{ padding: '16px', color: COLORS.gray.dark, fontSize: FONTS.sizes.sm, lineHeight: '1.7' }}>
-                <ul style={{ margin: 0, paddingLeft: '0', listStyle: 'none' }}>
-                  <li style={{ marginBottom: '8px', fontWeight: FONTS.weight.bold }}>✓ Ensures local code compliance (fire, egress, accessibility, energy)</li>
-                  <li style={{ fontWeight: FONTS.weight.bold }}>✓ Reduces construction-phase issues by clarifying site vs factory scope</li>
-                </ul>
+              <td style={{ padding: '16px', textAlign: 'left', color: COLORS.gray.dark, fontSize: FONTS.sizes.sm, verticalAlign: 'top' }}>
+                <span style={{ color: COLORS.green.main, fontWeight: FONTS.weight.bold }}>✓</span> Ensures local code compliance and clarifies site vs factory scope
               </td>
             </tr>
           </tbody>
