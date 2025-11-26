@@ -13,36 +13,30 @@
 // ============================================================================
 
 /**
- * SKU widths in feet (exact from original HTML)
- * These represent the actual module configurations used in placement
+ * Bay-based unit widths in feet
+ * Each bay is 14'6" (14.5 feet)
+ * 2-Bedroom = 3 bays (43.5 feet)
+ * 4-Bedroom = 5 bays (72.5 feet)
  */
 export const SKU_WIDTHS = {
-  studio: 13.5,        // Studio unit (single 13.5' module)
-  oneCorner: 15.5,     // 1BR corner unit
-  oneInline: 24.5,     // 1BR inline unit
-  twoCorner: 31.0,     // 2BR corner unit
-  twoInline: 38.0,     // 2BR inline unit
-  threeCorner: 42.0,   // 3BR corner unit (all 3BRs are corners)
+  twoBedroom: 43.5,    // 2-Bedroom: 3 bays × 14.5'
+  fourBedroom: 72.5,   // 4-Bedroom: 5 bays × 14.5'
 };
 
 /**
- * Lobby widths based on lobby type (exact from original)
+ * Common Area widths based on bay count
+ * Each bay is 14.5 feet
  */
-export const LOBBY_WIDTHS = {
-  1: 13.5,   // 1-Bay (single loaded)
-  2: 24.5,   // 2-Bay (double loaded) - DEFAULT
-  4: 49.0,   // 4-Bay (wrap)
+export const COMMON_AREA_WIDTHS = {
+  1: 14.5,   // 1-Bay (single loaded)
+  2: 29.0,   // 2-Bay (double loaded) - DEFAULT
+  4: 58.0,   // 4-Bay (wrap)
 };
 
 /**
- * Fixed stair width (per side)
+ * Fixed stair width (per side) - 1 bay
  */
-export const STAIR_WIDTH = 13.5;
-
-/**
- * Corner slots per side (architectural constraint)
- */
-export const CORNER_SLOTS_PER_SIDE = 2;
+export const STAIR_WIDTH = 14.5;
 
 /**
  * Base building parameters (for cost scaling)
@@ -60,22 +54,19 @@ export const BASE_BUILDING = {
  * All units are 33 feet long; width × 33 = area
  */
 export const UNIT_SIZES_GSF = {
-  studio: 13.5 * 33,        // 445.5 SF
-  oneCorner: 15.5 * 33,     // 511.5 SF
-  oneInline: 24.5 * 33,     // 808.5 SF
-  twoCorner: 31.0 * 33,     // 1,023 SF
-  twoInline: 38.0 * 33,     // 1,254 SF
-  threeCorner: 42.0 * 33,   // 1,386 SF
+  twoBedroom: 43.5 * 33,    // 1,435.5 SF
+  fourBedroom: 72.5 * 33,   // 2,392.5 SF
 };
 
 /**
  * Common area dimensions (all 33 feet long)
+ * Each bay is 14.5 feet
  */
 export const COMMON_AREA_DIMS = {
-  lobby_1bay: 13.5 * 33,    // 445.5 SF
-  lobby_2bay: 24.5 * 33,    // 808.5 SF
-  lobby_4bay: 49.0 * 33,    // 1,617 SF
-  stairs: 13.5 * 33,        // 445.5 SF (per side)
+  area_1bay: 14.5 * 33,     // 478.5 SF
+  area_2bay: 29.0 * 33,     // 957 SF
+  area_4bay: 58.0 * 33,     // 1,914 SF
+  stairs: 14.5 * 33,        // 478.5 SF (per side)
 };
 
 // ============================================================================
@@ -83,28 +74,27 @@ export const COMMON_AREA_DIMS = {
 // ============================================================================
 
 /**
- * Optimizes unit mix using exact original algorithm
+ * Optimizes unit mix for bay-based 2BR & 4BR units
  *
- * ALGORITHM (from original HTML):
+ * ALGORITHM (Bay-based):
  * 1. Convert building-wide targets to per-side targets
- * 2. Map to SKUs (corner vs inline)
- * 3. STAGE 1: Threshold-based shortening
- * 4. STAGE 2: Mix adjustments (corner→inline, type swaps)
- * 5. STAGE 3: Add-back phase (restore units if slack)
+ * 2. Calculate per-side required width
+ * 3. STAGE 1: Fit units by removing larger (4BR) first, then smaller (2BR)
+ * 4. STAGE 2: Add-back phase if slack space available
  *
- * @param {Object} targets - Target unit counts {studio, oneBed, twoBed, threeBed}
+ * @param {Object} targets - Target unit counts {twoBedroom, fourBedroom}
  * @param {number} buildingLength - Target building length in feet
- * @param {number} lobbyType - Lobby type (1, 2, or 4)
+ * @param {number} commonAreaType - Common Area type (1, 2, or 4 bays)
  * @param {number} floors - Number of floors
  * @returns {Object} Optimization results
  */
-export const optimizeUnits = (targets, buildingLength, lobbyType, floors = 5) => {
-  // Lobby and stair geometry
-  const lobbyWidth = LOBBY_WIDTHS[lobbyType] || LOBBY_WIDTHS[2];
+export const optimizeUnits = (targets, buildingLength, commonAreaType, floors = 5) => {
+  // Common Area and stair geometry
+  const commonAreaWidth = COMMON_AREA_WIDTHS[commonAreaType] || COMMON_AREA_WIDTHS[2];
   const stairWidth = STAIR_WIDTH;
 
   // Total units requested (for display only)
-  const totalWanted = (targets.studio || 0) + (targets.oneBed || 0) + (targets.twoBed || 0) + (targets.threeBed || 0);
+  const totalWanted = (targets.twoBedroom || 0) + (targets.fourBedroom || 0);
 
   // Helper: compute per-side units from total building-wide targets
   const perSideFromTotal = (totalUnits) => {
@@ -115,47 +105,25 @@ export const optimizeUnits = (targets, buildingLength, lobbyType, floors = 5) =>
 
   // Per-side user-type targets (per typical floor)
   const perSideTargets = {
-    studio: perSideFromTotal(targets.studio || 0),
-    oneBed: perSideFromTotal(targets.oneBed || 0),
-    twoBed: perSideFromTotal(targets.twoBed || 0),
-    threeBed: perSideFromTotal(targets.threeBed || 0),
+    twoBedroom: perSideFromTotal(targets.twoBedroom || 0),
+    fourBedroom: perSideFromTotal(targets.fourBedroom || 0),
   };
 
-  // Initial SKU mapping per side (per typical floor)
-  let remainingCornerSlots = CORNER_SLOTS_PER_SIDE;
-
-  // 3-bed: treat all as corner SKUs
-  let sku_3_corner = perSideTargets.threeBed || 0;
-  const used3ForCorners = Math.min(sku_3_corner, remainingCornerSlots);
-  remainingCornerSlots -= used3ForCorners;
-
-  // 2-bed: some corner, rest inline
-  let sku_2_corner = Math.min(perSideTargets.twoBed || 0, remainingCornerSlots);
-  let sku_2_inline = Math.max(0, (perSideTargets.twoBed || 0) - sku_2_corner);
-  remainingCornerSlots -= sku_2_corner;
-
-  // 1-bed: some corner, rest inline
-  let sku_1_corner = Math.min(perSideTargets.oneBed || 0, remainingCornerSlots);
-  let sku_1_inline = Math.max(0, (perSideTargets.oneBed || 0) - sku_1_corner);
-
-  // Studios: all inline
-  let sku_studio = perSideTargets.studio || 0;
+  // Per-side unit counts (will be optimized)
+  let units_2br = perSideTargets.twoBedroom || 0;
+  let units_4br = perSideTargets.fourBedroom || 0;
 
   // Preserve original per-side type targets for add-back limits
   const perSideTypeTargets = { ...perSideTargets };
 
-  // Helper: compute required length on ONE SIDE (units only, excluding lobby+stair)
+  // Helper: compute required length on ONE SIDE (units only, excluding common area + stair)
   const computeRequiredSide = () => (
-    sku_studio * SKU_WIDTHS.studio +
-    sku_1_corner * SKU_WIDTHS.oneCorner +
-    sku_1_inline * SKU_WIDTHS.oneInline +
-    sku_2_corner * SKU_WIDTHS.twoCorner +
-    sku_2_inline * SKU_WIDTHS.twoInline +
-    sku_3_corner * SKU_WIDTHS.threeCorner
+    units_2br * SKU_WIDTHS.twoBedroom +
+    units_4br * SKU_WIDTHS.fourBedroom
   );
 
   // Available length on one side for units
-  const availableSide = buildingLength - lobbyWidth - stairWidth;
+  const availableSide = buildingLength - commonAreaWidth - stairWidth;
 
   // ------------- STAGE 1: Threshold-based shortening -------------
   let safetyCounter = 0;
