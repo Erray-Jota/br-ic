@@ -271,14 +271,15 @@ const ArchitectTab = () => {
           }}
           style={{
             padding: '12px 24px',
-            background: phase === 'entitlement' ? COLORS.green.main : '#e5e7eb',
-            color: phase === 'entitlement' ? 'white' : COLORS.gray.dark,
-            border: 'none',
+            background: phase === 'entitlement' ? COLORS.blue.main : 'white',
+            color: phase === 'entitlement' ? 'white' : 'black',
+            border: `3px solid ${COLORS.blue.main}`,
             borderRadius: '8px',
             fontSize: FONTS.sizes.base,
             fontWeight: FONTS.weight.bold,
             cursor: 'pointer',
-            transition: 'all 0.2s'
+            transition: 'all 0.2s',
+            boxShadow: phase === 'entitlement' ? '0 4px 12px rgba(0, 81, 186, 0.3)' : 'none'
           }}
         >
           📋 Entitlement
@@ -290,14 +291,15 @@ const ArchitectTab = () => {
           }}
           style={{
             padding: '12px 24px',
-            background: phase === 'permitting' ? COLORS.green.main : '#e5e7eb',
-            color: phase === 'permitting' ? 'white' : COLORS.gray.dark,
-            border: 'none',
+            background: phase === 'permitting' ? COLORS.blue.main : 'white',
+            color: phase === 'permitting' ? 'white' : 'black',
+            border: `3px solid ${COLORS.blue.main}`,
             borderRadius: '8px',
             fontSize: FONTS.sizes.base,
             fontWeight: FONTS.weight.bold,
             cursor: 'pointer',
-            transition: 'all 0.2s'
+            transition: 'all 0.2s',
+            boxShadow: phase === 'permitting' ? '0 4px 12px rgba(0, 81, 186, 0.3)' : 'none'
           }}
         >
           ✅ Permitting
