@@ -216,11 +216,16 @@ const ArchitectTab = () => {
             {/* Role Row */}
             <tr style={{ borderBottom: `2px solid ${COLORS.gray.light}`, background: '#f0f9ff' }}>
               <td style={{ padding: '16px', textAlign: 'center', fontWeight: FONTS.weight.bold, color: COLORS.blue.dark, fontSize: FONTS.sizes.base, verticalAlign: 'top' }}>Role</td>
-              <td style={{ padding: '16px', textAlign: 'left', color: COLORS.gray.dark, fontSize: FONTS.sizes.sm, lineHeight: '1.5', verticalAlign: 'top' }}>
-                <div style={{ color: COLORS.green.main, fontWeight: FONTS.weight.bold, marginBottom: '4px' }}>✓ Creates the standardized modular product: prototypes, assemblies, UL/GA walls, chassis, details, schedules</div>
+              <td style={{ padding: '16px', textAlign: 'left', color: COLORS.gray.dark, fontSize: FONTS.sizes.sm, lineHeight: '1.6', verticalAlign: 'top' }}>
+                <div style={{ color: COLORS.green.main, fontWeight: FONTS.weight.bold, marginBottom: '4px' }}>✓ Creates the standardized modular product: prototypes, assemblies, UL/GA walls, chassis, details, schedules, façade logic</div>
+                <div style={{ color: COLORS.green.main, fontWeight: FONTS.weight.bold, marginBottom: '4px' }}>✓ Delivers 80% of the Factory Permit Set and ~40% of the AHJ Set via repeatable, validated design</div>
+                <div style={{ color: COLORS.green.main, fontWeight: FONTS.weight.bold, marginBottom: '4px' }}>✓ Ensures DfMA correctness so the factory and GC have zero ambiguity</div>
+                <div style={{ color: COLORS.green.main, fontWeight: FONTS.weight.bold }}>✓ Maintains product integrity—no project-specific drift, no redesign loops, no unplanned liability</div>
               </td>
-              <td style={{ padding: '16px', textAlign: 'left', color: COLORS.gray.dark, fontSize: FONTS.sizes.sm, lineHeight: '1.5', verticalAlign: 'top' }}>
-                <div style={{ color: COLORS.green.main, fontWeight: FONTS.weight.bold }}>✓ Localizes product to exact site, codes, zoning, and AHJ requirements</div>
+              <td style={{ padding: '16px', textAlign: 'left', color: COLORS.gray.dark, fontSize: FONTS.sizes.sm, lineHeight: '1.6', verticalAlign: 'top' }}>
+                <div style={{ color: COLORS.green.main, fontWeight: FONTS.weight.bold, marginBottom: '4px' }}>✓ Localizes the product to exact site, codes, zoning, and AHJ requirements</div>
+                <div style={{ color: COLORS.green.main, fontWeight: FONTS.weight.bold, marginBottom: '4px' }}>✓ Owns Title 24/energy, civil coordination, site plan, foundation/podium, wind/seismic, accessibility paths, and items requiring a stamp</div>
+                <div style={{ color: COLORS.green.main, fontWeight: FONTS.weight.bold }}>✓ Integrates RaaP's product kit into a complete, permit-ready building</div>
               </td>
             </tr>
             {/* SPEED */}
