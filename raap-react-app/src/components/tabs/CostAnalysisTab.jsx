@@ -552,7 +552,7 @@ const CostAnalysisTab = () => {
                           </>
                         );
                       })}
-                      <tr style={{ background: '#374151', color: 'white', borderTop: '2px solid #111827' }}>
+                      <tr key="mobile-total" style={{ background: '#374151', color: 'white', borderTop: '2px solid #111827' }}>
                         <td style={{ padding: '8px', fontWeight: 700, fontSize: '12px' }}>TOTAL</td>
                         <td style={{ padding: '8px', textAlign: 'right', fontWeight: 700, fontSize: '14px' }}>{formatMega(divisionCosts.totals[selectedEntity1 === 'siteBuild' ? 'siteCost' : selectedEntity1 === 'modularGC' ? 'gcCost' : selectedEntity1 === 'fabricator' ? 'fabCost' : 'modularTotal'])}</td>
                         <td style={{ padding: '8px', textAlign: 'right', fontWeight: 700, fontSize: '14px' }}>{formatMega(divisionCosts.totals[selectedEntity2 === 'siteBuild' ? 'siteCost' : selectedEntity2 === 'modularGC' ? 'gcCost' : selectedEntity2 === 'fabricator' ? 'fabCost' : 'modularTotal'])}</td>
@@ -612,7 +612,7 @@ const CostAnalysisTab = () => {
                           </>
                         );
                       })}
-                      <tr style={{ background: '#374151', color: 'white', borderTop: '3px solid #111827' }}>
+                      <tr key="desktop-total" style={{ background: '#374151', color: 'white', borderTop: '3px solid #111827' }}>
                         <td style={{ padding: '12px', fontWeight: 700, fontSize: '15px' }}>TOTAL</td>
                         <td style={{ padding: '12px', textAlign: 'right', fontWeight: 700, fontSize: '16px' }}>{formatMega(divisionCosts.totals[selectedEntity1 === 'siteBuild' ? 'siteCost' : selectedEntity1 === 'modularGC' ? 'gcCost' : selectedEntity1 === 'fabricator' ? 'fabCost' : 'modularTotal'])}</td>
                         <td style={{ padding: '12px', textAlign: 'right', fontWeight: 600, fontSize: '13px' }}>100%</td>
