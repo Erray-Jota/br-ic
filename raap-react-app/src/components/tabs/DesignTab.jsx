@@ -117,14 +117,29 @@ const DesignTab = () => {
           <div className="grid-2" style={{ gap: isEffectivelyMobile ? '8px' : '12px' }}>
             {/* Design Configuration */}
             <div className="card">
-              <h2>
+              <h2 style={{ marginBottom: '16px' }}>
                 📐 Design Configuration
-                <button className="btn btn-success" style={{ padding: '4px 8px', fontSize: '12px', fontWeight: 600 }}>
-                  💾 Save Project
-                </button>
               </h2>
 
-              {/* Lobby and Building Length Slider (side by side) */}
+              {/* Project Name & Save Button */}
+              <div className="grid-2" style={{ gap: '12px', marginBottom: '12px', alignItems: 'flex-end' }}>
+                <div className="form-group" style={{ marginBottom: 0 }}>
+                  <label className="form-label">Project Name</label>
+                  <input 
+                    type="text" 
+                    className="form-select"
+                    placeholder="Enter project name"
+                    value={projectData.projectName || ''}
+                    onChange={(e) => handleInputChange('projectName', e.target.value)}
+                    style={{ padding: '8px 12px', border: '1px solid #d1d5db', borderRadius: '6px' }}
+                  />
+                </div>
+                <button className="btn btn-success" style={{ padding: '8px 16px', fontSize: '14px', fontWeight: 600, width: '100%' }}>
+                  💾 Save Project
+                </button>
+              </div>
+
+              {/* Lobby and Floors (side by side) */}
               <div className="grid-2" style={{ gap: '12px', marginBottom: '12px' }}>
                 <div className="form-group" style={{ marginBottom: 0 }}>
                   <label className="form-label">Lobby</label>
@@ -136,20 +151,37 @@ const DesignTab = () => {
                 </div>
 
                 <div className="form-group" style={{ marginBottom: 0 }}>
-                  <label className="form-label">Building Length: {projectData.targetLength} ft</label>
-                  <input
-                    type="range"
-                    min="100"
-                    max="400"
-                    value={projectData.targetLength}
-                    step="5"
-                    onChange={(e) => handleInputChange('targetLength', parseInt(e.target.value))}
-                    style={{
-                      width: '100%',
-                      height: '8px',
-                      accentColor: isConstraintMet ? '#0051BA' : '#dc2626'
-                    }}
-                  />
+                  <label className="form-label">Floors</label>
+                  <select className="form-select" value={projectData.floors} onChange={(e) => handleInputChange('floors', parseInt(e.target.value))}>
+                    <option value="3">3 Floors</option>
+                    <option value="4">4 Floors</option>
+                    <option value="5">5 Floors</option>
+                  </select>
+                </div>
+              </div>
+
+              {/* Building Length Slider */}
+              <div style={{ marginBottom: '12px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                  <label className="form-label" style={{ marginBottom: 0 }}>Building Length: {projectData.targetLength} ft</label>
+                  <span style={{ fontSize: '14px', fontWeight: 600, color: '#6b7280' }}>Required Length: {calculations.requiredLength.toFixed(1)} ft</span>
+                </div>
+                <input
+                  type="range"
+                  min="100"
+                  max="400"
+                  value={projectData.targetLength}
+                  step="5"
+                  onChange={(e) => handleInputChange('targetLength', parseInt(e.target.value))}
+                  style={{
+                    width: '100%',
+                    height: '8px',
+                    accentColor: isConstraintMet ? '#0051BA' : '#dc2626'
+                  }}
+                />
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', fontWeight: 600, color: '#6b7280', marginTop: '6px' }}>
+                  <span>100</span>
+                  <span>400</span>
                 </div>
               </div>
 
