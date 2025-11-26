@@ -250,47 +250,28 @@ export const calculateIdealRequiredLength = (targets, commonAreaType, floors = 5
 
 /**
  * Calculates total building GSF including common areas with exact dimensions
- * Based on TARGET unit counts (not optimized), mathematically divided across floors and sides
+ * Based on optimized unit counts, mathematically divided across floors and sides
  */
-export const calculateBuildingGSF = (optimized, floors, lobbyType = 2, skus = {}, bonusUnits = 0, podiumCount = 0) => {
-  // Calculate per-side per-floor targets mathematically from optimized totals
-  const studioPerSide = (optimized.studio / floors) / 2;
-  const oneBedPerSide = (optimized.oneBed / floors) / 2;
-  const twoBedPerSide = (optimized.twoBed / floors) / 2;
-  const threeBedPerSide = (optimized.threeBed / floors) / 2;
-
-  // Map to SKUs using same logic as optimization engine
-  let sku_3_corner = threeBedPerSide;
-  let remainingCorners = CORNER_SLOTS_PER_SIDE - sku_3_corner;
-
-  let sku_2_corner = Math.min(twoBedPerSide, remainingCorners);
-  let sku_2_inline = twoBedPerSide - sku_2_corner;
-  remainingCorners -= sku_2_corner;
-
-  let sku_1_corner = Math.min(oneBedPerSide, remainingCorners);
-  let sku_1_inline = oneBedPerSide - sku_1_corner;
-
-  let sku_studio = studioPerSide;
+export const calculateBuildingGSF = (optimized, floors, commonAreaType = 2, podiumCount = 0) => {
+  // Calculate per-side per-floor units mathematically from optimized totals
+  const twoBedPerSide = (optimized.twoBedroom / floors) / 2;
+  const fourBedPerSide = (optimized.fourBedroom / floors) / 2;
 
   // Calculate per-floor unit GSF (per side)
   const perFloorUnitGSF =
-    sku_studio * UNIT_SIZES_GSF.studio +
-    sku_1_corner * UNIT_SIZES_GSF.oneCorner +
-    sku_1_inline * UNIT_SIZES_GSF.oneInline +
-    sku_2_corner * UNIT_SIZES_GSF.twoCorner +
-    sku_2_inline * UNIT_SIZES_GSF.twoInline +
-    sku_3_corner * UNIT_SIZES_GSF.threeCorner;
+    twoBedPerSide * UNIT_SIZES_GSF.twoBedroom +
+    fourBedPerSide * UNIT_SIZES_GSF.fourBedroom;
 
   // Per-floor unit GSF for both sides combined
   const perFloorBothSidesUnitGSF = perFloorUnitGSF * 2;
   const totalUnitGSF = perFloorBothSidesUnitGSF * floors;
 
-  // Calculate common area (lobby + 2 stairs per floor) with exact dimensions
-  const lobbyGSF = lobbyType === 1 ? COMMON_AREA_DIMS.lobby_1bay : 
-                   lobbyType === 4 ? COMMON_AREA_DIMS.lobby_4bay : 
-                   COMMON_AREA_DIMS.lobby_2bay;
+  // Calculate common area (Common Area + 2 stairs per floor) with exact dimensions
+  const commonAreaGSF = commonAreaType === 1 ? COMMON_AREA_DIMS.area_1bay : 
+                        commonAreaType === 4 ? COMMON_AREA_DIMS.area_4bay : 
+                        COMMON_AREA_DIMS.area_2bay;
   const stairsGSF = COMMON_AREA_DIMS.stairs * 2; // 2 stairs per floor
-  const perFloorCommonGSF = lobbyGSF + stairsGSF;
+  const perFloorCommonGSF = commonAreaGSF + stairsGSF;
   const totalCommonGSF = perFloorCommonGSF * floors;
 
   const residentialFloors = floors - podiumCount;
@@ -299,7 +280,7 @@ export const calculateBuildingGSF = (optimized, floors, lobbyType = 2, skus = {}
 
   const totalGSF = totalUnitGSF + totalCommonGSF + totalPodiumGSF;
 
-  const totalUnits = optimized.studio + optimized.oneBed + optimized.twoBed + optimized.threeBed;
+  const totalUnits = optimized.twoBedroom + optimized.fourBedroom;
 
   return {
     totalGSF,
@@ -330,11 +311,13 @@ export const calculateFloorMultiplier = (floors) => {
 
 export default {
   SKU_WIDTHS,
-  LOBBY_WIDTHS,
+  COMMON_AREA_WIDTHS,
   STAIR_WIDTH,
+  COMMON_AREA_DIMS,
   BASE_BUILDING,
   UNIT_SIZES_GSF,
   optimizeUnits,
+  calculateIdealRequiredLength,
   calculateBuildingGSF,
   calculateUnitRatio,
   calculateFloorMultiplier,
