@@ -213,9 +213,9 @@ const ArchitectTab = () => {
             </tr>
           </thead>
           <tbody>
-            {/* Role Row */}
+            {/* Responsibility Row */}
             <tr style={{ borderBottom: `2px solid ${COLORS.gray.light}`, background: '#f0f9ff' }}>
-              <td style={{ padding: '16px', textAlign: 'center', fontWeight: FONTS.weight.bold, color: COLORS.blue.dark, fontSize: FONTS.sizes.base, verticalAlign: 'top' }}>Role</td>
+              <td style={{ padding: '16px', textAlign: 'center', fontWeight: FONTS.weight.bold, color: COLORS.blue.dark, fontSize: FONTS.sizes.base, verticalAlign: 'top', whiteSpace: 'nowrap' }}>Responsibility</td>
               <td style={{ padding: '16px', textAlign: 'left', color: COLORS.gray.dark, fontSize: FONTS.sizes.sm, lineHeight: '1.6', verticalAlign: 'top' }}>
                 <div style={{ color: COLORS.green.main, fontWeight: FONTS.weight.bold, marginBottom: '4px' }}>✓ Creates the standardized modular product: prototypes, assemblies, UL/GA walls, chassis, details, schedules, façade logic</div>
                 <div style={{ color: COLORS.green.main, fontWeight: FONTS.weight.bold, marginBottom: '4px' }}>✓ Delivers 80% of the Factory Permit Set and ~40% of the AHJ Set via repeatable, validated design</div>
