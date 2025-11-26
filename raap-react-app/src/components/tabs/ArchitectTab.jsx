@@ -201,16 +201,40 @@ const ArchitectTab = () => {
           🎯 Coordination – Architect
         </h1>
         <p style={{ fontSize: FONTS.sizes.base, color: COLORS.gray.medium, margin: 0, fontWeight: FONTS.weight.bold }}>
-          How RaaP (Product Architect) and AoR (Project Architect) share scope and sequencing
+          RaaP defines the Product. The AoR customizes the Project. Together, they eliminate the fragmentation that usually destroys modular schedules.
         </p>
+      </div>
+
+      {/* RaaP's Role */}
+      <div style={{ marginBottom: SPACING['2xl'], padding: SPACING.lg, background: '#f0f7ff', border: `2px solid ${COLORS.blue.light}`, borderRadius: '12px' }}>
+        <h2 style={{ fontSize: FONTS.sizes.lg, fontWeight: FONTS.weight.bold, color: COLORS.blue.dark, marginBottom: SPACING.md, margin: 0 }}>🏭 RaaP's Role (Product Architect)</h2>
+        <ul style={{ margin: 0, paddingLeft: '20px', color: COLORS.gray.dark, lineHeight: '1.8', fontSize: FONTS.sizes.sm }}>
+          <li style={{ marginBottom: '8px' }}>Creates the standardized modular product: unit prototypes, module assemblies, UL/GA walls, chassis, connection details, schedules, façade logic.</li>
+          <li style={{ marginBottom: '8px' }}>Delivers 80% of the Factory Permit Set and ~40% of the AHJ Set via repeatable, validated design content.</li>
+          <li style={{ marginBottom: '8px' }}>Ensures DfMA correctness so the factory and GC have zero ambiguity.</li>
+          <li>Maintains product integrity—no project-specific drift, no redesign loops, no unplanned liability.</li>
+        </ul>
+      </div>
+
+      {/* AoR's Role */}
+      <div style={{ marginBottom: SPACING['3xl'], padding: SPACING.lg, background: '#fff8f0', border: `2px solid ${COLORS.green.light}`, borderRadius: '12px' }}>
+        <h2 style={{ fontSize: FONTS.sizes.lg, fontWeight: FONTS.weight.bold, color: COLORS.green.dark, marginBottom: SPACING.md, margin: 0 }}>🏗️ AoR's Role (Project Architect)</h2>
+        <ul style={{ margin: 0, paddingLeft: '20px', color: COLORS.gray.dark, lineHeight: '1.8', fontSize: FONTS.sizes.sm }}>
+          <li style={{ marginBottom: '8px' }}>Localizes the product to the exact site, codes, zoning, and AHJ requirements.</li>
+          <li style={{ marginBottom: '8px' }}>Owns Title 24/energy, civil coordination, site plan, foundation/podium, wind/seismic, accessibility paths, and all items requiring a stamp.</li>
+          <li>Integrates RaaP's product kit into a complete, permit-ready building.</li>
+        </ul>
       </div>
 
       {/* Comparison Table */}
       <div style={{ marginBottom: SPACING['3xl'], overflowX: 'auto' }}>
+        <div style={{ textAlign: 'center', marginBottom: SPACING.lg }}>
+          <h2 style={{ fontSize: FONTS.sizes['2xl'], fontWeight: FONTS.weight.black, color: COLORS.blue.dark, margin: 0 }}>Why</h2>
+        </div>
         <table style={{ width: '100%', borderCollapse: 'collapse', background: 'white', border: `2px solid ${COLORS.gray.light}`, borderRadius: '12px', overflow: 'hidden' }}>
           <thead>
             <tr style={{ background: `linear-gradient(90deg, ${COLORS.green.bg} 0%, ${COLORS.blue.bg} 100%)`, borderBottom: `3px solid ${COLORS.green.dark}` }}>
-              <th style={{ padding: '16px', textAlign: 'left', fontWeight: FONTS.weight.bold, fontSize: FONTS.sizes.base, color: COLORS.green.dark }}>Why Two Roles Exist in Industrialized Construction</th>
+              <th style={{ padding: '16px', textAlign: 'left', fontWeight: FONTS.weight.bold, fontSize: FONTS.sizes.base, color: COLORS.green.dark }}>Outcomes</th>
               <th style={{ padding: '16px', textAlign: 'left', fontWeight: FONTS.weight.bold, fontSize: FONTS.sizes.base, color: COLORS.green.dark }}>🏭 RaaP – Product Architect</th>
               <th style={{ padding: '16px', textAlign: 'left', fontWeight: FONTS.weight.bold, fontSize: FONTS.sizes.base, color: COLORS.blue.dark }}>🏗️ AoR – Project Architect</th>
             </tr>
