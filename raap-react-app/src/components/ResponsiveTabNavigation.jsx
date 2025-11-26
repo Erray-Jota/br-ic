@@ -25,13 +25,11 @@ const ResponsiveTabNavigation = () => {
   }, [lastScrollY]);
 
   const tabs = [
-    { id: 1, label: '🎯 Intro', shortLabel: 'Intro' },
-    { id: 2, label: '📋 Project', shortLabel: 'Project' },
     { id: 3, label: '📐 Design', shortLabel: 'Design' },
     { id: 4, label: '💰 Cost', shortLabel: 'Cost' },
     { id: 5, label: '⚙️ Coordination', shortLabel: 'Coordination' },
     { id: 6, label: '🎨 Portfolio', shortLabel: 'Portfolio' },
-    { id: 7, label: '✨ SmartStart', shortLabel: 'SmartStart' },
+    { id: 8, label: '📦 Archive', shortLabel: 'Archive' },
   ];
 
   // Desktop top navigation
@@ -68,7 +66,7 @@ const ResponsiveTabNavigation = () => {
     );
   }
 
-  // Mobile bottom navigation - only show first 4 tabs on mobile
+  // Mobile bottom navigation - show Design, Cost, Coordination, Portfolio
   const mobileVisibleTabs = tabs.slice(0, 4);
   
   // Design sub-tabs for mobile
@@ -138,7 +136,7 @@ const ResponsiveTabNavigation = () => {
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(3, 1fr)',
+            gridTemplateColumns: 'repeat(2, 1fr)',
             gap: 0,
             borderBottom: '1px solid #e5e7eb',
           }}
@@ -146,7 +144,6 @@ const ResponsiveTabNavigation = () => {
           {[
             { id: 1, label: '📊 Summary' },
             { id: 2, label: '⏱️ Time' },
-            { id: 4, label: '🔍 Details' },
           ].map((subtab) => (
             <button
               key={subtab.id}
@@ -160,6 +157,50 @@ const ResponsiveTabNavigation = () => {
                 cursor: 'pointer',
                 fontSize: '10px',
                 fontWeight: activeSubtabs.cost === subtab.id ? 700 : 500,
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                gap: '2px',
+                transition: 'all 0.2s',
+              }}
+            >
+              <span style={{ fontSize: '14px' }}>{subtab.label.charAt(0)}</span>
+              <span style={{ fontSize: '9px', fontWeight: 500 }}>
+                {subtab.label.split(' ')[1] || ''}
+              </span>
+            </button>
+          ))}
+        </div>
+      )}
+
+      {/* Archive sub-tabs - show only when Archive tab (8) is active */}
+      {activeTab === 8 && (
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(4, 1fr)',
+            gap: 0,
+            borderBottom: '1px solid #e5e7eb',
+          }}
+        >
+          {[
+            { id: 1, label: '🎯 Intro' },
+            { id: 2, label: '📋 Project' },
+            { id: 3, label: '✨ Smart' },
+            { id: 4, label: '📊 Scenarios' },
+          ].map((subtab) => (
+            <button
+              key={subtab.id}
+              onClick={() => switchSubtab('archive', subtab.id)}
+              style={{
+                padding: '8px 6px',
+                background: activeSubtabs.archive === subtab.id ? '#E8F5E9' : 'white',
+                color: activeSubtabs.archive === subtab.id ? '#2D5A3D' : '#6b7280',
+                border: 'none',
+                borderBottom: activeSubtabs.archive === subtab.id ? '3px solid #2D5A3D' : 'none',
+                cursor: 'pointer',
+                fontSize: '10px',
+                fontWeight: activeSubtabs.archive === subtab.id ? 700 : 500,
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',

@@ -4,13 +4,11 @@ import { useMobile } from './hooks/useMobile';
 import Header from './components/Header';
 import ResponsiveTabNavigation from './components/ResponsiveTabNavigation';
 import ProjectsPage from './components/ProjectsPage';
-import IntroductionTab from './components/tabs/IntroductionTab';
-import ProjectTab from './components/tabs/ProjectTab';
 import DesignTab from './components/tabs/DesignTab';
 import CostAnalysisTab from './components/tabs/CostAnalysisTab';
 import CoordinationTab from './components/tabs/CoordinationTab';
 import PortfolioTab from './components/tabs/PortfolioTab';
-import SmartStartTab from './components/tabs/SmartStartTab';
+import ArchiveTab from './components/tabs/ArchiveTab';
 import ErrorBoundary from './components/ErrorBoundary';
 import './App.css';
 
@@ -45,13 +43,11 @@ function AppContent() {
               <>
                 <ResponsiveTabNavigation />
                 <div style={{ marginTop: isEffectivelyMobile ? '10px' : '20px', marginBottom: '20px' }}>
-                  {activeTab === 1 && <IntroductionTab />}
-                  {activeTab === 2 && <ProjectTab />}
                   {activeTab === 3 && <DesignTab />}
                   {activeTab === 4 && <CostAnalysisTab />}
                   {activeTab === 5 && <CoordinationTab />}
                   {activeTab === 6 && <PortfolioTab />}
-                  {activeTab === 7 && <SmartStartTab />}
+                  {activeTab === 8 && <ArchiveTab />}
                 </div>
               </>
             )}
