@@ -16,6 +16,15 @@ const LocationInput = ({ value, onChange, label, placeholder = 'Enter city or zi
   const apiKey = import.meta.env.VITE_GOOGLE_API_KEY || '';
   const debounceTimer = useRef(null);
 
+  // Debug: Log API key availability
+  useEffect(() => {
+    if (!apiKey) {
+      console.warn('LocationInput: Google API key not found');
+    } else {
+      console.log('LocationInput: Google API key loaded successfully');
+    }
+  }, [apiKey]);
+
   // Close suggestions when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -36,10 +45,12 @@ const LocationInput = ({ value, onChange, label, placeholder = 'Enter city or zi
   // Search using Google Geocoding API with filtering for cities
   const searchLocations = async (query) => {
     if (!apiKey || query.length < 2) {
+      console.log('Search blocked: API key missing or query too short', { hasKey: !!apiKey, queryLen: query.length });
       setSuggestions([]);
       return;
     }
 
+    console.log('Searching locations for:', query);
     try {
       // Use Geocoding API to find locations
       const response = await fetch(
@@ -47,6 +58,7 @@ const LocationInput = ({ value, onChange, label, placeholder = 'Enter city or zi
       );
 
       const data = await response.json();
+      console.log('API Response status:', data.status, 'Results count:', data.results?.length);
 
       if (data.status === 'OK' && data.results && data.results.length > 0) {
         // Filter results to only include cities/localities and postal codes
