@@ -44,14 +44,9 @@ const LocationInput = ({ value, onChange, label, placeholder = 'Enter city or zi
       const isZipCode = /^\d{5}$/.test(query);
       console.log('Search query:', query, 'Is zip code:', isZipCode);
       
-      // Use Nominatim API (free, no authentication required)
-      // For zip codes, use postcode search; for cities, use city search
-      let url;
-      if (isZipCode) {
-        url = `https://nominatim.openstreetmap.org/search?format=json&country=us&postalcode=${encodeURIComponent(query)}&limit=15&addressdetails=1&extratags=1`;
-      } else {
-        url = `https://nominatim.openstreetmap.org/search?format=json&country=us&city=${encodeURIComponent(query)}&limit=15&addressdetails=1&extratags=1`;
-      }
+      // Use Nominatim API with flexible 'q' parameter for better results
+      // This works better for US cities, military bases, and zip codes
+      const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&country=us&limit=20&addressdetails=1&extratags=1`;
       
       const response = await fetch(url, { headers: { 'Accept': 'application/json' } });
 
@@ -59,24 +54,33 @@ const LocationInput = ({ value, onChange, label, placeholder = 'Enter city or zi
       console.log('Nominatim response:', data.length, 'results');
 
       if (data && Array.isArray(data) && data.length > 0) {
-        // Filter results to show cities, towns, military facilities, and postal codes
+        // Keep results that are likely cities or military locations
+        // Filter OUT: streets, restaurants, shops, etc.
         const filteredResults = data.filter(result => {
           const type = result.type || '';
           const className = result.class || '';
           const displayName = (result.display_name || '').toLowerCase();
           
-          // Include:
-          // - Standard city-level results (place: city, town, village, hamlet)
-          // - Postal codes
-          // - Military facilities and government areas (admin_level 8+)
-          // - Any results with "military", "fort", "base", "base", "barracks" in the name
-          // - Suburbs and localities
-          return (className === 'place' && (type === 'city' || type === 'town' || type === 'village' || type === 'hamlet' || type === 'suburb' || type === 'locality')) ||
-                 (className === 'postal_code') ||
-                 (className === 'military' || type === 'military' || type === 'barracks') ||
-                 (className === 'amenity' && (type === 'military' || displayName.includes('military'))) ||
-                 (className === 'admin' && (displayName.includes('fort') || displayName.includes('base') || displayName.includes('military') || displayName.includes('barracks'))) ||
-                 displayName.includes('air force') || displayName.includes('fort ') || displayName.includes('base') || displayName.includes('barracks');
+          // EXCLUDE problematic types
+          const excludeTypes = ['street', 'road', 'building', 'restaurant', 'shop', 'office', 'house', 'parking'];
+          const excludeClasses = ['building', 'shop', 'tourism', 'amenity'];
+          
+          if (excludeTypes.includes(type) || excludeClasses.includes(className)) {
+            return false;
+          }
+          
+          // INCLUDE: cities, towns, military, postal codes, counties, states
+          return displayName.length > 0 && 
+                 (displayName.includes(', ') || // Has a comma (likely has city, state)
+                  className === 'postal_code' ||
+                  className === 'military' ||
+                  className === 'place' ||
+                  className === 'admin' ||
+                  displayName.includes('air force') || 
+                  displayName.includes('fort ') || 
+                  displayName.includes('naval ') ||
+                  displayName.includes('base') || 
+                  displayName.includes('barracks'));
         });
 
         console.log('Filtered results:', filteredResults.length);
