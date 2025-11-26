@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { useProject } from '../../contexts/ProjectContext';
 import { COLORS, FONTS, SPACING } from '../../styles/theme';
+import ImageGridExpander from '../ImageGridExpander';
+import { ENTITLEMENT_IMAGES, PERMITTING_IMAGES } from '../../data/imageGridData';
 
 const ENTITLEMENT_CATEGORIES = [
   {
@@ -305,6 +307,16 @@ const ArchitectTab = () => {
           ✅ Permitting
         </button>
       </div>
+
+      {/* Image Grid */}
+      {!selectedCategoryId && (
+        <div style={{ marginBottom: SPACING['3xl'] }}>
+          <h3 style={{ fontSize: FONTS.sizes.lg, fontWeight: FONTS.weight.bold, color: COLORS.blue.dark, marginBottom: SPACING.lg, textAlign: 'center' }}>
+            {phase === 'entitlement' ? 'Key Entitlement Deliverables' : 'Key Permitting Deliverables'}
+          </h3>
+          <ImageGridExpander images={phase === 'entitlement' ? ENTITLEMENT_IMAGES : PERMITTING_IMAGES} />
+        </div>
+      )}
 
       {/* Category Grid */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '16px', marginBottom: SPACING['2xl'] }}>
