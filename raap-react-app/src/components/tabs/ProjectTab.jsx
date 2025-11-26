@@ -44,12 +44,6 @@ const ProjectTab = () => {
     (projectData.targets.twoBedroom || 0) +
     (projectData.targets.fourBedroom || 0);
 
-  const projectImageSrc = {
-    3: ASSET_PATHS.PROJECT_GRAPHIC_3_FLOORS,
-    4: ASSET_PATHS.PROJECT_GRAPHIC_4_FLOORS,
-    5: ASSET_PATHS.PROJECT_GRAPHIC_5_FLOORS,
-  }[projectData.floors] || ASSET_PATHS.PROJECT_GRAPHIC_URL;
-
   return (
     <div>
       {/* Hero Section */}
@@ -62,11 +56,9 @@ const ProjectTab = () => {
         </p>
       </div>
 
-      {/* Hero Image - Changes based on number of floors */}
+      {/* Hero Image - Static for all floor counts */}
       <div style={{ marginBottom: SPACING['2xl'], borderRadius: '12px', overflow: 'hidden', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}>
-        <video key={projectData.floors} autoPlay muted loop style={{ width: '100%', height: 'auto', display: 'block' }}>
-          <source src={projectImageSrc} type="video/mp4" />
-        </video>
+        <img src="/hero-configure.png" alt="Configure Platform" style={{ width: '100%', height: 'auto', display: 'block' }} />
       </div>
 
       {/* Project Info Banner */}
