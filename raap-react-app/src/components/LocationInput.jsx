@@ -32,7 +32,7 @@ const LocationInput = ({ value, onChange, label, placeholder = 'Enter city or zi
     setInputValue(value || '');
   }, [value, setInputValue]);
 
-  // Search using backend proxy to Google Places API (avoids CORS issues)
+  // Search using Vite proxy to Google Places API
   const searchLocations = async (query) => {
     if (query.length < 2) {
       setSuggestions([]);
@@ -40,8 +40,16 @@ const LocationInput = ({ value, onChange, label, placeholder = 'Enter city or zi
     }
 
     try {
-      // Call backend proxy instead of Google API directly
-      const response = await fetch(`/api/places/autocomplete?input=${encodeURIComponent(query)}`);
+      const apiKey = import.meta.env.VITE_GOOGLE_API_KEY;
+      if (!apiKey) {
+        console.error('Google API key not found');
+        setSuggestions([]);
+        return;
+      }
+
+      // Call through Vite proxy to avoid CORS
+      const url = `/api/places/autocomplete/json?input=${encodeURIComponent(query)}&key=${apiKey}&components=country:us`;
+      const response = await fetch(url);
       const data = await response.json();
       console.log('Google Places response:', data.predictions?.length || 0, 'results');
 
@@ -49,8 +57,9 @@ const LocationInput = ({ value, onChange, label, placeholder = 'Enter city or zi
         const results = await Promise.all(
           data.predictions.slice(0, 8).map(async (prediction) => {
             try {
-              // Get detailed information including lat/lng using backend proxy
-              const detailsResponse = await fetch(`/api/places/details?placeId=${prediction.place_id}`);
+              // Get detailed location info through proxy
+              const detailsUrl = `/api/places/details/json?place_id=${prediction.place_id}&key=${apiKey}&fields=geometry,formatted_address`;
+              const detailsResponse = await fetch(detailsUrl);
               const detailsData = await detailsResponse.json();
               
               if (detailsData.result && detailsData.result.geometry) {
