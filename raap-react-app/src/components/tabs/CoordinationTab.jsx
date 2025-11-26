@@ -110,7 +110,7 @@ const CoordinationTab = () => {
           🎯 De-Risk, Accelerate & Lock In Savings
         </h1>
         <p style={{ fontSize: FONTS.sizes.base, color: COLORS.gray.medium, margin: 0, fontWeight: FONTS.weight.bold }}>
-          Three critical levers to derisk modular construction and protect your project's timeline, costs, and quality
+          Four critical levers to derisk modular construction and protect your project's timeline, costs, and quality
         </p>
       </div>
 
