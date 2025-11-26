@@ -262,8 +262,8 @@ const CostAnalysisTab = () => {
                     </label>
                     <input
                       type="range"
-                      min="100"
-                      max="500"
+                      min="300"
+                      max="800"
                       step="10"
                       value={projectData.targetLength}
                       onChange={(e) => updateProjectData({ targetLength: parseInt(e.target.value) })}
@@ -273,9 +273,9 @@ const CostAnalysisTab = () => {
                       }}
                     />
                     <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px', color: '#6b7280', marginTop: '4px' }}>
-                      <span>100 ft</span>
+                      <span>300 ft</span>
                       <span>Required: {calculations.requiredLength.toFixed(1)} ft</span>
-                      <span>500 ft</span>
+                      <span>800 ft</span>
                     </div>
                   </div>
 
