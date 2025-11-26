@@ -250,10 +250,8 @@ const DesignTab = () => {
       )}
 
       {activeSubtabs.design === 2 && (
-        <div>
-          <div style={{ background: 'white', borderRadius: '8px', overflow: 'hidden', marginBottom: '12px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }}>
-            <img src="/images/Barracks-Layout.png" alt="Barracks Floor Plan Layout" style={{ width: '100%', height: 'auto', display: 'block' }} />
-          </div>
+        <div style={{ marginBottom: '24px', textAlign: 'center', color: '#6b7280' }}>
+          <p>Unit floor plan details shown in the Building tab.</p>
         </div>
       )}
 
@@ -310,46 +308,11 @@ const DesignTab = () => {
             </div>
           </div>
 
-          {/* Floor Plan Image - Based on Units Per Floor */}
+          {/* Floor Plan Image - Barracks Layout */}
           <div className="card">
             <h2 style={{ fontSize: isEffectivelyMobile ? '14px' : '18px' }}>📐 Floor Plan Layout</h2>
-
-            <div
-              ref={(el) => {
-                if (el) {
-                  setTimeout(() => {
-                    // Center both horizontally and vertically
-                    el.scrollLeft = (el.scrollWidth - el.clientWidth) / 2;
-                    el.scrollTop = (el.scrollHeight - el.clientHeight) / 2;
-                  }, 100);
-                }
-              }}
-              style={{
-                overflow: 'auto', // Allow scrolling in both directions
-                background: '#f9fafb',
-                padding: '2px',
-                borderRadius: '8px',
-                marginBottom: '0',
-                height: isEffectivelyMobile ? '200px' : '300px',
-                display: 'block'
-              }}
-            >
-              <img
-                src={
-                  (calculations.totalOptimized <= 12
-                    ? ASSET_PATHS.LAYOUT_SHORT
-                    : calculations.totalOptimized <= 25
-                      ? ASSET_PATHS.LAYOUT_MEDIUM
-                      : ASSET_PATHS.LAYOUT_LONG) + '?v=' + new Date().getTime()
-                }
-                alt="Floor Layout"
-                style={{
-                  height: '300%', // Zoomed in
-                  width: 'auto',
-                  display: 'block',
-                  margin: '0 auto'
-                }}
-              />
+            <div style={{ background: 'white', borderRadius: '8px', overflow: 'hidden', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }}>
+              <img src="/images/Barracks-Layout.png" alt="Barracks Floor Plan Layout" style={{ width: '100%', height: 'auto', display: 'block' }} />
             </div>
           </div>
         </div>
