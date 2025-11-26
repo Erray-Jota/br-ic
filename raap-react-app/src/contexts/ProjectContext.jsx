@@ -14,7 +14,7 @@ const createDefaultProject = (name = 'New Project') => ({
   id: Date.now().toString(),
   projectName: name,
   floors: 3,
-  targetLength: 280,
+  targetLength: 500,
   commonAreaType: 2,
   podiumCount: 0,
   commonAreaPct: 5,

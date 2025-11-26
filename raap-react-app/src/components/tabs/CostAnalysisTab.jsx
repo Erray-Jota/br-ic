@@ -284,7 +284,9 @@ const CostAnalysisTab = () => {
                     <div className="form-group" style={{ marginBottom: 0 }}>
                       <label className="form-label" style={{ fontSize: '11px' }}>Floors</label>
                       <select className="form-select" value={projectData.floors} onChange={(e) => updateProjectData({ floors: parseInt(e.target.value) })} style={{ padding: '6px' }}>
-                        {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 15, 20].map(n => <option key={n} value={n}>{n}</option>)}
+                        <option value={3}>3 Floors</option>
+                        <option value={4}>4 Floors</option>
+                        <option value={5}>5 Floors</option>
                       </select>
                     </div>
                     <div className="form-group" style={{ marginBottom: 0 }}>
@@ -298,7 +300,9 @@ const CostAnalysisTab = () => {
                     <div className="form-group" style={{ marginBottom: 0 }}>
                       <label className="form-label" style={{ fontSize: '11px' }}>Podium</label>
                       <select className="form-select" value={projectData.podiumCount} onChange={(e) => updateProjectData({ podiumCount: parseInt(e.target.value) })} style={{ padding: '6px' }}>
-                        {[0, 1, 2, 3].map(n => <option key={n} value={n}>{n}</option>)}
+                        <option value={0}>0</option>
+                        <option value={1}>1</option>
+                        <option value={2}>2</option>
                       </select>
                     </div>
                     <div className="form-group" style={{ marginBottom: 0 }}>
