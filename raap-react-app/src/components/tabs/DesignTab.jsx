@@ -109,11 +109,11 @@ const DesignTab = () => {
                 </button>
               </div>
 
-              {/* Lobby and Floors (side by side) */}
+              {/* Common Area and Floors (side by side) */}
               <div className="grid-2" style={{ gap: '12px', marginBottom: '12px' }}>
                 <div className="form-group" style={{ marginBottom: 0 }}>
-                  <label className="form-label">Lobby</label>
-                  <select className="form-select" value={projectData.lobbyType} onChange={(e) => handleInputChange('lobbyType', parseInt(e.target.value))}>
+                  <label className="form-label">Common Area</label>
+                  <select className="form-select" value={projectData.commonAreaType} onChange={(e) => handleInputChange('commonAreaType', parseInt(e.target.value))}>
                     <option value="1">1-Bay</option>
                     <option value="2">2-Bay (Default)</option>
                     <option value="4">4-Bay</option>
@@ -138,8 +138,8 @@ const DesignTab = () => {
                 </div>
                 <input
                   type="range"
-                  min="100"
-                  max="400"
+                  min="300"
+                  max="800"
                   value={projectData.targetLength}
                   step="5"
                   onChange={(e) => handleInputChange('targetLength', parseInt(e.target.value))}
@@ -150,8 +150,8 @@ const DesignTab = () => {
                   }}
                 />
                 <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', fontWeight: 600, color: '#6b7280', marginTop: '6px' }}>
-                  <span>100</span>
-                  <span>400</span>
+                  <span>300</span>
+                  <span>800</span>
                 </div>
               </div>
 
