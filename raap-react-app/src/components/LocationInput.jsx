@@ -59,15 +59,24 @@ const LocationInput = ({ value, onChange, label, placeholder = 'Enter city or zi
       console.log('Nominatim response:', data.length, 'results');
 
       if (data && Array.isArray(data) && data.length > 0) {
-        // Filter results to only show cities, towns, villages, and postal codes (exclude streets, places, etc.)
+        // Filter results to show cities, towns, military facilities, and postal codes
         const filteredResults = data.filter(result => {
           const type = result.type || '';
           const className = result.class || '';
+          const displayName = (result.display_name || '').toLowerCase();
           
-          // Only include city-level results
-          return (className === 'place' && (type === 'city' || type === 'town' || type === 'village' || type === 'hamlet')) ||
+          // Include:
+          // - Standard city-level results (place: city, town, village, hamlet)
+          // - Postal codes
+          // - Military facilities and government areas (admin_level 8+)
+          // - Any results with "military", "fort", "base", "base", "barracks" in the name
+          // - Suburbs and localities
+          return (className === 'place' && (type === 'city' || type === 'town' || type === 'village' || type === 'hamlet' || type === 'suburb' || type === 'locality')) ||
                  (className === 'postal_code') ||
-                 (isZipCode && className === 'place'); // For zip codes, be more lenient
+                 (className === 'military' || type === 'military' || type === 'barracks') ||
+                 (className === 'amenity' && (type === 'military' || displayName.includes('military'))) ||
+                 (className === 'admin' && (displayName.includes('fort') || displayName.includes('base') || displayName.includes('military') || displayName.includes('barracks'))) ||
+                 displayName.includes('air force') || displayName.includes('fort ') || displayName.includes('base') || displayName.includes('barracks');
         });
 
         console.log('Filtered results:', filteredResults.length);
