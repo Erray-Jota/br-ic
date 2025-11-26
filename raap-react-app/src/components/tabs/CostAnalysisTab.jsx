@@ -5,7 +5,6 @@ import { useMobile } from '../../hooks/useMobile';
 import { MASTER_DIVISIONS } from '../../data/constants';
 import { calculateDivisionCosts, LOCATION_FACTORS as COST_LOCATION_FACTORS, compareScenarios } from '../../engines/costEngine';
 import LocationInput from '../LocationInput';
-import ProjectInfoBanner from '../ProjectInfoBanner';
 import { COLORS, FONTS, SPACING, BORDERS, STYLE_PRESETS } from '../../styles/theme';
 import { AlertModal } from '../Modal';
 
@@ -176,9 +175,6 @@ const CostAnalysisTab = () => {
       {/* SUMMARY SUB TAB */}
       {activeSubtabs.cost === 1 && (
         <div>
-          {/* Project Info Banner */}
-          <ProjectInfoBanner calculations={calculations} />
-
           {/* COST SUMMARY BOX (3 Horizontal Boxes) */}
           <div className="grid-3-mobile" style={{ gap: isEffectivelyMobile ? '8px' : '12px', marginBottom: '12px' }}>
             {/* Box 1: Site Build Costs */}
