@@ -79,19 +79,19 @@ const DesignTab = () => {
             <h2 style={{ marginBottom: '12px' }}>📐 Unit Floor Plans</h2>
             <div className="grid-2" style={{ gap: isEffectivelyMobile ? '8px' : '12px' }}>
               {/* 2-Bedroom Floor Plan */}
-              <div style={{ background: 'white', borderRadius: '8px', overflow: 'hidden', boxShadow: '0 1px 3px rgba(0,0,0,0.1)', border: '1px solid #e5e7eb' }}>
+              <div style={{ background: 'white', borderRadius: '8px', overflow: 'hidden', boxShadow: '0 1px 3px rgba(0,0,0,0.1)', border: '1px solid #e5e7eb', display: 'flex', flexDirection: 'column' }}>
                 <div style={{ padding: '12px', background: '#f3f4f6', borderBottom: '1px solid #e5e7eb', fontWeight: 700, color: '#111827' }}>
                   2-Bedroom Unit (43.5')
                 </div>
-                <img src="/images/2BR-Floorplan.png" alt="2-Bedroom Floor Plan" style={{ width: '100%', height: 'auto', display: 'block' }} />
+                <img src="/images/2BR-Floorplan.png" alt="2-Bedroom Floor Plan" style={{ width: '100%', height: '400px', objectFit: 'cover', display: 'block' }} />
               </div>
 
               {/* 4-Bedroom Floor Plan */}
-              <div style={{ background: 'white', borderRadius: '8px', overflow: 'hidden', boxShadow: '0 1px 3px rgba(0,0,0,0.1)', border: '1px solid #e5e7eb' }}>
+              <div style={{ background: 'white', borderRadius: '8px', overflow: 'hidden', boxShadow: '0 1px 3px rgba(0,0,0,0.1)', border: '1px solid #e5e7eb', display: 'flex', flexDirection: 'column' }}>
                 <div style={{ padding: '12px', background: '#f3f4f6', borderBottom: '1px solid #e5e7eb', fontWeight: 700, color: '#111827' }}>
                   4-Bedroom Unit (72.5')
                 </div>
-                <img src="/images/4BR-Floorplan.png" alt="4-Bedroom Floor Plan" style={{ width: '100%', height: 'auto', display: 'block' }} />
+                <img src="/images/4BR-Floorplan.png" alt="4-Bedroom Floor Plan" style={{ width: '100%', height: '400px', objectFit: 'cover', display: 'block' }} />
               </div>
             </div>
           </div>
