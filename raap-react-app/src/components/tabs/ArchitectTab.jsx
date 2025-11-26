@@ -217,12 +217,22 @@ const ArchitectTab = () => {
       </div>
 
       {/* AoR's Role */}
-      <div style={{ marginBottom: SPACING['3xl'], padding: SPACING.lg, background: '#fff8f0', border: `2px solid ${COLORS.green.light}`, borderRadius: '12px' }}>
+      <div style={{ marginBottom: SPACING['2xl'], padding: SPACING.lg, background: '#fff8f0', border: `2px solid ${COLORS.green.light}`, borderRadius: '12px' }}>
         <h2 style={{ fontSize: FONTS.sizes.lg, fontWeight: FONTS.weight.bold, color: COLORS.green.dark, marginBottom: SPACING.md, margin: 0 }}>🏗️ AoR's Role (Project Architect)</h2>
         <ul style={{ margin: 0, paddingLeft: '20px', color: COLORS.gray.dark, lineHeight: '1.8', fontSize: FONTS.sizes.sm }}>
           <li style={{ marginBottom: '8px' }}>Localizes the product to the exact site, codes, zoning, and AHJ requirements.</li>
           <li style={{ marginBottom: '8px' }}>Owns Title 24/energy, civil coordination, site plan, foundation/podium, wind/seismic, accessibility paths, and all items requiring a stamp.</li>
           <li>Integrates RaaP's product kit into a complete, permit-ready building.</li>
+        </ul>
+      </div>
+
+      {/* Shared Outcomes */}
+      <div style={{ marginBottom: SPACING['3xl'], padding: SPACING.lg, background: `linear-gradient(90deg, ${COLORS.blue.bg} 0%, ${COLORS.green.bg} 100%)`, border: `3px solid ${COLORS.blue.main}`, borderRadius: '12px', boxShadow: '0 4px 12px rgba(0, 81, 186, 0.15)' }}>
+        <h2 style={{ fontSize: FONTS.sizes.lg, fontWeight: FONTS.weight.bold, color: COLORS.blue.dark, marginBottom: SPACING.md, margin: 0, textAlign: 'center' }}>✨ Shared Outcomes</h2>
+        <ul style={{ margin: 0, paddingLeft: '20px', color: COLORS.gray.dark, lineHeight: '1.8', fontSize: FONTS.sizes.sm }}>
+          <li style={{ marginBottom: '8px' }}>Zero rework (AoR doesn't redraw modules; RaaP doesn't touch local design).</li>
+          <li style={{ marginBottom: '8px' }}>Parallelization (AoR proceeds on project work while factory uses RaaP's kit).</li>
+          <li>Predictability (clear scope = fewer RFIs, fewer change orders, and faster approvals).</li>
         </ul>
       </div>
 
