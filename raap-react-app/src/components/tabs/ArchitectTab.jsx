@@ -231,31 +231,37 @@ const ArchitectTab = () => {
             {/* SPEED */}
             <tr style={{ borderBottom: `1px solid ${COLORS.gray.light}`, background: '#f9fafb' }}>
               <td style={{ padding: '16px', textAlign: 'center', fontWeight: FONTS.weight.bold, color: COLORS.green.main, fontSize: FONTS.sizes.base, verticalAlign: 'top' }}>⚡ SPEED</td>
-              <td style={{ padding: '16px', textAlign: 'left', color: COLORS.gray.dark, fontSize: FONTS.sizes.sm, verticalAlign: 'top' }}>
-                <span style={{ color: COLORS.green.main, fontWeight: FONTS.weight.bold }}>✓</span> Pre-validated modules, assemblies, and façade logic optimized for factory production
+              <td style={{ padding: '16px', textAlign: 'left', color: COLORS.gray.dark, fontSize: FONTS.sizes.sm, verticalAlign: 'top', display: 'flex', gap: '8px' }}>
+                <span style={{ color: COLORS.green.main, fontWeight: FONTS.weight.bold, flexShrink: 0 }}>✓</span> 
+                <span>Pre-validated modules, assemblies, and façade logic optimized for factory production</span>
               </td>
-              <td style={{ padding: '16px', textAlign: 'left', color: COLORS.gray.dark, fontSize: FONTS.sizes.sm, verticalAlign: 'top' }}>
-                <span style={{ color: COLORS.green.main, fontWeight: FONTS.weight.bold }}>✓</span> Accelerates entitlement/permitting by adapting ready-made product to site/zoning codes
+              <td style={{ padding: '16px', textAlign: 'left', color: COLORS.gray.dark, fontSize: FONTS.sizes.sm, verticalAlign: 'top', display: 'flex', gap: '8px' }}>
+                <span style={{ color: COLORS.green.main, fontWeight: FONTS.weight.bold, flexShrink: 0 }}>✓</span>
+                <span>Accelerates entitlement/permitting by adapting ready-made product to site/zoning codes</span>
               </td>
             </tr>
             {/* SAVINGS */}
             <tr style={{ borderBottom: `1px solid ${COLORS.gray.light}`, background: 'white' }}>
               <td style={{ padding: '16px', textAlign: 'center', fontWeight: FONTS.weight.bold, color: COLORS.green.main, fontSize: FONTS.sizes.base, verticalAlign: 'top' }}>💰 SAVINGS</td>
-              <td style={{ padding: '16px', textAlign: 'left', color: COLORS.gray.dark, fontSize: FONTS.sizes.sm, verticalAlign: 'top' }}>
-                <span style={{ color: COLORS.green.main, fontWeight: FONTS.weight.bold }}>✓</span> Eliminates 70–90% of architectural effort normally spent on units, corridors, and assemblies
+              <td style={{ padding: '16px', textAlign: 'left', color: COLORS.gray.dark, fontSize: FONTS.sizes.sm, verticalAlign: 'top', display: 'flex', gap: '8px' }}>
+                <span style={{ color: COLORS.green.main, fontWeight: FONTS.weight.bold, flexShrink: 0 }}>✓</span>
+                <span>Eliminates 70–90% of architectural effort normally spent on units, corridors, and assemblies</span>
               </td>
-              <td style={{ padding: '16px', textAlign: 'left', color: COLORS.gray.dark, fontSize: FONTS.sizes.sm, verticalAlign: 'top' }}>
-                <span style={{ color: COLORS.green.main, fontWeight: FONTS.weight.bold }}>✓</span> Focuses on 30–50% project-specific work with fixed product architecture
+              <td style={{ padding: '16px', textAlign: 'left', color: COLORS.gray.dark, fontSize: FONTS.sizes.sm, verticalAlign: 'top', display: 'flex', gap: '8px' }}>
+                <span style={{ color: COLORS.green.main, fontWeight: FONTS.weight.bold, flexShrink: 0 }}>✓</span>
+                <span>Focuses on 30–50% project-specific work with fixed product architecture</span>
               </td>
             </tr>
             {/* DE-RISK */}
             <tr style={{ background: '#f9fafb' }}>
               <td style={{ padding: '16px', textAlign: 'center', fontWeight: FONTS.weight.bold, color: COLORS.green.main, fontSize: FONTS.sizes.base, verticalAlign: 'top' }}>🛡️ DE-RISK</td>
-              <td style={{ padding: '16px', textAlign: 'left', color: COLORS.gray.dark, fontSize: FONTS.sizes.sm, verticalAlign: 'top' }}>
-                <span style={{ color: COLORS.green.main, fontWeight: FONTS.weight.bold }}>✓</span> Factory-validated UL/GA assemblies, tolerances, and MEP interfaces eliminate manufacturing uncertainty
+              <td style={{ padding: '16px', textAlign: 'left', color: COLORS.gray.dark, fontSize: FONTS.sizes.sm, verticalAlign: 'top', display: 'flex', gap: '8px' }}>
+                <span style={{ color: COLORS.green.main, fontWeight: FONTS.weight.bold, flexShrink: 0 }}>✓</span>
+                <span>Factory-validated UL/GA assemblies, tolerances, and MEP interfaces eliminate manufacturing uncertainty</span>
               </td>
-              <td style={{ padding: '16px', textAlign: 'left', color: COLORS.gray.dark, fontSize: FONTS.sizes.sm, verticalAlign: 'top' }}>
-                <span style={{ color: COLORS.green.main, fontWeight: FONTS.weight.bold }}>✓</span> Ensures local code compliance and clarifies site vs factory scope
+              <td style={{ padding: '16px', textAlign: 'left', color: COLORS.gray.dark, fontSize: FONTS.sizes.sm, verticalAlign: 'top', display: 'flex', gap: '8px' }}>
+                <span style={{ color: COLORS.green.main, fontWeight: FONTS.weight.bold, flexShrink: 0 }}>✓</span>
+                <span>Ensures local code compliance and clarifies site vs factory scope</span>
               </td>
             </tr>
           </tbody>
