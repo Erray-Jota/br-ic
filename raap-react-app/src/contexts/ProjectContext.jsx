@@ -72,24 +72,24 @@ export const ProjectProvider = ({ children }) => {
 
   const currentProject = projects.find((p) => p.id === currentProjectId) || projects[0];
 
-  // Tab name to ID mapping
-  const TAB_NAMES = { Intro: 6, Configure: 3, Budget: 4, Manage: 5 };
-  const TAB_IDS = { 6: 'Intro', 3: 'Configure', 4: 'Budget', 5: 'Manage' };
+  // Tab name to ID mapping (lowercase for URLs)
+  const TAB_NAMES = { intro: 6, configure: 3, budget: 4, manage: 5 };
+  const TAB_IDS = { 6: 'intro', 3: 'configure', 4: 'budget', 5: 'manage' };
   
-  // Subtab name to ID mapping
+  // Subtab name to ID mapping (lowercase for URLs)
   const SUBTAB_NAMES = {
-    design: { Summary: 1, Units: 2, Floorplan: 3, Building: 4 },
-    cost: { Summary: 1, 'Build Time': 2, Assemblies: 3 },
+    design: { summary: 1, units: 2, floorplan: 3, building: 4 },
+    cost: { summary: 1, 'build-time': 2, assemblies: 3 },
   };
   const SUBTAB_IDS = {
-    design: { 1: 'Summary', 2: 'Units', 3: 'Floorplan', 4: 'Building' },
-    cost: { 1: 'Summary', 2: 'Build Time', 3: 'Assemblies' },
+    design: { 1: 'summary', 2: 'units', 3: 'floorplan', 4: 'building' },
+    cost: { 1: 'summary', 2: 'build-time', 3: 'assemblies' },
   };
 
   // Initialize tab from URL or default to Intro
   const getInitialTab = () => {
     const pathname = window.location.pathname.split('/').filter(Boolean)[0];
-    return TAB_NAMES[pathname] || 6; // Default to Intro (tab 6)
+    return TAB_NAMES[pathname?.toLowerCase()] || 6; // Default to Intro (tab 6)
   };
 
   const getInitialSubtabs = () => {
@@ -97,13 +97,13 @@ export const ProjectProvider = ({ children }) => {
     const defaults = { design: 1, cost: 1, factors: 1, smartstart: 1, archive: 1 };
     
     if (pathParts.length >= 2) {
-      const tabName = pathParts[0];
-      const subtabName = pathParts[1];
+      const tabName = pathParts[0]?.toLowerCase();
+      const subtabName = pathParts[1]?.toLowerCase();
       
-      if (tabName === 'Configure' && SUBTAB_NAMES.design[subtabName]) {
+      if (tabName === 'configure' && SUBTAB_NAMES.design[subtabName]) {
         return { ...defaults, design: SUBTAB_NAMES.design[subtabName] };
       }
-      if (tabName === 'Budget' && SUBTAB_NAMES.cost[subtabName]) {
+      if (tabName === 'budget' && SUBTAB_NAMES.cost[subtabName]) {
         return { ...defaults, cost: SUBTAB_NAMES.cost[subtabName] };
       }
     }
@@ -123,10 +123,10 @@ export const ProjectProvider = ({ children }) => {
       newPath += tabName;
       
       // Add subtab name if it's not the default
-      if (tabName === 'Configure' && activeSubtabs.design !== 1) {
+      if (tabName === 'configure' && activeSubtabs.design !== 1) {
         const designName = SUBTAB_IDS.design[activeSubtabs.design];
         if (designName) newPath += `/${designName}`;
-      } else if (tabName === 'Budget' && activeSubtabs.cost !== 1) {
+      } else if (tabName === 'budget' && activeSubtabs.cost !== 1) {
         const costName = SUBTAB_IDS.cost[activeSubtabs.cost];
         if (costName) newPath += `/${costName}`;
       }
