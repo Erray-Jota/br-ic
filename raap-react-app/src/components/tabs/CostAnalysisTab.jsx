@@ -673,22 +673,22 @@ const CostAnalysisTab = () => {
                 </tr>
               </thead>
               <tbody>
-                <tr style={{ borderBottom: '1px solid #e5e7eb' }}>
+                <tr key="design-phase-1" style={{ borderBottom: '1px solid #e5e7eb' }}>
                   <td style={{ padding: '8px', fontWeight: 600, color: COLORS.gray.dark }}>SmartStart/Conceptual</td>
                   <td style={{ padding: '8px', textAlign: 'center', color: COLORS.green.dark, fontWeight: 600 }}>2 mo</td>
                   <td style={{ padding: '8px', textAlign: 'center', color: COLORS.gray.medium }}>3 mo</td>
                 </tr>
-                <tr style={{ borderBottom: '1px solid #e5e7eb' }}>
+                <tr key="design-phase-2" style={{ borderBottom: '1px solid #e5e7eb' }}>
                   <td style={{ padding: '8px', fontWeight: 600, color: COLORS.gray.dark }}>Entitlements</td>
                   <td style={{ padding: '8px', textAlign: 'center', color: COLORS.green.dark, fontWeight: 600 }}>12 mo</td>
                   <td style={{ padding: '8px', textAlign: 'center', color: COLORS.gray.medium }}>12 mo</td>
                 </tr>
-                <tr style={{ borderBottom: '1px solid #e5e7eb' }}>
+                <tr key="design-phase-3" style={{ borderBottom: '1px solid #e5e7eb' }}>
                   <td style={{ padding: '8px', fontWeight: 600, color: COLORS.gray.dark }}>Permit Docs</td>
                   <td style={{ padding: '8px', textAlign: 'center', color: COLORS.green.dark, fontWeight: 600 }}>2 mo</td>
                   <td style={{ padding: '8px', textAlign: 'center', color: COLORS.gray.medium }}>7 mo</td>
                 </tr>
-                <tr style={{ background: '#f0fdf4', borderTop: '2px solid #16A34A' }}>
+                <tr key="design-phase-total" style={{ background: '#f0fdf4', borderTop: '2px solid #16A34A' }}>
                   <td style={{ padding: '9px', fontWeight: FONTS.weight.bold, color: COLORS.green.dark }}>Total Design</td>
                   <td style={{ padding: '9px', textAlign: 'center', fontWeight: FONTS.weight.bold, color: COLORS.green.dark, fontSize: FONTS.sizes.xs }}>21 mo</td>
                   <td style={{ padding: '9px', textAlign: 'center', fontWeight: FONTS.weight.bold, color: COLORS.red.dark, fontSize: FONTS.sizes.xs }}>25 mo</td>
@@ -709,22 +709,22 @@ const CostAnalysisTab = () => {
                 </tr>
               </thead>
               <tbody>
-                <tr style={{ borderBottom: '1px solid #e5e7eb' }}>
+                <tr key="construction-phase-1" style={{ borderBottom: '1px solid #e5e7eb' }}>
                   <td style={{ padding: '8px', fontWeight: 600, color: COLORS.gray.dark }}>FabAssure (Pre-construction)</td>
                   <td style={{ padding: '8px', textAlign: 'center', color: '#059669', fontWeight: 600 }}>13 mo</td>
                   <td style={{ padding: '8px', textAlign: 'center', color: '#d1d5db' }}>—</td>
                 </tr>
-                <tr style={{ borderBottom: '1px solid #e5e7eb' }}>
+                <tr key="construction-phase-2" style={{ borderBottom: '1px solid #e5e7eb' }}>
                   <td style={{ padding: '8px', fontWeight: 600, color: COLORS.gray.dark }}>Fabricator (Modules)</td>
                   <td style={{ padding: '8px', textAlign: 'center', color: '#059669', fontWeight: 600 }}>4 mo</td>
                   <td style={{ padding: '8px', textAlign: 'center', color: '#d1d5db' }}>—</td>
                 </tr>
-                <tr style={{ borderBottom: '1px solid #e5e7eb' }}>
+                <tr key="construction-phase-3" style={{ borderBottom: '1px solid #e5e7eb' }}>
                   <td style={{ padding: '8px', fontWeight: 600, color: COLORS.gray.dark }}>GC On-Site</td>
                   <td style={{ padding: '8px', textAlign: 'center', color: '#059669', fontWeight: 600 }}>8 mo</td>
                   <td style={{ padding: '8px', textAlign: 'center', color: COLORS.gray.medium }}>14 mo</td>
                 </tr>
-                <tr style={{ background: '#f0fdf4', borderTop: '2px solid #16A34A' }}>
+                <tr key="construction-phase-total" style={{ background: '#f0fdf4', borderTop: '2px solid #16A34A' }}>
                   <td style={{ padding: '9px', fontWeight: FONTS.weight.bold, color: COLORS.green.dark }}>Total Construction</td>
                   <td style={{ padding: '9px', textAlign: 'center', fontWeight: FONTS.weight.bold, color: COLORS.green.dark, fontSize: FONTS.sizes.xs }}>14 mo</td>
                   <td style={{ padding: '9px', textAlign: 'center', fontWeight: FONTS.weight.bold, color: COLORS.red.dark, fontSize: FONTS.sizes.xs }}>20 mo</td>
