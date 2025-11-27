@@ -1,4 +1,5 @@
 import { useProject } from '../../contexts/ProjectContext';
+import { useAnalytics } from '../../services/tracking';
 import { useMobile } from '../../hooks/useMobile';
 import { ASSET_PATHS } from '../../data/constants';
 import { COLORS, FONTS, SPACING, STYLE_PRESETS } from '../../styles/theme';
@@ -6,6 +7,7 @@ import { COLORS, FONTS, SPACING, STYLE_PRESETS } from '../../styles/theme';
 const IntroductionTab = () => {
   const { switchTab } = useProject();
   const { isEffectivelyMobile } = useMobile();
+  const { exportLogs } = useAnalytics();
 
   return (
     <div style={{ maxWidth: '56rem', margin: '0 auto' }}>
@@ -64,6 +66,35 @@ const IntroductionTab = () => {
         <p style={{ fontSize: isEffectivelyMobile ? FONTS.sizes.sm : FONTS.sizes.base, fontWeight: FONTS.weight.bold, marginBottom: 0, color: COLORS.gray.dark, lineHeight: '1.6' }}>
           {isEffectivelyMobile ? 'Factory-optimized design & cost model — feasibility, savings & confidence before entitlement.' : 'We start with a factory-optimized design and a detailed cost model — giving you feasibility, savings, and confidence before you commit capital to entitlement.'}
         </p>
+        <div style={{ marginTop: SPACING.lg, display: 'grid', gridTemplateColumns: isEffectivelyMobile ? '1fr' : '1fr 1fr 1fr', gap: SPACING.md }}>
+          <div style={{ background: 'rgba(255,255,255,0.6)', padding: SPACING.md, borderRadius: '8px', border: `1px solid ${COLORS.green.light}` }}>
+            <div style={{ fontWeight: 800, color: COLORS.green.dark, marginBottom: '4px' }}>1. Configure</div>
+            <div style={{ fontSize: FONTS.sizes.sm, color: COLORS.gray.dark }}>Design your building with factory-ready modules.</div>
+          </div>
+          <div style={{ background: 'rgba(255,255,255,0.6)', padding: SPACING.md, borderRadius: '8px', border: `1px solid ${COLORS.green.light}` }}>
+            <div style={{ fontWeight: 800, color: COLORS.green.dark, marginBottom: '4px' }}>2. Cost</div>
+            <div style={{ fontSize: FONTS.sizes.sm, color: COLORS.gray.dark }}>Get instant, defensible pricing and savings analysis.</div>
+          </div>
+          <div style={{ background: 'rgba(255,255,255,0.6)', padding: SPACING.md, borderRadius: '8px', border: `1px solid ${COLORS.green.light}` }}>
+            <div style={{ fontWeight: 800, color: COLORS.green.dark, marginBottom: '4px' }}>3. Construct</div>
+            <div style={{ fontSize: FONTS.sizes.sm, color: COLORS.gray.dark }}>Coordinate partners and logistics for execution.</div>
+          </div>
+        </div>
+      </div>
+      <div style={{ marginTop: '20px', textAlign: 'center' }}>
+        <button
+          onClick={exportLogs}
+          style={{
+            background: 'none',
+            border: 'none',
+            color: '#9CA3AF',
+            fontSize: '11px',
+            cursor: 'pointer',
+            textDecoration: 'underline'
+          }}
+        >
+          Export Usage Logs (Debug)
+        </button>
       </div>
     </div>
   );

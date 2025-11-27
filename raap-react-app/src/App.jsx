@@ -1,16 +1,28 @@
+import { Suspense, lazy } from 'react';
+import { AnalyticsProvider } from './services/tracking';
 import { ProjectProvider, useProject } from './contexts/ProjectContext';
 import { GoogleMapsLoader } from './components/GoogleMapsLoader';
 import { useMobile } from './hooks/useMobile';
 import Header from './components/Header';
 import ResponsiveTabNavigation from './components/ResponsiveTabNavigation';
 import ProjectsPage from './components/ProjectsPage';
-import DesignTab from './components/tabs/DesignTab';
-import CostAnalysisTab from './components/tabs/CostAnalysisTab';
-import CoordinationTab from './components/tabs/CoordinationTab';
-import PortfolioTab from './components/tabs/PortfolioTab';
-import ArchiveTab from './components/tabs/ArchiveTab';
 import ErrorBoundary from './components/ErrorBoundary';
 import './App.css';
+
+// Lazy load heavy tab components
+const IntroductionTab = lazy(() => import('./components/tabs/IntroductionTab'));
+const DesignTab = lazy(() => import('./components/tabs/DesignTab'));
+const CostAnalysisTab = lazy(() => import('./components/tabs/CostAnalysisTab'));
+const CoordinationTab = lazy(() => import('./components/tabs/CoordinationTab'));
+const PortfolioTab = lazy(() => import('./components/tabs/PortfolioTab'));
+const ArchiveTab = lazy(() => import('./components/tabs/ArchiveTab'));
+
+// Loading component for Suspense fallback
+const LoadingSpinner = () => (
+  <div style={{ display: 'flex', justifyContent: 'center', padding: '40px' }}>
+    <div style={{ color: '#6b7280' }}>Loading...</div>
+  </div>
+);
 
 function AppContent() {
   const { activeTab, showingProjectsPage } = useProject();
@@ -43,11 +55,13 @@ function AppContent() {
               <>
                 <ResponsiveTabNavigation />
                 <div style={{ marginTop: isEffectivelyMobile ? '10px' : '20px', marginBottom: '20px' }}>
-                  {activeTab === 6 && <PortfolioTab />}
-                  {activeTab === 3 && <DesignTab />}
-                  {activeTab === 4 && <CostAnalysisTab />}
-                  {activeTab === 5 && <CoordinationTab />}
-                  {activeTab === 8 && <ArchiveTab />}
+                  <Suspense fallback={<LoadingSpinner />}>
+                    {activeTab === 6 && <IntroductionTab />}
+                    {activeTab === 3 && <DesignTab />}
+                    {activeTab === 4 && <CostAnalysisTab />}
+                    {activeTab === 5 && <CoordinationTab />}
+                    {activeTab === 8 && <ArchiveTab />}
+                  </Suspense>
                 </div>
               </>
             )}
@@ -61,11 +75,18 @@ function AppContent() {
 function App() {
   return (
     <ErrorBoundary>
-      <ProjectProvider>
-        <GoogleMapsLoader>
-          <AppContent />
-        </GoogleMapsLoader>
-      </ProjectProvider>
+      <AnalyticsProvider config={{
+        gaMeasurementId: import.meta.env.VITE_GA_MEASUREMENT_ID,
+        clarityId: import.meta.env.VITE_CLARITY_ID,
+        sixSenseId: import.meta.env.VITE_SIXSENSE_ID,
+        enabled: true // Always enabled for now, or use import.meta.env.PROD
+      }}>
+        <ProjectProvider>
+          <GoogleMapsLoader>
+            <AppContent />
+          </GoogleMapsLoader>
+        </ProjectProvider>
+      </AnalyticsProvider>
     </ErrorBoundary>
   );
 }

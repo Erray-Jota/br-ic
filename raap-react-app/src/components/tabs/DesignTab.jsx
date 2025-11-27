@@ -1,5 +1,6 @@
 import { useRef, useLayoutEffect } from 'react';
 import { useProject } from '../../contexts/ProjectContext';
+import { useAnalytics, TRACKING_EVENTS } from '../../services/tracking';
 import { useMobile } from '../../hooks/useMobile';
 import { useCalculations } from '../../hooks/useCalculations';
 import { ASSET_PATHS } from '../../data/constants';
@@ -10,6 +11,7 @@ const DesignTab = () => {
   const { projectData, updateProjectData, switchTab, activeSubtabs, switchSubtab } = useProject();
   const { isEffectivelyMobile } = useMobile();
   const calculations = useCalculations(projectData);
+  const { trackEvent } = useAnalytics();
 
   const handleInputChange = (field, value) => {
     updateProjectData({ [field]: value });
@@ -114,8 +116,8 @@ const DesignTab = () => {
               <div className="grid-2" style={{ gap: '12px', marginBottom: '12px', alignItems: 'flex-end' }}>
                 <div className="form-group" style={{ marginBottom: 0 }}>
                   <label className="form-label">Project Name</label>
-                  <input 
-                    type="text" 
+                  <input
+                    type="text"
                     className="form-select"
                     placeholder="Enter project name"
                     value={projectData.projectName || ''}
@@ -123,7 +125,11 @@ const DesignTab = () => {
                     style={{ padding: '8px 12px', border: '1px solid #d1d5db', borderRadius: '6px' }}
                   />
                 </div>
-                <button className="btn btn-success" style={{ padding: '8px 16px', fontSize: '14px', fontWeight: 600, width: '100%' }}>
+                <button
+                  className="btn btn-success"
+                  style={{ padding: '8px 16px', fontSize: '14px', fontWeight: 600, width: '100%' }}
+                  onClick={() => trackEvent(TRACKING_EVENTS.SAVE_PROJECT, { source: 'design_tab' })}
+                >
                   💾 Save Project
                 </button>
               </div>

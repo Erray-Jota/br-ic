@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useCallback, useEffect } from 'react';
+import { useAnalytics, TRACKING_EVENTS } from '../services/tracking';
 
 const ProjectContext = createContext();
 
@@ -82,9 +83,9 @@ export const ProjectProvider = ({ children }) => {
   const currentProject = projects.find((p) => p.id === currentProjectId) || projects[0];
 
   // Tab name to ID mapping (lowercase for URLs)
-  const TAB_NAMES = { intro: 6, configure: 3, budget: 4, manage: 5 };
-  const TAB_IDS = { 6: 'intro', 3: 'configure', 4: 'budget', 5: 'manage' };
-  
+  const TAB_NAMES = { intro: 6, configure: 3, cost: 4, construct: 5 };
+  const TAB_IDS = { 6: 'intro', 3: 'configure', 4: 'cost', 5: 'construct' };
+
   // Subtab name to ID mapping (lowercase for URLs)
   const SUBTAB_NAMES = {
     design: { summary: 1, units: 2, building: 3, sustainability: 4 },
@@ -106,22 +107,22 @@ export const ProjectProvider = ({ children }) => {
   const getInitialSubtabs = () => {
     const pathParts = window.location.pathname.split('/').filter(Boolean);
     const defaults = { design: 1, cost: 1, factors: 1 };
-    
+
     if (pathParts.length >= 2) {
       const tabName = pathParts[0]?.toLowerCase();
       const subtabName = pathParts[1]?.toLowerCase();
-      
+
       if (tabName === 'configure' && SUBTAB_NAMES.design[subtabName]) {
         return { ...defaults, design: SUBTAB_NAMES.design[subtabName] };
       }
-      if (tabName === 'budget' && SUBTAB_NAMES.cost[subtabName]) {
+      if (tabName === 'cost' && SUBTAB_NAMES.cost[subtabName]) {
         return { ...defaults, cost: SUBTAB_NAMES.cost[subtabName] };
       }
-      if (tabName === 'manage' && SUBTAB_NAMES.factors[subtabName]) {
+      if (tabName === 'construct' && SUBTAB_NAMES.factors[subtabName]) {
         return { ...defaults, factors: SUBTAB_NAMES.factors[subtabName] };
       }
     }
-    
+
     return defaults;
   };
 
@@ -132,29 +133,48 @@ export const ProjectProvider = ({ children }) => {
   useEffect(() => {
     let newPath = '/';
     const tabName = TAB_IDS[activeTab];
-    
+
     if (tabName) {
       newPath += tabName;
-      
+
       // Add subtab name if it's not the default
       if (tabName === 'configure' && activeSubtabs.design !== 1) {
         const designName = SUBTAB_IDS.design[activeSubtabs.design];
         if (designName) newPath += `/${designName}`;
-      } else if (tabName === 'budget' && activeSubtabs.cost !== 1) {
+      } else if (tabName === 'cost' && activeSubtabs.cost !== 1) {
         const costName = SUBTAB_IDS.cost[activeSubtabs.cost];
         if (costName) newPath += `/${costName}`;
-      } else if (tabName === 'manage' && activeSubtabs.factors !== 1) {
+      } else if (tabName === 'construct' && activeSubtabs.factors !== 1) {
         const factorName = SUBTAB_IDS.factors[activeSubtabs.factors];
         if (factorName) newPath += `/${factorName}`;
       }
     }
-    
+
     if (newPath !== window.location.pathname) {
       window.history.replaceState({}, '', newPath);
     }
   }, [activeTab, activeSubtabs, TAB_IDS, SUBTAB_IDS]);
 
+  const { trackEvent } = useAnalytics();
+
   const updateProjectData = useCallback((updates) => {
+    // Track specific updates
+    if (updates.floors) {
+      trackEvent(TRACKING_EVENTS.CHANGE_FLOORS, { floors: updates.floors });
+    }
+    if (updates.targetLength) {
+      trackEvent('change_length', { length: updates.targetLength });
+    }
+    if (updates.targets) {
+      trackEvent(TRACKING_EVENTS.CHANGE_UNIT_MIX, { targets: updates.targets });
+    }
+    if (updates.propertyLocation) {
+      trackEvent(TRACKING_EVENTS.CHANGE_LOCATION, { location: updates.propertyLocation, type: 'site' });
+    }
+    if (updates.factoryLocation) {
+      trackEvent(TRACKING_EVENTS.CHANGE_LOCATION, { location: updates.factoryLocation, type: 'factory' });
+    }
+
     setProjects((prevProjects) =>
       prevProjects.map((project) =>
         project.id === currentProjectId
@@ -162,7 +182,7 @@ export const ProjectProvider = ({ children }) => {
           : project
       )
     );
-  }, [currentProjectId]);
+  }, [currentProjectId, trackEvent]);
 
   const switchTab = useCallback((tabIndex) => {
     setActiveTab(tabIndex);

@@ -27,8 +27,8 @@ const ResponsiveTabNavigation = () => {
   const tabs = [
     { id: 6, label: '🎨 Intro', shortLabel: 'Intro' },
     { id: 3, label: '⚙️ Configure', shortLabel: 'Configure' },
-    { id: 4, label: '💰 Budget', shortLabel: 'Budget' },
-    { id: 5, label: '📋 Manage', shortLabel: 'Manage' },
+    { id: 4, label: '💰 Cost', shortLabel: 'Cost' },
+    { id: 5, label: '📋 Construct', shortLabel: 'Construct' },
   ];
 
   // Desktop top navigation
@@ -67,7 +67,7 @@ const ResponsiveTabNavigation = () => {
 
   // Mobile bottom navigation - show Design, Cost, Coordination, Portfolio
   const mobileVisibleTabs = tabs.slice(0, 4);
-  
+
   // Design sub-tabs for mobile
   const designSubtabs = [
     { id: 1, label: '📋 Summary' },
@@ -75,7 +75,7 @@ const ResponsiveTabNavigation = () => {
     { id: 3, label: '🗺️ Floorplan' },
     { id: 4, label: '🏗️ Building' },
   ];
-  
+
   return (
     <div
       style={{

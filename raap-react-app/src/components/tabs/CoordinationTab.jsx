@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useProject } from '../../contexts/ProjectContext';
+import { useAnalytics, TRACKING_EVENTS } from '../../services/tracking';
 import { DUMMY_PARTNERS } from '../../data/constants';
 import { COLORS, FONTS, SPACING, BORDERS } from '../../styles/theme';
 import { MapComponent } from '../MapComponent';
@@ -7,6 +8,7 @@ import ArchitectTab from './ArchitectTab';
 
 const CoordinationTab = () => {
   const { switchTab, activeSubtabs, switchSubtab, projectData } = useProject();
+  const { trackEvent } = useAnalytics();
   const [filterCategory, setFilterCategory] = useState('All');
   const [searchTerm, setSearchTerm] = useState('');
   const [routeMetadata, setRouteMetadata] = useState(null);
@@ -580,7 +582,13 @@ const CoordinationTab = () => {
                   ].map(system => (
                     <div
                       key={system.id}
-                      onClick={() => setSelectedSystem(selectedSystem === system.id ? null : system.id)}
+                      onClick={() => {
+                        const newSystem = selectedSystem === system.id ? null : system.id;
+                        setSelectedSystem(newSystem);
+                        if (newSystem) {
+                          trackEvent(TRACKING_EVENTS.OPEN_FACTORY_DETAILS, { system: system.id });
+                        }
+                      }}
                       className="clickable-label"
                       style={{
                         position: 'absolute',
@@ -705,6 +713,7 @@ const CoordinationTab = () => {
                           {['Design Detail', 'Scope Definition', 'Install Sequence', 'Inspection Points', 'Product Docs'].map(btn => (
                             <button
                               key={btn}
+                              onClick={() => trackEvent('click_action_button', { button: btn, system: system.label })}
                               style={{
                                 padding: '6px 12px',
                                 background: 'linear-gradient(135deg, #16A34A 0%, #003F87 100%)',

@@ -9,10 +9,7 @@ export const GoogleMapsLoader = ({ children }) => {
     libraries,
   });
 
-  if (loadError) {
-    return <div>Map cannot be loaded right now, sorry.</div>;
-  }
-
+  // Always render children so the app doesn't crash/block on map error
   return (
     <GoogleMapsContext.Provider value={{ isLoaded, loadError }}>
       {children}
